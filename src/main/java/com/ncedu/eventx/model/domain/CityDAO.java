@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="CITY")
-public class CityModel {
+public class CityDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

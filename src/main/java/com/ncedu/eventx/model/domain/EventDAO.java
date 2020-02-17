@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="EVENT")
-public class EventModel {
+public class EventDAO {
 
     @EmbeddedId
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,12 +15,12 @@ public class EventModel {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("id")
     @Column(name = "TYPE", nullable = false)
-    private EventTypeModel type;
+    private EventTypeDAO type;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("id")
     @Column(name = "CITY", nullable = false)
-    private CityModel city;
+    private CityDAO city;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -38,19 +38,19 @@ public class EventModel {
         return id;
     }
 
-    public EventTypeModel getType() {
+    public EventTypeDAO getType() {
         return type;
     }
 
-    public void setType(EventTypeModel type) {
+    public void setType(EventTypeDAO type) {
         this.type = type;
     }
 
-    public CityModel getCity() {
+    public CityDAO getCity() {
         return city;
     }
 
-    public void setCity(CityModel city) {
+    public void setCity(CityDAO city) {
         this.city = city;
     }
 

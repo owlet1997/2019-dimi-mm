@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="USER_")
-public class UserModel {
+public class UserDAO {
 
     @EmbeddedId
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="EVENT_TYPE")
-public class EventTypeModel {
+public class EventTypeDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

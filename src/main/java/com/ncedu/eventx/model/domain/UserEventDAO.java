@@ -4,43 +4,43 @@ import javax.persistence.*;
 
 @Embeddable
 @Table(name="USER_EVENT")
-public class UserEventModel {
+public class UserEventDAO {
 
     @ManyToOne
     @MapsId("id")
     @Column(name = "USER_ID", nullable = false)
-    private UserModel userId;
+    private UserDAO userId;
 
     @ManyToOne
     @MapsId("id")
     @Column(name = "EVENT_ID", nullable = false)
-    private EventModel eventId;
+    private EventDAO eventId;
 
     @Column(name = "SHOW_ORDER", nullable = false)
     private int showOrder;
 
-    public UserEventModel() {
+    public UserEventDAO() {
     }
 
-    public UserEventModel(UserModel userId, EventModel eventId, int showOrder) {
+    public UserEventDAO(UserDAO userId, EventDAO eventId, int showOrder) {
         this.userId = userId;
         this.eventId = eventId;
         this.showOrder = showOrder;
     }
 
-    public UserModel getUserId() {
+    public UserDAO getUserId() {
         return userId;
     }
 
-    public void setUserId(UserModel userId) {
+    public void setUserId(UserDAO userId) {
         this.userId = userId;
     }
 
-    public EventModel getEventId() {
+    public EventDAO getEventId() {
         return eventId;
     }
 
-    public void setEventId(EventModel eventId) {
+    public void setEventId(EventDAO eventId) {
         this.eventId = eventId;
     }
 }
