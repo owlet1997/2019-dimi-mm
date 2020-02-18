@@ -8,7 +8,9 @@ public class TemplateServlet {
 
     @RequestMapping("/helloWorld")
     public String helloworld(){
-        return "template";
+        return "index";
     }
+
+
 
 }
