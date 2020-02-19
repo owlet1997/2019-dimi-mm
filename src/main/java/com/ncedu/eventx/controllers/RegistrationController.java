@@ -16,15 +16,15 @@ public class RegistrationController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "RegistrationPage";
+        return "registrationPages/RegistrationPage";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registrationSubmit(@ModelAttribute @Valid User user, Model model, BindingResult bindingResult) {
         model.addAttribute(user);
         if (bindingResult.hasErrors()) {
-            return "RegistrationPage";
+            return "registrationPages/RegistrationPage";
         }
-        return "LogIn";
+        return "primaryCabinetPages/LogIn";
     }
 }

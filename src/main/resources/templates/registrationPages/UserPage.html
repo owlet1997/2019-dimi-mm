@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+</head>
+<body>
+<h1 th:text="'User ' + ${user.name}"></h1>
+<p th:text="'id: ' + ${user.id}"></p>
+<p th:text="'name: ' + ${user.name}"></p>
+<p th:text="'login: ' + ${user.login}"></p>
+<p th:text="'password: ' + ${user.password}"></p>
+<p th:text="'email: ' + ${user.email}"></p>
+<p th:text="'role: ' + ${user.role_id}"></p>
+<a href="/registration">Enter new User</a>
+<a href="/">On start page</a>
+</body>
+</html>
