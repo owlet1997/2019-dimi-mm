@@ -1,10 +1,11 @@
 package com.ncedu.eventx.model.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="CITY")
-public class CityDAO {
+public class CityDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

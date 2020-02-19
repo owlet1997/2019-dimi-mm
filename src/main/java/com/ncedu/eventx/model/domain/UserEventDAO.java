@@ -1,10 +1,11 @@
 package com.ncedu.eventx.model.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Embeddable
 @Table(name="USER_EVENT")
-public class UserEventDAO {
+public class UserEventDAO implements Serializable {
 
     @ManyToOne
     @MapsId("id")

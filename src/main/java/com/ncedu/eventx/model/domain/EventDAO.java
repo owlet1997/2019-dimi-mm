@@ -1,13 +1,14 @@
 package com.ncedu.eventx.model.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name="EVENT")
-public class EventDAO {
+public class EventDAO implements Serializable {
 
-    @EmbeddedId
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private int id;
@@ -21,6 +22,12 @@ public class EventDAO {
     @MapsId("id")
     @Column(name = "CITY", nullable = false)
     private CityDAO city;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @MapsId("id")
+    @Column(name = "CITY", nullable = false)
+    private CoordinatesDAO coordinates;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -84,5 +91,13 @@ public class EventDAO {
 
     public void setTimeEnd(LocalDate timeEnd) {
         this.timeEnd = timeEnd;
+    }
+
+    public CoordinatesDAO getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(CoordinatesDAO coordinates) {
+        this.coordinates = coordinates;
     }
 }
