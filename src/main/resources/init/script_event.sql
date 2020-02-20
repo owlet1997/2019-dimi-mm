@@ -1,3 +1,39 @@
+create SEQUENCE city_id_seq start with 1;
+
+create SEQUENCE type_id_seq start with 1;
+
+create SEQUENCE event_id_seq start with 1;
+
+create SEQUENCE coord_id_seq start with 1;
+
+CREATE OR REPLACE TRIGGER city_id_generate
+  BEFORE INSERT ON city
+  FOR EACH ROW
+BEGIN
+  :new.id := city_id_seq.nextval;
+END;
+             
+CREATE OR REPLACE TRIGGER type_id_generate
+  BEFORE INSERT ON event_type
+  FOR EACH ROW
+BEGIN
+  :new.id := type_id_seq.nextval;
+END;   
+
+CREATE OR REPLACE TRIGGER event_id_generate
+  BEFORE INSERT ON event
+  FOR EACH ROW
+BEGIN
+  :new.id := event_id_seq.nextval;
+END; 
+
+CREATE OR REPLACE TRIGGER coord_id_generate
+  BEFORE INSERT ON COORDINATES
+  FOR EACH ROW
+BEGIN
+  :new.id := coord_id_seq.nextval;
+END; 
+
 create table COORDINATES (
                              id NUMBER(20) NOT NULL,
                              CONSTRAINT PK_geo_id PRIMARY KEY (id),
