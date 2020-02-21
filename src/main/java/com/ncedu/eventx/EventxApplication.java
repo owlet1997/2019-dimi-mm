@@ -4,77 +4,64 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
-import java.io.IOException;
+import java.util.Objects;
+import java.util.Properties;
 
 @SpringBootApplication
+@EnableWebMvc
 @Configuration
 @EnableTransactionManagement
 public class EventxApplication {
+
+    @Autowired
+    private Environment env;
 
     public static void main(String[] args) {
         SpringApplication.run(EventxApplication.class, args);
     }
 
-    @Autowired
-    ApplicationContext context;
-
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource getDataSource(){
-        DataSourceBuilder builder = DataSourceBuilder.create();
-        return builder.build();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
+        dataSource.setUrl(env.getProperty("spring.datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.password"));
+
+        return dataSource;
     }
 
-    @Bean
-    public SessionFactory getSessionFactory() throws IOException {
-        org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration();
-        ClassPathResource res = new ClassPathResource("hibernate.cfg.xml");
-        SessionFactory sessionFactory = config.configure(res.getURL()).buildSessionFactory();
-        DataSourceBuilder builder = DataSourceBuilder.create();
-        return sessionFactory;
+    @Autowired
+    @Bean(name = "sessionFactory")
+    public SessionFactory getSessionFactory(DataSource dataSource) throws Exception {
+        Properties properties = new Properties();
+
+        // See: application.properties
+        properties.put("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
+        properties.put("hibernate.show_sql", env.getProperty("spring.jpa.show-sql"));
+        properties.put("current_session_context_class", //
+                env.getProperty("spring.jpa.properties.hibernate.current_session_context_class"));
+
+        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
+
+        // Package contain entity classes
+        factoryBean.setPackagesToScan("model");
+        factoryBean.setDataSource(dataSource);
+        factoryBean.setHibernateProperties(properties);
+        factoryBean.afterPropertiesSet();
+        //
+        SessionFactory sf = factoryBean.getObject();
+        return sf;
     }
-
-    @Bean
-    public SpringResourceTemplateResolver templateResolver(){
-
-        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setApplicationContext(context);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-
-        templateResolver.setCacheable(true);
-        return templateResolver;
-    }
-
-    @Bean
-    public SpringTemplateEngine templateEngine(){
-
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-
-        templateEngine.setEnableSpringELCompiler(true);
-        return templateEngine;
-    }
-
-    @Bean
-    public ThymeleafViewResolver viewResolver(){
-        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
-        return viewResolver;
-    }
-
 
 }

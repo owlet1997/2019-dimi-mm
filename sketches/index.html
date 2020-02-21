@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/bootstrap/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/fonts/font-awesome.css}"/>
+
+    <style>
+        .center { text-align: center; }
+        .logo { padding: 80px 0; }
+        img { max-width: 100%; margin-bottom: 20px; }
+        .map { padding: 70px 20px; background: url("../static/version-selector/map.png"); margin-bottom: 60px; border-radius: 20px; -webkit-border-radius: 20px; }
+        .item { transition: .4s ease; -webkit-transition: .4s ease; position: relative; top: 0; margin-bottom: 20px; }
+        .item:hover { top: -5px; }
+    </style>
+
+    <title>Spotter - Universal Directory Listing HTML Template</title>
+
+</head>
+
+<body>
+<div class="center logo">
+    <img th:src="@{/version-selector/logo.png}" alt="">
+</div>
+<div class="container">
+    <div class="map">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="facet-search.html" class="item"><img th:src="@{/version-selector/google-maps.png}" alt=""></a>
+            </div>
+            <div class="col-md-4">
+                <a href="register.html" class="item"><img th:src="@{/version-selector/real-estate.png}" alt=""></a>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="sign-in.html" class="item"><img th:src="@{/version-selector/car.png}" alt=""></a>
+        </div>
+        <div class="col-md-3">
+            <a href="profile.html" class="item"><img th:src="@{/version-selector/restaurant.png}" alt=""></a>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/jquery-2.1.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
