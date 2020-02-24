@@ -1,16 +1,17 @@
 package com.ncedu.eventx.model.DTO;
 
-import java.util.List;
+import java.util.Set;
 
-public class UserEventDTO {
+public class UserWithEventsDTO {
+
     private EventDTO event;
-    private List<UserDTO> users;
+    private Set<UserDTO> users;
     private int showOrder;
 
-    public UserEventDTO() {
+    public UserWithEventsDTO() {
     }
 
-    public UserEventDTO(EventDTO event, List<UserDTO> users, int showOrder) {
+    public UserWithEventsDTO(EventDTO event, Set<UserDTO> users, int showOrder) {
         this.event = event;
         this.users = users;
         this.showOrder = showOrder;
@@ -24,11 +25,11 @@ public class UserEventDTO {
         this.event = event;
     }
 
-    public List<UserDTO> getUsers() {
+    public Set<UserDTO> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserDTO> users) {
+    public void setUsers(Set<UserDTO> users) {
         this.users = users;
     }
 

@@ -5,6 +5,7 @@ import oracle.spatial.geometry.JGeometry;
 import javax.persistence.Column;
 
 public class CoordinatesDTO {
+
     private int id;
     private JGeometry coordinates;
 
@@ -15,14 +16,6 @@ public class CoordinatesDTO {
     public CoordinatesDTO(int id, JGeometry coordinates) {
         this.id = id;
         this.coordinates = coordinates;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public JGeometry getCoordinates() {

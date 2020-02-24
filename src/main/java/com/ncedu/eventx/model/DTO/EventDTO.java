@@ -12,6 +12,9 @@ public class EventDTO {
     private LocalDate dateEnd;
     private String description;
 
+    public EventDTO() {
+    }
+
     public EventDTO(int id, CityDTO city, String name,
                     EventTypeDTO eventType, LocalDate dateStart,
                     LocalDate dateEnd, String description) {

@@ -1,18 +1,22 @@
 package com.ncedu.eventx.model.DTO;
 
-public class CityDTO {
+import java.util.Set;
 
+public class CityWithEventsDTO {
     private int id;
     private String cityId;
     private String name;
+    private Set<EventDTO> events;
 
-    public CityDTO() {
+    public CityWithEventsDTO() {
     }
 
-    public CityDTO(int id, String cityId, String name) {
+    public CityWithEventsDTO(int id, String cityId,
+                             String name, Set<EventDTO> events) {
         this.id = id;
         this.cityId = cityId;
         this.name = name;
+        this.events = events;
     }
 
     public int getId() {
@@ -37,5 +41,13 @@ public class CityDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<EventDTO> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<EventDTO> events) {
+        this.events = events;
     }
 }
