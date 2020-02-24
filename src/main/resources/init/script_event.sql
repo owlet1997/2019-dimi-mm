@@ -56,7 +56,7 @@ create table EVENT (
                        id number(10) NOT NULL,
                        CONSTRAINT PK_event_id PRIMARY KEY (id),
                        type number(10) not null,
-                       CONSTRAINT FK_type_id foreign key (type) references CITY (id) ON DELETE CASCADE,
+                       CONSTRAINT FK_type_id foreign key (type) references EVENT_TYPE (id) ON DELETE CASCADE,
                        city number(10) not null,
                        CONSTRAINT FK_city_id foreign key (city) references CITY (id) ON DELETE CASCADE,
                        coord_id number(10),

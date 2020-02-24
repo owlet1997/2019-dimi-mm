@@ -8,13 +8,11 @@ import java.io.Serializable;
 public class UserEventDAO implements Serializable {
 
     @ManyToOne
-    @MapsId("id")
-    @Column(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     private UserDAO userId;
 
     @ManyToOne
-    @MapsId("id")
-    @Column(name = "EVENT_ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private EventDAO eventId;
 
     @Column(name = "SHOW_ORDER", nullable = false)

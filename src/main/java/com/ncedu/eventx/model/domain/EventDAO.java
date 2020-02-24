@@ -1,8 +1,11 @@
 package com.ncedu.eventx.model.domain;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name="EVENT")
@@ -10,23 +13,18 @@ public class EventDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", nullable = false)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapsId("id")
-    @Column(name = "TYPE", nullable = false)
+    @JoinColumn(name = "type_id", nullable = false)
     private EventTypeDAO type;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapsId("id")
-    @Column(name = "CITY", nullable = false)
+    @JoinColumn(name = "city_id", nullable = false)
     private CityDAO city;
 
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapsId("id")
-    @Column(name = "CITY", nullable = false)
+    @JoinColumn(name = "coord_id", nullable = false)
     private CoordinatesDAO coordinates;
 
     @Column(name = "NAME", nullable = false)
@@ -35,11 +33,13 @@ public class EventDAO implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "TIME_START", nullable = false)
-    private LocalDate timeStart;
+    private Date timeStart;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "TIME_END", nullable = false)
-    private LocalDate timeEnd;
+    private Date timeEnd;
 
     public int getId() {
         return id;
@@ -77,19 +77,19 @@ public class EventDAO implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getTimeStart() {
+    public Date getTimeStart() {
         return timeStart;
     }
 
-    public void setTimeStart(LocalDate timeStart) {
+    public void setTimeStart(Date timeStart) {
         this.timeStart = timeStart;
     }
 
-    public LocalDate getTimeEnd() {
+    public Date getTimeEnd() {
         return timeEnd;
     }
 
-    public void setTimeEnd(LocalDate timeEnd) {
+    public void setTimeEnd(Date timeEnd) {
         this.timeEnd = timeEnd;
     }
 
