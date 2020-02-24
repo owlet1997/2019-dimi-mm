@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name="EVENT")
@@ -26,6 +27,9 @@ public class EventDAO implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "coord_id", nullable = false)
     private CoordinatesDAO coordinates;
+
+    @OneToMany(mappedBy = "eventId")
+    Set<UserEventDAO> userEvents;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -99,5 +103,13 @@ public class EventDAO implements Serializable {
 
     public void setCoordinates(CoordinatesDAO coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public Set<UserEventDAO> getUserEvents() {
+        return userEvents;
+    }
+
+    public void setUserEvents(Set<UserEventDAO> userEvents) {
+        this.userEvents = userEvents;
     }
 }

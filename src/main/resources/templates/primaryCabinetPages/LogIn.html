@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Private cabinet</title>
+</head>
+<body>
+<style>
+    .login {
+        font-size: 20px;
+        font-family: "Times New Roman";
+        font-weight: lighter;
+    }
+
+    .password {
+        font-size: 20px;
+        font-family: "Times New Roman";
+        font-weight: lighter;
+    }
+
+</style>
+<p><a href="/"><button type="button">Back</button></a></p>
+<form action="#" th:action="@{/login}" th:object="${user}" method="post">
+    <div class="login">
+        <p>Login:</p>
+    </div>
+    <input type="text" size="40" th:field="*{login}">
+    <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</p>
+    <br>
+    <div class="password">
+        <p>Password:</p>
+    </div>
+    <input type="password" size="40" th:field="*{password}">
+    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</p>
+    <br>
+    <form>
+        <p><input type="submit" value="submit" formaction="/login" formmethod="post"></p>
+    </form>
+</form>
+</body>
+</html>

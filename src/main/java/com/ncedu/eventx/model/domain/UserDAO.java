@@ -1,7 +1,9 @@
 package com.ncedu.eventx.model.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name="USER_")
@@ -13,8 +15,11 @@ public class UserDAO implements Serializable {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="id", nullable = false)
+    @JoinColumn(name="roleid", nullable = false)
     private UserRoleDAO roleId;
+
+    @OneToMany(mappedBy = "userId")
+    Set<UserEventDAO> userEvents;
 
     @Column(nullable = false)
     private String login;
@@ -33,6 +38,19 @@ public class UserDAO implements Serializable {
 
     @Column(name="AVATAR_IMG", nullable = false)
     private String avatarImg;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Email(message = "Email address has invalid format: ${validatedValue}",
+            regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
+    @Column(name = "EMAIL")
+    private String email;
 
     public int getId() {
         return id;
@@ -92,5 +110,13 @@ public class UserDAO implements Serializable {
 
     public void setAvatarImg(String avatarImg) {
         this.avatarImg = avatarImg;
+    }
+
+    public Set<UserEventDAO> getUserEvents() {
+        return userEvents;
+    }
+
+    public void setUserEvents(Set<UserEventDAO> userEvents) {
+        this.userEvents = userEvents;
     }
 }

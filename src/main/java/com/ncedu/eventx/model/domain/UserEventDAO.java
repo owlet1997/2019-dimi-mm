@@ -3,16 +3,21 @@ package com.ncedu.eventx.model.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Embeddable
+@Entity
 @Table(name="USER_EVENT")
 public class UserEventDAO implements Serializable {
 
+    @EmbeddedId
+    UserEventKey id;
+
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @MapsId("user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserDAO userId;
 
     @ManyToOne
-    @Column(name = "id", nullable = false)
+    @MapsId("event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private EventDAO eventId;
 
     @Column(name = "SHOW_ORDER", nullable = false)
