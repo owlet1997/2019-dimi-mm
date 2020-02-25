@@ -1,6 +1,8 @@
 package com.ncedu.eventx.controllers;
 
+
 import com.ncedu.eventx.model.domain.UserDAO;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +19,7 @@ public class WebController {
 
     @RequestMapping(value = "/user")
     public String userPage(Model model) {
+
         model.addAttribute(new UserDAO());
         return "registrationPages/UserPage";
     }
@@ -24,12 +27,15 @@ public class WebController {
     // Личный кабинет
     @RequestMapping(value = "/logIn", method = RequestMethod.GET)
     public String logIn(Model model) {
+
         model.addAttribute(new UserDAO()); // Добавить проверку на пользователя
         return "primaryCabinetPages/LogIn";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
+
     public  String logIn(@ModelAttribute UserDAO user,Model model) {
+
         model.addAttribute(user);
         if(user.getLogin().equals("123") && user.getPassword().equals("123")) {
             return "primaryCabinetPages/AuthorizedPage";
@@ -56,8 +62,10 @@ public class WebController {
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
     public String changePassword(Model model) {
+
         model.addAttribute(new UserDAO());
         return "primaryCabinetPages/ChangePassword";
     }
 
 }
+

@@ -1,6 +1,8 @@
 package com.ncedu.eventx.controllers;
 
+
 import com.ncedu.eventx.model.domain.UserDAO;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,16 +17,22 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationForm(Model model) {
+
         model.addAttribute("user", new UserDAO());
+
         return "registrationPages/RegistrationPage";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registrationSubmit(@ModelAttribute @Valid UserDAO user, Model model, BindingResult bindingResult) {
+
         model.addAttribute(user);
         if (bindingResult.hasErrors()) {
             return "registrationPages/RegistrationPage";
         }
         return "primaryCabinetPages/LogIn";
     }
+
 }
+}
+
