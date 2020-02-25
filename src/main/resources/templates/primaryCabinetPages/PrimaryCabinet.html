@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cabinet</title>
+</head>
+<body>
+<style>
+    .text {
+        font-size: 30px;
+        font-family: "Times New Roman";
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .delete {
+        width: auto;
+        height: 20px;
+        position: absolute;
+        bottom: 7%;
+        left: 92%;
+        text-align: center;
+    }
+
+    .edit {
+        width: auto;
+        height: 20px;
+        position: absolute;
+        bottom: 7%;
+        left: 50%;
+        text-align: center;
+    }
+
+    .changePassword {
+        width: auto;
+        height: 20px;
+        position: absolute;
+        bottom: 7%;
+        left: 12%;
+        text-align: center;
+    }
+
+</style>
+<p><a href="/"><button type="button">Back</button></a></p>
+<div class="text">
+    <p th:text="'name: ' + ${user.name}"></p>
+    <p th:text="'role: ' + ${user.role_id}"></p>
+    <p th:text="'email: ' + ${user.email}"></p>
+</div>
+<div class="delete">
+    <p><a href="/delete"><button type="button">delete</button></a></p>
+</div>
+<div class="edit">
+    <p><a href="/editProfile"><button type="button">edit</button></a></p>
+</div>
+<div class="changePassword">
+    <p><a href="/changePassword"><button type="button">change password</button></a></p>
+</div>
+</body>
+</html>
