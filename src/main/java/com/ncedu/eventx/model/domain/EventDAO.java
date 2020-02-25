@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,9 @@ public class EventDAO implements Serializable {
 
     @OneToMany(mappedBy = "eventId")
     Set<UserEventDAO> userEvents;
+
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    HashSet<EventItemDAO> items;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -111,5 +115,13 @@ public class EventDAO implements Serializable {
 
     public void setUserEvents(Set<UserEventDAO> userEvents) {
         this.userEvents = userEvents;
+    }
+
+    public HashSet<EventItemDAO> getItems() {
+        return items;
+    }
+
+    public void setItems(HashSet<EventItemDAO> items) {
+        this.items = items;
     }
 }

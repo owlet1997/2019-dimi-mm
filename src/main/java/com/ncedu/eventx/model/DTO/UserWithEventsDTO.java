@@ -4,33 +4,33 @@ import java.util.Set;
 
 public class UserWithEventsDTO {
 
-    private EventDTO event;
-    private Set<UserDTO> users;
+    private UserDTO user;
+    private Set<EventDTO> events;
     private int showOrder;
 
     public UserWithEventsDTO() {
     }
 
-    public UserWithEventsDTO(EventDTO event, Set<UserDTO> users, int showOrder) {
-        this.event = event;
-        this.users = users;
+    public UserWithEventsDTO(UserDTO user, Set<EventDTO> events, int showOrder) {
+        this.user = user;
+        this.events = events;
         this.showOrder = showOrder;
     }
 
-    public EventDTO getEvent() {
-        return event;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setEvent(EventDTO event) {
-        this.event = event;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
-    public Set<UserDTO> getUsers() {
-        return users;
+    public Set<EventDTO> getEvents() {
+        return events;
     }
 
-    public void setUsers(Set<UserDTO> users) {
-        this.users = users;
+    public void setEvents(Set<EventDTO> events) {
+        this.events = events;
     }
 
     public int getShowOrder() {
