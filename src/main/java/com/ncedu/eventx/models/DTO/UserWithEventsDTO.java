@@ -1,4 +1,4 @@
-package com.ncedu.eventx.model.DTO;
+package com.ncedu.eventx.models.DTO;
 
 import java.util.Set;
 

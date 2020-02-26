@@ -1,7 +1,14 @@
 package com.ncedu.eventx.repositories;
 
-import com.ncedu.eventx.model.domain.UserRoleDAO;
+import com.ncedu.eventx.models.entities.UserRoleEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RolesRepository extends CrudRepository<UserRoleDAO, Integer> {
+import java.util.List;
+
+@Repository
+public interface RolesRepository extends CrudRepository<UserRoleEntity, Integer> {
+    List<UserRoleEntity> findAll();
+
+    List<UserRoleEntity> findById(int id);
 }

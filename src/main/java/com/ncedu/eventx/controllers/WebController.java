@@ -1,6 +1,6 @@
 package com.ncedu.eventx.controllers;
 
-import com.ncedu.eventx.model.domain.UserDAO;
+import com.ncedu.eventx.models.entities.UserEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,19 +17,19 @@ public class WebController {
 
     @RequestMapping(value = "/user")
     public String userPage(Model model) {
-        model.addAttribute(new UserDAO());
+        model.addAttribute(new UserEntity());
         return "registrationPages/UserPage";
     }
 
     // Личный кабинет
     @RequestMapping(value = "/logIn", method = RequestMethod.GET)
     public String logIn(Model model) {
-        model.addAttribute(new UserDAO()); // Добавить проверку на пользователя
+        model.addAttribute(new UserEntity()); // Добавить проверку на пользователя
         return "primaryCabinetPages/LogIn";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public  String logIn(@ModelAttribute UserDAO user,Model model) {
+    public  String logIn(@ModelAttribute UserEntity user,Model model) {
         model.addAttribute(user);
         if(user.getLogin().equals("123") && user.getPassword().equals("123")) {
             return "primaryCabinetPages/AuthorizedPage";
@@ -38,7 +38,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/primaryCabinet", method = RequestMethod.GET)
-    public String primaryCabinet(@ModelAttribute UserDAO user, Model model) {
+    public String primaryCabinet(@ModelAttribute UserEntity user, Model model) {
         model.addAttribute(user);
         return "primaryCabinetPages/PrimaryCabinet";
     }
@@ -50,13 +50,13 @@ public class WebController {
 
     @RequestMapping(value = "/editProfile", method = RequestMethod.GET)
     public String editUser(Model model) {
-        model.addAttribute(new UserDAO());
+        model.addAttribute(new UserEntity());
         return "primaryCabinetPages/EditUser";
     }
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
     public String changePassword(Model model) {
-        model.addAttribute(new UserDAO());
+        model.addAttribute(new UserEntity());
         return "primaryCabinetPages/ChangePassword";
     }
 
