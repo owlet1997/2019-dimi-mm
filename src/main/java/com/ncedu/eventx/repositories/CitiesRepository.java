@@ -1,12 +1,14 @@
 package com.ncedu.eventx.repositories;
 
-import com.ncedu.eventx.model.domain.CityDAO;
+import com.ncedu.eventx.models.entities.CityEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface CitiesRepository extends CrudRepository<CityDAO, Integer> {
-    List<CityDAO> findAll();
+@Repository
+public interface CitiesRepository extends CrudRepository<CityEntity, Integer> {
+    List<CityEntity> findAll();
 
-    CityDAO findByCityId(String cityid);
+    List<CityEntity> findByCityId(String cityId);
 }

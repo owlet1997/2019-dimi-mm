@@ -1,12 +1,15 @@
 package com.ncedu.eventx.repositories;
 
-import com.ncedu.eventx.model.domain.EventTypeDAO;
+import com.ncedu.eventx.models.entities.EventTypeEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface EventTypeRepository extends CrudRepository<EventTypeDAO, Integer> {
-    List<EventTypeDAO> findAll();
+@Repository
+public interface EventTypeRepository extends CrudRepository<EventTypeEntity, Integer> {
 
-    EventTypeDAO findById(int id);
+    List<EventTypeEntity> findAll();
+
+    List<EventTypeEntity> findById(int id);
 }

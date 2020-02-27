@@ -1,19 +1,22 @@
 package com.ncedu.eventx.repositories;
 
-import com.ncedu.eventx.model.domain.CityDAO;
-import com.ncedu.eventx.model.domain.EventDAO;
-import com.ncedu.eventx.model.domain.EventTypeDAO;
+import com.ncedu.eventx.models.entities.CityEntity;
+import com.ncedu.eventx.models.entities.EventEntity;
+import com.ncedu.eventx.models.entities.EventTypeEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface EventRepository extends CrudRepository<EventDAO, Integer> {
-    List<EventDAO> findAll();
+@Repository
+public interface EventRepository extends CrudRepository<EventEntity, Integer> {
 
-    EventDAO findById(int id);
+    List<EventEntity> findAllByCity(CityEntity city);
 
-    List<EventDAO> findAllByCity(CityDAO city);
+    List<EventEntity> findAll();
 
-    List<EventDAO> findAllByType(EventTypeDAO type);
+    List<EventEntity> findAllByType(EventTypeEntity type);
+
+    List<EventEntity> findById(int id);
 
 }
