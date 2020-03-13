@@ -1,31 +1,37 @@
 package com.ncedu.eventx.models.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name="user", schema = "eventx")
 public class UserEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(nullable = false)
-    private UserRoleEntity roleId;
+    private UserRoleEntity role;
 
-    @OneToMany(mappedBy = "userId")
-    Set<UserEventEntity> userEvents;
+    @OneToMany(mappedBy = "user")
+    List<UserEventEntity> userEvents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    List<UserEventItemEntity> userEventItems = new ArrayList<>();
 
     @Column(nullable = false)
     private String login;

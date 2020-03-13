@@ -1,31 +1,32 @@
 package com.ncedu.eventx.models.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name="CITY", schema = "eventx")
 public class CityEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false)
-    private String cityId;
+    private String abbrev;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventEntity> events;
+    @OneToMany(mappedBy = "city", cascade = {CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
+    private List<EventEntity> events = new ArrayList<>();
 
 }

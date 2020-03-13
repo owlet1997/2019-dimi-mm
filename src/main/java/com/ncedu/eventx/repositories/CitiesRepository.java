@@ -10,5 +10,9 @@ import java.util.List;
 public interface CitiesRepository extends CrudRepository<CityEntity, Integer> {
     List<CityEntity> findAll();
 
-    List<CityEntity> findByCityId(String cityId);
+    CityEntity findById(int id);
+
+    CityEntity findByAbbrev(String abbrev);
+
+    CityEntity findByName(String name);
 }

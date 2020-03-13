@@ -1,11 +1,14 @@
 package com.ncedu.eventx.models.entities;
 
+import com.ncedu.eventx.models.entities.EventEntity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Getter
@@ -15,24 +18,22 @@ import java.util.Date;
 public class EventItemEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(nullable = false)
-    private EventEntity parentId;
+    private EventEntity parent;
 
     @Column(nullable = false)
     private String name;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date timestart;
+    private Date timeStart;
 
-    @Column(nullable = false)
-    private float latitude;
-
-    @Column(nullable = false)
-    private float longtitude;
+    @OneToMany(mappedBy = "item")
+    List<UserEventItemEntity> userEventItems = new ArrayList<>();
 
 }

@@ -10,7 +10,7 @@ import lombok.*;
 public class CityDTO {
 
     private int id;
-    private String cityId;
+    private String abbrev;
     private String name;
 
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active">
+        <h5 class="list-group-item-heading">List group item heading</h5>
+        <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action">
+        <h5 class="list-group-item-heading">List group item heading</h5>
+        <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action">
+        <h5 class="list-group-item-heading">List group item heading</h5>
+        <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+    </a>
+</div>
+
+<script>
+    (function () {
+        const SERVER_URL = "http://localhost:8080";
+
+        const list = document.querySelector('.list');
+
+        fetch(`${SERVER_URL}/api/events/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            res.forEach(function (element) {
+                const node = ' <div class="item list">' +
+                    '        <div class="wrapper">' +
+                    '            <a href="item-detail.html"><h3 id="name">' + element.name + '</h3></a>' +
+                    '            <figure id="address">' + element.address +   '</figure>' +
+                    '            <div class="info">' +
+                    '                <div class="type">' +
+                    '                    <span id="type">' + element.description + '</span>' +
+                    '                </div>' +
+                    '                <div class="rating" data-rating="3"></div>' +
+                    '            </div>' +
+                    '        </div>' +
+                    '    </div>';
+                list.insertAdjacentHTML("beforeend",node);
+            })
+        })
+        .catch(error => alert(error))
+      }())
+</script>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.ncedu.eventx.models.DTO;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Getter
@@ -15,10 +16,11 @@ public class EventDTO {
     private CityDTO city;
     private String name;
     private EventTypeDTO eventType;
-    private LocalDate dateStart;
-    private LocalDate dateEnd;
+    private CoordinatesDTO coord;
+    private Date timeStart;
+    private Date timeEnd;
     private String description;
-    private float latitude;
-    private float longtitude;
+    private String address;
+
 
 }

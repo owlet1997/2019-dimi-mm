@@ -1,30 +1,36 @@
 package com.ncedu.eventx.controllers;
 
-import com.ncedu.eventx.models.entities.UserEntity;
+import com.ncedu.eventx.converters.UsersMapper;
+import com.ncedu.eventx.models.DTO.UserDTO;
+import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+import com.ncedu.eventx.services.UsersService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class RegistrationController {
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    final UsersService usersService;
+
+    public RegistrationController(UsersService usersService) {
+        this.usersService = usersService;
+    }
+    UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
+
+    @GetMapping(value = "/registration")
     public String registrationForm(Model model) {
-        model.addAttribute("user", new UserEntity());
+
+        model.addAttribute("user", new UserDTO());
         return "registrationPages/RegistrationPage";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registrationSubmit(@ModelAttribute @Valid UserEntity user, Model model, BindingResult bindingResult) {
-        model.addAttribute(user);
-        if (bindingResult.hasErrors()) {
-            return "registrationPages/RegistrationPage";
-        }
-        return "primaryCabinetPages/LogIn";
+    @PostMapping(value = "/registration")
+    @ResponseBody
+    public UserForCreateDTO registrationSubmit(@RequestBody UserForCreateDTO user) {
+
+        usersService.createRegisteredUser(user);
+        return usersMapper.toUserForCreateDTO(usersService.getUserById(user.getId()));
     }
 }

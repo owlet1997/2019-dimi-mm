@@ -1,6 +1,5 @@
 package com.ncedu.eventx.models.DTO;
 
-import com.ncedu.eventx.models.entities.UserRoleEntity;
 import lombok.*;
 
 @Data
@@ -11,7 +10,7 @@ import lombok.*;
 public class UserDTO {
 
     private int id;
-    private UserRoleEntity roleId;
+    private UserRoleDTO roleId;
     private String login;
     private String email;
     private String password;

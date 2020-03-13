@@ -1,9 +1,6 @@
 package com.ncedu.eventx.models.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,13 +10,20 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
-public class UserEventKeyEntity implements Serializable {
+public class UserEventItemKey implements Serializable {
 
     @Column(nullable = false)
-    int eventId;
+    int item;
 
     @Column(nullable = false)
-    int userId;
+    int user;
+
+    @Column(nullable = false)
+    int role;
 
 }
+
+// enum с ролями

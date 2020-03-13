@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <title>Update user</title>
+</head>
+<header>
+
+</header>
+
+<body>
+<div class="container-fluid mt-3">
+    <h4 class="mb-2">Обновить информацию</h4>
+
+    <!-- Добавил форме атрибут name -->
+    <form name="update" method="post">
+
+        <div class="form-row">
+
+            <input name="id" type="hidden" class="form-control" id="id" value="${user.id}">
+            <div class="col">
+                <input name="name" type="text" class="form-control" placeholder="Имя, фамилия">
+            </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                <label for="inputEmail">Email</label>
+                <!-- Добавил атрибут name всем input -->
+                <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="inputPassword">Password</label>
+                <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputLogin">Login</label>
+            <input name="login" type="text" class="form-control" id="inputLogin" placeholder="my_login">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputOrganization">Organization name</label>
+                <input name="organizationName" type="text" class="form-control" id="inputOrganization">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPozition">Position name</label>
+                <select name="positionName" id="inputPozition" class="form-control">
+                    <option selected>Teacher</option>
+                    <option>Student</option>
+                    <option>Another..</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script>
+
+    (function () {
+        const SERVER_URL = "http://localhost:8080";
+
+        const userId = window.location.pathname.split("/")[2];
+        console.log(userId);
+
+        const form = document.forms.update;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `${SERVER_URL}/api/users/`+userId, true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState !== 4) return;
+
+            const res = JSON.parse(xhr.responseText);
+            console.log(res);
+            if (xhr.status < 300) {
+
+                for (let element in res) {
+                    form[element].value = res[element];
+                }
+            }
+
+        }
+    }())
+</script>
+<script>
+    // Константа с адресом сервера, доступ к ней должен быть везде
+    const SERVER_URL = "http://localhost:8080";
+    // Самовызывающаяся функция
+    (function () {
+        // Ищем форму по имени
+        const form = document.forms.update;
+
+        // Слушаем, когда на форму подпишутся
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const userId = window.location.pathname.split("/")[2];
+
+            let body = {};
+            for (let element of form.elements) {
+                body[element.name] = element.value;
+            }
+            // Делаем запрос на сервер
+            fetch(`${SERVER_URL}/user/`+ userId + `/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(body)
+            })
+
+                // Получаем из ответа JSON
+                .then(res => res.json())
+                .then(res => alert(JSON.stringify(res)))
+                // Обрабатываем ошибки с сервера
+                .catch(error => alert(error))
+
+            window.location.assign(SERVER_URL + "/user/" + userId);
+        })
+    })()
+</script>
+</body>
+
+</html>
