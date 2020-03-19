@@ -37,7 +37,7 @@
                             <li><a href="/registration"><strong>Register</strong></a></li>
                         </ul>
                         <a href="submit.html" class="submit-item">
-                            <div class="content"><span>Submit Your Item</span></div>
+                            <div class="content"><span>Добавить событие</span></div>
                             <div class="icon">
                                 <i class="fa fa-plus"></i>
                             </div>
@@ -54,14 +54,14 @@
             <div id="page-content">
                 <section class="container">
                     <div class="row">
-                        <!--Content-->оо, и что долж
+                        <!--Content-->
                         <div class="col-md-7">
                             <header>
                                 <h1 class="page-title">Все события</h1>
                             </header>
                             <figure class="filter clearfix">
                                 <div class="buttons pull-left">
-                                    <a href="listing-grid.html" class="btn icon active"><i class="fa fa-th"></i>Карта</a>
+                                    <a href="/map" class="btn icon active"><i class="fa fa-th"></i>Карта</a>
                                     <a href="listing-list.html" class="btn icon active"><i class="fa fa-th-list"></i>Список</a>
                                 </div>
                                 <div class="pull-right">
@@ -79,9 +79,24 @@
                             </figure>
 
                             <!--Listing List-->
-                            <section class="block listing">
+                            <section class="block listing js-events">
 
                             </section>
+
+                            <script type="text/template" class="template">
+                                <div class="item list">
+                                    <div class="wrapper">
+                                        <a href="item-detail.html"><h3 id="name" class="item-name"><%- item.name %></h3></a>
+                                        <figure id="address"><%- item.address  %></figure>
+                                        <div class="info">
+                                            <div class="type">
+                                                <span><%- item.description  %></span>
+                                            </div>
+                                            <div class="rating" data-rating="3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </script>
                             <!--end Listing List-->
                             <!--Pagination-->
                             <nav>
@@ -99,28 +114,32 @@
                         <div class="col-md-3 col-sm-4">
                             <aside id="sidebar">
                                 <section>
-                                    <form role="form" action="?" method="post" class="background-color-white">
-                                        <header><h2>Your Search</h2></header>
+                                    <form name="find" role="form" action="?" method="post" class="background-color-white">
+                                        <header><h2>Найти события</h2></header>
+                                        <label for="city">Выберите город</label>
+
                                         <div class="form-group">
-                                            <select class="custom-select custom-select-lg mb-3 js-city">
-                                                <option value="">Open this select menu</option>
+                                            <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true">
+                                                <option value="" selected>Город не выбран</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="keyword">Поиск по дате</label>
+                                            <input name="dateStart" type="date" class="form-control" id="keyword">
+                                        </div>
+                                        <label for="type">Выберите тип события</label>
+                                        <div class="form-group">
+                                            <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true">
+                                                <option value="" selected>Тип не выбран</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="keyword">Поиск по слову</label>
-                                            <input type="text" class="form-control" id="keyword">
+                                            <button type="submit" class="btn btn-default">Найти!</button>
                                         </div>
 
-                                        <!-- /.form-group -->
-                                        <div id="checkboxes" class="js-event-types">
-                                            <label>Выберите тип события</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-default">Search Now</button>
-                                        </div>
-                                        <!-- /.form-group -->
                                     </form>
-                                    <!-- /.form-->
+
                                 </section>
 
                             </aside>
@@ -141,38 +160,47 @@
                     <div class="container">
                         <div class="row">
 
-                            <div class="col-md-4 col-sm-6">
+                            <div class="col-md-4 col-sm-4">
                                 <section>
                                     <h2>About Us</h2>
                                     <address>
-                                        <div>Max Five Lounge</div>
-                                        <div>63 Birch Street</div>
-                                        <div>Granada Hills, CA 91344</div>
-                                        <figure>
-                                            <div class="info">
-                                                <i class="fa fa-mobile"></i>
-                                                <span>818-832-5258</span>
-                                            </div>
-                                            <div class="info">
-                                                <i class="fa fa-phone"></i>
-                                                <span>+1 123 456 789</span>
-                                            </div>
-                                            <div class="info">
-                                                <i class="fa fa-globe"></i>
-                                                <a href="#">www.maxfivelounge.com</a>
-                                            </div>
-                                        </figure>
+                                        <div>Группа DEV-2</div>
+                                        <div>DIMI-MM</div>
                                     </address>
+
+                                </section>
+                            </div>
+                            <!--/.col-md-4-->
+                            <div class="col-md-4 col-sm-4">
+                                <!--New Items-->
+                                <section>
+                                    <h2>Об авторах</h2>
+                                    <figure>
+                                        <div class="info">
+                                            <span>Шаталова Надежда</span>
+                                        </div>
+                                        <div class="info">
+                                            <span>Таиров Александр</span>
+                                        </div>
+                                    </figure>
+                                    <!--/.item-horizontal small-->
+                                </section>
+                                <!--end New Items-->
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <!--New Items-->
+                                <section>
+                                    <h2>Вот здесь нас нет</h2>
                                     <div class="social">
                                         <a href="#" class="social-button"><i class="fa fa-twitter"></i></a>
                                         <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
                                         <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
                                     </div>
 
-                                    <a href="contact.html" class="btn framed icon">Contact Us<i class="fa fa-angle-right"></i></a>
+                                    <!--/.item-horizontal small-->
                                 </section>
+                                <!--end New Items-->
                             </div>
-                            <!--/.col-md-4-->
                         </div>
                         <!--/.row-->
                     </div>
@@ -181,7 +209,7 @@
                 <!--/.footer-top-->
                 <div class="footer-bottom">
                     <div class="container">
-                        <span class="left">(C) ThemeStarz, All rights reserved</span>
+                        <span class="left">(C) EventX, NetCracker, 2020. Students don't have rights</span>
                         <span class="right">
                                 <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
                             </span>
@@ -195,74 +223,15 @@
     <!-- end Inner Wrapper -->
 </div>
 <!-- end Outer Wrapper-->
+
 <script>
+    var eventLink = document.querySelector('h3.item-name');
 
-    (function () {
-        const SERVER_URL = "http://localhost:8080";
+    eventLink.addEventListener(onclick,function (event) {
+        event.preventDefault();
 
-        const list = document.querySelector('section.block.listing');
-        const selectEventType = document.querySelector('.js-event-types');
-        const selectCity = document.querySelector('.js-city');
 
-        fetch(`${SERVER_URL}/api/events/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                res.forEach(function (element) {
-                    const node = ' <div class="item list">' +
-                        '        <div class="wrapper">' +
-                        '            <a href="item-detail.html"><h3 id="name">' + element.name + '</h3></a>' +
-                        '            <figure id="address">' + element.address +   '</figure>' +
-                        '            <div class="info">' +
-                        '                <div class="type">' +
-                        '                    <span id="type">' + element.description + '</span>' +
-                        '                </div>' +
-                        '                <div class="rating" data-rating="3"></div>' +
-                        '            </div>' +
-                        '        </div>' +
-                        '    </div>';
-                    list.insertAdjacentHTML("beforeend",node);
-                })
-            })
-            .catch(error => alert(error));
-
-        fetch(`${SERVER_URL}/api/event-types/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                res.forEach(function (element) {
-                    const node = '<div class="checkbox">  <label>' +
-                        '<input type="checkbox">' + element.type +
-                        '</label> </div>';
-                    selectEventType.insertAdjacentHTML("beforeend",node);
-                })
-            })
-            .catch(error => alert(error));
-
-        fetch(`${SERVER_URL}/api/cities/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                res.forEach(function (element) {
-                    const node = '<option value="'+ element.id + '">'+ element.name + '</option>';
-                    selectCity.insertAdjacentHTML("beforeend",node);
-                })
-            })
-            .catch(error => alert(error));
-
-    }())
+    })
 </script>
 
 <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
@@ -273,7 +242,12 @@
 <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="js/icheck.min.js"></script>
 <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
-<!--<script type="text/javascript" src="js/custom.js"></script>-->
+<script type="text/javascript" src="js/custom.js"></script>
+
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
+<script type="text/javascript" src="js/my-scripts/listEvents.js"></script>
+<script type="text/javascript" src="js/my-scripts/findEvents.js"></script>
 
 </body>
 </html>

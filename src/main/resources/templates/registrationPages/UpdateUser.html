@@ -78,14 +78,13 @@
 <script>
 
     (function () {
-        const SERVER_URL = "http://localhost:8080";
 
         const userId = window.location.pathname.split("/")[2];
         console.log(userId);
 
         const form = document.forms.update;
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `${SERVER_URL}/api/users/`+userId, true);
+        xhr.open('GET', `/api/users/`+userId, true);
         xhr.send();
 
         xhr.onreadystatechange = function () {

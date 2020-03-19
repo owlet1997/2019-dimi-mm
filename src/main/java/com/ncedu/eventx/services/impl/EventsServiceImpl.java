@@ -4,6 +4,7 @@ import com.ncedu.eventx.converters.*;
 import com.ncedu.eventx.models.DTO.EventDTO;
 import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.EventWithUsersDTO;
+import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
 import com.ncedu.eventx.services.EventsService;
@@ -24,7 +25,7 @@ import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
 @Service
 public class EventsServiceImpl implements EventsService {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     final EventRepository eventRepository;
     final CitiesRepository citiesRepository;
@@ -91,7 +92,7 @@ public class EventsServiceImpl implements EventsService {
 
 
     @Override
-    public List<EventDTO> getEventsBySearchParams(String city, String type, String dateStart) {
+    public List<EventWithItemsDTO> getEventsBySearchParams(String city, String type, String dateStart) {
 
         List<EventEntity> eventEntityList = new ArrayList<>();
 
@@ -162,15 +163,24 @@ public class EventsServiceImpl implements EventsService {
                 break;
         }
 
-    return eventMapper.toListDTO(eventEntityList);
+    return getEventsWithItemsList(eventEntityList);
     }
 
     @Override
-    public List<EventWithItemsDTO> getEventsWithItemsList() {
-        List<EventEntity> list = eventRepository.findAll();
+    public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
+        UserRoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+        List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
+
         List<EventWithItemsDTO> withItemsDTOList = new ArrayList<>();
-        for (EventEntity e: list) {
-            withItemsDTOList.add(eventMapper.toEventWithItemsDTO(e));
+        for (EventEntity e: eventEntityList) {
+            List<UserEntity> usersList = userEventEntityList.stream()
+                    .filter(event -> event.getEvent().equals(e))
+                    .filter(role -> role.getRole().equals(userRoleVisit))
+                    .map(UserEventEntity::getUser).collect(Collectors.toList());
+            List<UserDTO> userDTOList = usersMapper.toUserDTOList(usersList);
+            EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(e);
+            event.setVisitors(userDTOList);
+            withItemsDTOList.add(event);
         }
         return withItemsDTOList;
     }

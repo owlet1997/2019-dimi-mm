@@ -50,6 +50,12 @@ public class WebController {
         return "EventList";
     }
 
+    @GetMapping(value = "/map")
+    public String map(Model model) {
+
+        return "eventMap";
+    }
+
     @GetMapping(value = "/test")
     public String test(Model model) {
 

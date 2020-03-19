@@ -9,10 +9,12 @@ import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventItemRepository;
 import com.ncedu.eventx.repositories.EventRepository;
 import com.ncedu.eventx.repositories.RolesRepository;
+import com.ncedu.eventx.repositories.UserEventItemRepository;
 import com.ncedu.eventx.services.EventItemService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +27,16 @@ public class EventItemServiceImpl implements EventItemService {
     final EventItemRepository eventItemRepository;
     final EventRepository eventRepository;
     final RolesRepository rolesRepository;
+    final UserEventItemRepository userEventItemRepository;
 
-    public EventItemServiceImpl(EventItemRepository eventItemRepository, EventRepository eventRepository, RolesRepository rolesRepository) {
+    public EventItemServiceImpl(EventItemRepository eventItemRepository,
+                                EventRepository eventRepository,
+                                RolesRepository rolesRepository,
+                                UserEventItemRepository userEventItemRepository) {
         this.eventItemRepository = eventItemRepository;
         this.eventRepository = eventRepository;
         this.rolesRepository = rolesRepository;
+        this.userEventItemRepository = userEventItemRepository;
     }
 
     EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
@@ -44,6 +51,7 @@ public class EventItemServiceImpl implements EventItemService {
 
         eventItemEntity.setParent(parentEntity);
         eventItemEntity.setName(eventItemDTO.getName());
+        eventItemEntity.setAuditory(eventItemDTO.getAuditory());
         eventItemEntity.setTimeStart(eventItemDTO.getTimeStart());
 
         eventItemRepository.save(eventItemEntity);
@@ -51,29 +59,34 @@ public class EventItemServiceImpl implements EventItemService {
     }
 
     @Override
-    public List<EventItemDTO> getEventItemsListByParent(int id) {
+    public List<EventItemWithUsersDTO> getEventItemsListByParent(int id) {
         EventEntity eventEntity = eventRepository.findById(id);
         List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
-        return eventItemMapper.toListDTO(list);
-
-    }
-
-    @Override
-    public EventItemWithUsersDTO getEventItemWithUsers(EventItemDTO eventItemDTO) {
-        EventItemEntity itemEntity = eventItemRepository.findById(eventItemDTO.getId());
 
         UserRoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
         UserRoleEntity userRoleSpeaker = rolesRepository.findByName(SPEAKER.getDescription());
 
-        List<UserEventItemEntity> list = itemEntity.getUserEventItems();
+        List<EventItemWithUsersDTO> withUsersDTOList = new ArrayList<>();
 
-        List<UserEntity> usersList = list.stream()
-                .filter(e -> e.getRole().equals(userRoleVisit))
-                .map(UserEventItemEntity::getUser).collect(Collectors.toList());;
+        for (EventItemEntity e: list) {
+            List<UserEventItemEntity> userEventMap = userEventItemRepository.getAllByItem(e);
 
-        UserEntity speaker = list.stream().filter(e -> e.getRole().equals(userRoleSpeaker))
-                            .map(UserEventItemEntity::getUser).findAny().get();
+            List<UserEntity> usersList = userEventMap.stream()
+                    .filter(role -> role.getRole().equals(userRoleVisit))
+                    .map(UserEventItemEntity::getUser).collect(Collectors.toList());;
 
-        return new EventItemWithUsersDTO(eventItemDTO,usersMapper.toDTO(speaker),usersMapper.toUserDTOList(usersList));
+            UserEntity speaker = userEventMap.stream().filter(role -> role.getRole().equals(userRoleSpeaker))
+                    .map(UserEventItemEntity::getUser).findAny().get();
+
+            EventItemWithUsersDTO item = new EventItemWithUsersDTO(eventItemMapper.toEventItemDTO(e),
+                                                                   usersMapper.toDTO(speaker),
+                                                                   usersMapper.toUserDTOList(usersList));
+            withUsersDTOList.add(item);
+
+        }
+
+        return withUsersDTOList;
+
     }
+
 }

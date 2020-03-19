@@ -54,11 +54,11 @@ public class EventEntity implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_start", nullable = false)
     private Date timeStart;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_end", nullable = false)
     private Date timeEnd;
 

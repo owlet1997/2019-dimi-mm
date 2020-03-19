@@ -3,6 +3,7 @@ package com.ncedu.eventx.models.DTO;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,4 +22,5 @@ public class EventWithItemsDTO {
     private String description;
     private String address;
     private Set<EventItemDTO> items;
+    private List<UserDTO> visitors;
 }

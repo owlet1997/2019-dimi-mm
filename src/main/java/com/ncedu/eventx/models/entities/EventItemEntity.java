@@ -29,9 +29,12 @@ public class EventItemEntity {
     @Column(nullable = false)
     private String name;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timeStart;
+
+    @Column(nullable = false)
+    private String auditory;
 
     @OneToMany(mappedBy = "item")
     List<UserEventItemEntity> userEventItems = new ArrayList<>();

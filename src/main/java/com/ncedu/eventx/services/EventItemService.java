@@ -10,8 +10,6 @@ public interface EventItemService {
 
    EventItemEntity createEventItem(EventItemDTO eventItemDTO);
 
-   List<EventItemDTO> getEventItemsListByParent(int id);
-
-   EventItemWithUsersDTO getEventItemWithUsers(EventItemDTO eventItemDTO);
+   List<EventItemWithUsersDTO> getEventItemsListByParent(int id);
 
 }

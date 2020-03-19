@@ -88,7 +88,7 @@ public class MainRestController {
             produces = { MediaType.APPLICATION_JSON_VALUE
             })
     @ResponseBody
-    public List<EventItemDTO> getEventItemsByParent(@PathVariable("id") int eventId) {
+    public List<EventItemWithUsersDTO> getEventItemsByParent(@PathVariable("id") int eventId) {
         return eventItemService.getEventItemsListByParent(eventId);
     }
 
@@ -104,7 +104,7 @@ public class MainRestController {
             produces = { MediaType.APPLICATION_JSON_VALUE
             })
     @ResponseBody
-    public List<EventDTO> getEventBySearchParam(@RequestParam(name = "city") Optional<String> city,
+    public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional<String> city,
                                                 @RequestParam(name = "type") Optional<String> type,
                                                 @RequestParam(name = "dateStart") Optional<String> dateStart) {
 
@@ -112,6 +112,16 @@ public class MainRestController {
                                                 type.orElseGet(()->""),
                                                 dateStart.orElseGet(()->""));
     }
+
+//    @GetMapping(value = "/api/events", //
+//            produces = { MediaType.APPLICATION_JSON_VALUE
+//            })
+//    @ResponseBody
+//    public List<EventWithItemsDTO> getEvents() {
+//        return eventsService.getEventsWithItemsList();
+//    }
+
+
 
 
 
