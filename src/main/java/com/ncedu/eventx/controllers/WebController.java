@@ -2,8 +2,10 @@ package com.ncedu.eventx.controllers;
 
 
 import com.ncedu.eventx.converters.UsersMapper;
+import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class WebController {
 
     final UsersService usersService;
+    final UserEventService userEventService;
 
-    public WebController(UsersService usersService) {
+    public WebController(UsersService usersService, UserEventService userEventService) {
         this.usersService = usersService;
+        this.userEventService = userEventService;
     }
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
@@ -36,6 +40,14 @@ public class WebController {
         return new ModelAndView("registrationPages/UpdateUser");
     }
 
+    @PostMapping("/add-event")
+    @ResponseBody
+    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
+
+        userEventService.createEvent(event);
+        return event;
+    }
+
     @PutMapping("/user/{id}/update")
     @ResponseBody
     public UserForCreateDTO updateUser(@RequestBody UserForCreateDTO user){
@@ -48,6 +60,12 @@ public class WebController {
     public String list(Model model) {
 
         return "EventList";
+    }
+
+    @GetMapping(value = "/add-event")
+    public String addEvent(Model model) {
+
+        return "submit";
     }
 
     @GetMapping(value = "/map")

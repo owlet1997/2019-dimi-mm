@@ -5,6 +5,7 @@ import com.ncedu.eventx.models.DTO.CoordinatesDTO;
 import com.ncedu.eventx.models.entities.CoordinatesEntity;
 import com.ncedu.eventx.repositories.CoordinatesRepository;
 import com.ncedu.eventx.services.CoordinatesService;
+import org.locationtech.jts.geom.Point;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,12 @@ public class CoordinatesServiceImpl implements CoordinatesService {
     CoordinatesMapper coordinatesMapper = Mappers.getMapper(CoordinatesMapper.class);
 
     @Override
-    public boolean createPlace(CoordinatesDTO coordinatesDTO) {
+    public CoordinatesEntity createPlace(String name, Point coord) {
         CoordinatesEntity coordinatesEntity = new CoordinatesEntity();
-        coordinatesEntity.setName(coordinatesDTO.getName());
-        coordinatesEntity.setPoint(coordinatesDTO.getPoint());
+        coordinatesEntity.setName(name);
+        coordinatesEntity.setPoint(coord);
         coordinatesRepository.save(coordinatesEntity);
-        return true;
+        return coordinatesEntity;
     }
 
     @Override
@@ -43,9 +44,8 @@ public class CoordinatesServiceImpl implements CoordinatesService {
     }
 
     @Override
-    public CoordinatesDTO getPlaceByName(String name) {
-        CoordinatesEntity coordinatesEntity = coordinatesRepository.findByName(name);
-        return coordinatesMapper.toCoordinatesDTO(coordinatesEntity);
+    public CoordinatesEntity getPlaceByName(String name) {
+        return coordinatesRepository.findByName(name);
     }
 
 

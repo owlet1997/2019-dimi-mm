@@ -1,5 +1,6 @@
 package com.ncedu.eventx.services;
 import com.ncedu.eventx.models.DTO.EventDTO;
+import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.EventWithUsersDTO;
 import com.ncedu.eventx.models.entities.EventEntity;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface EventsService {
 
-    boolean createEvent(EventDTO event);
+    EventEntity createEvent(EventForCreateDTO createDTO);
 
     public EventDTO getEventById(int id);
 

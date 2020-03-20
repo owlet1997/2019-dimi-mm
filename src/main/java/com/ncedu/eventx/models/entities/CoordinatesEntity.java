@@ -28,7 +28,6 @@ public class CoordinatesEntity {
     private int id;
 
     @Column(nullable = false)
-    @UniqueElements
     private String name;
 
     @Column(columnDefinition="geometry(Point,4326)",nullable = false)

@@ -1,6 +1,7 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.models.DTO.EventDTO;
+import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.DTO.UserRoleDTO;
 import com.ncedu.eventx.models.entities.*;
@@ -62,10 +63,9 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
-    public boolean createEvent(UserDTO user, EventDTO eventDTO) {
-        UserEntity userEntity = userRepository.findById(user.getId());
-        eventsService.createEvent(eventDTO);
-        EventEntity eventEntity = eventRepository.findByName(eventDTO.getName());
+    public boolean createEvent(EventForCreateDTO createDTO) {
+        UserEntity userEntity = userRepository.findById(Integer.parseInt(createDTO.getUserId()));
+        EventEntity eventEntity = eventsService.createEvent(createDTO);
         UserRoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());

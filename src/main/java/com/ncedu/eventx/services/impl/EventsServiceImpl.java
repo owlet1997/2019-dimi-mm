@@ -1,12 +1,10 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.*;
-import com.ncedu.eventx.models.DTO.EventDTO;
-import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
-import com.ncedu.eventx.models.DTO.EventWithUsersDTO;
-import com.ncedu.eventx.models.DTO.UserDTO;
+import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
+import com.ncedu.eventx.services.CoordinatesService;
 import com.ncedu.eventx.services.EventsService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -26,12 +24,14 @@ import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
 public class EventsServiceImpl implements EventsService {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    SimpleDateFormat formatCreate = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
     final EventRepository eventRepository;
     final CitiesRepository citiesRepository;
     final EventTypeRepository eventTypeRepository;
     final RolesRepository rolesRepository;
     final UserEventRepository userEventRepository;
+    final CoordinatesService coordinatesService;
 
     CitiesMapper citiesMapper = Mappers.getMapper(CitiesMapper.class);
     CoordinatesMapper coordinatesMapper = Mappers.getMapper(CoordinatesMapper.class);
@@ -40,27 +40,38 @@ public class EventsServiceImpl implements EventsService {
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
 
-    public EventsServiceImpl(EventRepository eventRepository, CitiesRepository citiesRepository, EventTypeRepository eventTypeRepository, RolesRepository rolesRepository, UserEventRepository userEventRepository) {
+    public EventsServiceImpl(EventRepository eventRepository, CitiesRepository citiesRepository, EventTypeRepository eventTypeRepository, RolesRepository rolesRepository, UserEventRepository userEventRepository, CoordinatesService coordinatesService) {
         this.eventRepository = eventRepository;
         this.citiesRepository = citiesRepository;
         this.eventTypeRepository = eventTypeRepository;
         this.rolesRepository = rolesRepository;
         this.userEventRepository = userEventRepository;
+        this.coordinatesService = coordinatesService;
     }
 
     @Override
-    public boolean createEvent(EventDTO event) {
+    public EventEntity createEvent(EventForCreateDTO event) {
         EventEntity eventEntity = new EventEntity();
-
-        CityEntity cityEntity = citiesMapper.toCityEntity(event.getCity());
-        CoordinatesEntity coordinatesEntity = coordinatesMapper.toCoordinatesEntity(event.getCoord());
-        EventTypeEntity eventTypeEntity = eventTypesMapper.toEventTypeEntity(event.getEventType());
+        CoordinatesEntity coordinatesEntity;
+        CityEntity cityEntity = citiesRepository.findByAbbrev(event.getCity());
+        if (coordinatesService.getPlaceByName(event.getAddress())==null){
+            coordinatesEntity = coordinatesService.createPlace(event.getAddress(), event.getCoord());
+        }
+        else coordinatesEntity = coordinatesService.getPlaceByName(event.getAddress());
+        EventTypeEntity eventTypeEntity = eventTypeRepository.findById(event.getType());
 
         eventEntity.setAddress(event.getAddress());
         eventEntity.setName(event.getName());
         eventEntity.setDescription(event.getDescription());
-        eventEntity.setTimeStart(event.getTimeStart());
-        eventEntity.setTimeEnd(event.getTimeEnd());
+
+        String dateStart = event.getDateStart() + " " + event.getTimeStart();
+        String dateEnd = event.getDateEnd() + " " + event.getTimeEnd();
+        try {
+            eventEntity.setTimeStart(formatCreate.parse(dateStart));
+            eventEntity.setTimeEnd(formatCreate.parse(dateEnd));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         eventEntity.setCoord(coordinatesEntity);
         eventEntity.setCity(cityEntity);
@@ -68,7 +79,7 @@ public class EventsServiceImpl implements EventsService {
 
         eventRepository.save(eventEntity);
 
-        return true;
+        return eventEntity;
 
     }
 

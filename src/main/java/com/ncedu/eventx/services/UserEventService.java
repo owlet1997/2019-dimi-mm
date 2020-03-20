@@ -1,6 +1,7 @@
 package com.ncedu.eventx.services;
 
 import com.ncedu.eventx.models.DTO.EventDTO;
+import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.DTO.UserRoleDTO;
 import com.ncedu.eventx.models.entities.UserEventEntity;
@@ -16,7 +17,7 @@ public interface UserEventService {
 
     List<UserEventEntity> getAllByUser(UserDTO userDTO);
 
-    boolean createEvent(UserDTO user, EventDTO eventDTO);
+    boolean createEvent(EventForCreateDTO createDTO);
 
     boolean visitEvent(UserDTO user, EventDTO eventDTO);
 
