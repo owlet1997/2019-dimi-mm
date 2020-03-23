@@ -25,6 +25,11 @@ public class RoleEntity implements Serializable {
     @Column
     private String name;
 
+    @OneToMany(mappedBy = "role",
+            cascade = {CascadeType.REFRESH, CascadeType.MERGE},
+            orphanRemoval = true)
+    private List<UserEntity> users = new ArrayList<>();
+
     @OneToMany(mappedBy = "role")
     private List<UserEventEntity> userEventList = new ArrayList<>();
 
