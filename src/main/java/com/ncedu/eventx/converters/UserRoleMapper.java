@@ -3,7 +3,6 @@ package com.ncedu.eventx.converters;
 
 import com.ncedu.eventx.models.DTO.RoleDTO;
 import com.ncedu.eventx.models.entities.RoleEntity;
-=======
 
 import org.mapstruct.Mapper;
 

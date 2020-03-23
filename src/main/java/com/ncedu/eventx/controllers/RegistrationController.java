@@ -28,9 +28,9 @@ public class RegistrationController {
 
     @PostMapping(value = "/registration")
     @ResponseBody
-    public UserForCreateDTO registrationSubmit(@RequestBody UserForCreateDTO user) {
+    public UserForCreateDTO registrationSubmit(@RequestBody UserDTO user) {
 
         usersService.createRegisteredUser(user);
-        return usersMapper.toUserForCreateDTO(usersService.getUserById(user.getId()));
+        return usersMapper.toUserDTO(usersService.getUserById(user.getId()));
     }
 }
