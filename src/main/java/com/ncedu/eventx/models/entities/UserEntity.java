@@ -28,16 +28,13 @@ public class UserEntity implements Serializable, UserDetails {
     private int id;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    private List<RoleEntity> roles;
+    @JoinColumn(nullable = false)
+    private RoleEntity role;
 
     @OneToMany(mappedBy = "user")
     List<UserEventEntity> userEvents = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    List<UserEventItemEntity> userEventItems = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "user")
     List<UserEventItemEntity> userEventItems = new ArrayList<>();
@@ -60,40 +57,6 @@ public class UserEntity implements Serializable, UserDetails {
     @Email
     @Column(nullable = false)
     private String email;
-
-    // Удалить
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
-
-    public List<UserEventEntity> getUserEvents() {
-        return userEvents;
-    }
-
-    public void setUserEvents(List<UserEventEntity> userEvents) {
-        this.userEvents = userEvents;
-    }
-
-    public List<UserEventItemEntity> getUserEventItems() {
-        return userEventItems;
-    }
-
-    public void setUserEventItems(List<UserEventItemEntity> userEventItems) {
-        this.userEventItems = userEventItems;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -132,39 +95,4 @@ public class UserEntity implements Serializable, UserDetails {
         return false;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getOrganizationName() {
-        return organizationName;
-    }
-
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
-    }
-
-    public String getPositionName() {
-        return positionName;
-    }
-
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
-    public String getAvatarImg() {
-        return avatarImg;
-    }
-
-    public void setAvatarImg(String avatarImg) {
-        this.avatarImg = avatarImg;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
