@@ -52,6 +52,7 @@ public class MainRestController {
             produces = { MediaType.APPLICATION_JSON_VALUE
                     })
     @ResponseBody
+
     public UserDTO getUser(@PathVariable("userNo") int userNo) {
         return usersMapper.toUserDTO(usersService.getUserById(userNo));
     }

@@ -1,25 +1,32 @@
 package com.ncedu.eventx.models.entities;
 
 import lombok.*;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
+
 import java.util.*;
+
 
 @Data
 @Getter
 @Setter
 @Entity
 @ToString
+
 @Table(name="t_user", schema = "eventx")
 public class UserEntity implements Serializable, UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.REFRESH, CascadeType.MERGE})
@@ -27,6 +34,10 @@ public class UserEntity implements Serializable, UserDetails {
 
     @OneToMany(mappedBy = "user")
     List<UserEventEntity> userEvents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    List<UserEventItemEntity> userEventItems = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     List<UserEventItemEntity> userEventItems = new ArrayList<>();

@@ -3,7 +3,10 @@ package com.ncedu.eventx.services.impl;
 import com.ncedu.eventx.models.DTO.EventDTO;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
+
 import com.ncedu.eventx.models.DTO.RoleDTO;
+
+
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventRepository;
 import com.ncedu.eventx.repositories.RolesRepository;
@@ -51,8 +54,10 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
+
     public List<UserEventEntity> getAllByRole(RoleDTO roleDTO) {
         RoleEntity entity = rolesRepository.findByName(roleDTO.getName());
+
         return userEventRepository.findAllByRole(entity);
     }
 
@@ -66,7 +71,9 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean createEvent(EventForCreateDTO createDTO) {
         UserEntity userEntity = userRepository.findById(Integer.parseInt(createDTO.getUserId()));
         EventEntity eventEntity = eventsService.createEvent(createDTO);
+
         RoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
+
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
@@ -78,7 +85,9 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean visitEvent(UserDTO user, EventDTO eventDTO) {
         UserEntity userEntity = userRepository.findById(user.getId());
         EventEntity eventEntity = eventRepository.findById(eventDTO.getId());
+
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);

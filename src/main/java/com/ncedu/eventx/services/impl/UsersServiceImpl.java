@@ -2,21 +2,27 @@ package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.UserDTO;
+
 import com.ncedu.eventx.models.entities.RoleEntity;
 import com.ncedu.eventx.models.entities.UserEntity;
+
 import com.ncedu.eventx.repositories.RolesRepository;
 import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+
 public class UsersServiceImpl implements UsersService, UserDetailsService {
+
 
     final UserRepository userRepository;
     final RolesRepository rolesRepository;
@@ -35,6 +41,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
+
     public boolean createRegisteredUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
         List<RoleEntity> roles = null;
@@ -44,6 +51,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         userEntity.setRoles(roles);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
+
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
@@ -54,11 +62,13 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
+
     public boolean updateUser(UserDTO userDTO) {
         UserEntity userEntity = userRepository.findById(userDTO.getId());
 
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
+
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
@@ -73,6 +83,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     public boolean deleteUser(int id) {
             userRepository.deleteById(id);
             return true;
+
     }
 
     @Override
@@ -80,6 +91,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         UserEntity userEntity = userRepository.findById(id);
         return usersMapper.toDTO(userEntity);
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -91,4 +103,5 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
 
         return (UserDetails) user;
     }
+
 }

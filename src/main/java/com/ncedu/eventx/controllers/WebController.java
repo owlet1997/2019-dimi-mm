@@ -4,6 +4,7 @@ package com.ncedu.eventx.controllers;
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
+
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
@@ -32,6 +33,7 @@ public class WebController {
         ModelAndView modelAndView = new ModelAndView("registrationPages/UserPage");
         modelAndView.addObject("user",user);
         return modelAndView;
+
     }
 
     @GetMapping("/user/{id}/update")
@@ -106,7 +108,7 @@ public class WebController {
 
 
 
-//    // Личный кабинет
+   //    // Личный кабинет
 //    @GetMapping(value = "/login")
 //    public String logIn(Model model) {
 //

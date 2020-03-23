@@ -15,14 +15,17 @@ public interface UserEventRepository extends CrudRepository<UserEventEntity, Use
 
     List<UserEventEntity> findAllByRole(RoleEntity roleEntity);
 
+
     List<UserEventEntity> findAllByUser(UserEntity userEntity);
 
     boolean deleteAllByEvent(EventEntity eventEntity);
 
     UserEventEntity findByEventAndUser(EventEntity eventEntity, UserEntity userEntity);
 
+
     UserEventEntity findByEventAndRole(EventEntity eventEntity, RoleEntity roleEntity);
 
     boolean deleteByEventAndUserAndRole(EventEntity entity, UserEntity userEntity, RoleEntity roleEntity);
+
 
 }

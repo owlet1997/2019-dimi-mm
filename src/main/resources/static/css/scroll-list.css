@@ -1,0 +1,20 @@
+div.right-group, div.time, div.answers, div.person, div.time-and-counters{
+display: flex;
+}
+
+div.time-and-counters{
+justify-content:space-between;
+}
+
+div.time.text {
+width:max-content;                                                                  margin: none;
+vertical-align: center;
+}
+
+.accordion {
+    height: 90vh;
+    margin-bottom: 10px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+}
+

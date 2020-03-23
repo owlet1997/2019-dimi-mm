@@ -73,7 +73,6 @@ public class DataSourceConfig {
         dataSource.setUsername(userName);
         dataSource.setPassword(password);
 
-        return dataSource;
 
        /* dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
         dataSource.setUrl(env.getProperty("spring.datasource.url"));

@@ -31,7 +31,9 @@ public class UserEventEntity implements Serializable {
     @ManyToOne
     @MapsId("role")
     @JoinColumn(nullable = false)
+
     private RoleEntity role;
+
 
     @Column(nullable = false)
     private int showOrder;

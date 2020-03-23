@@ -63,8 +63,10 @@ public class EventItemServiceImpl implements EventItemService {
         EventEntity eventEntity = eventRepository.findById(id);
         List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
 
+
         RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
         RoleEntity userRoleSpeaker = rolesRepository.findByName(SPEAKER.getDescription());
+
 
         List<EventItemWithUsersDTO> withUsersDTOList = new ArrayList<>();
 
