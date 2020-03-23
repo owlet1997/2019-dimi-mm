@@ -2,7 +2,6 @@ package com.ncedu.eventx.controllers;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserForCreateDTO;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ public class RegistrationController {
 
     @PostMapping(value = "/registration")
     @ResponseBody
-    public UserForCreateDTO registrationSubmit(@RequestBody UserDTO user) {
+    public UserDTO registrationSubmit(@RequestBody UserDTO user) {
 
         usersService.createRegisteredUser(user);
         return usersMapper.toUserDTO(usersService.getUserById(user.getId()));
