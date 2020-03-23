@@ -44,10 +44,10 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
 
     public boolean createRegisteredUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
-        List<RoleEntity> roles = rolesRepository.findByName(userDTO.getUsername());
+        RoleEntity role = rolesRepository.findByName(userDTO.getUsername());
 
         userEntity.setId(userDTO.getId());
-        userEntity.setRole(roles);
+        userEntity.setRole(role);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
 
