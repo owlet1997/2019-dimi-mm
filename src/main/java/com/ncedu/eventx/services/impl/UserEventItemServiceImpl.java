@@ -86,7 +86,7 @@ public class UserEventItemServiceImpl implements UserEventItemService {
         if (!userEventService.isVisited(userId,itemEntity.getParent().getId()))
         userEventService.visitEvent(userId,itemEntity.getParent().getId());
 
-        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
         List<UserEventItemEntity> list = userEventItemRepository.getAllByItem(itemEntity);
 
@@ -99,7 +99,7 @@ public class UserEventItemServiceImpl implements UserEventItemService {
 
     @Override
     public boolean removeFromFeatured(int itemId, int userId) {
-        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
         UserEventItemKey key = new UserEventItemKey(itemId,userId,roleEntity.getId());
         UserEventItemEntity userEventItemEntity = userEventItemRepository.findById(key).get();

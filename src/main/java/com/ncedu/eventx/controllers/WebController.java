@@ -55,7 +55,7 @@ public class WebController {
     public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
 //    public UserDTO updateUser(@RequestBody UserDTO user){
         usersService.updateUser(user);
-        return usersMapper.toUserForCreateDTO(usersService.getUserById(user.getId()));
+        return usersMapper.toUserForUpdateDTO(usersService.getUserById(user.getId()));
     }
 
     @GetMapping(value = "/list")
@@ -105,6 +105,17 @@ public class WebController {
         usersService.createRegisteredUser(user);
         return "redirect:/";
     }
+
+    @GetMapping(value = "/log-in")
+    public String loginBootstrap(Model model) {
+        return "sign-in";
+    }
+
+    @GetMapping(value = "/register")
+    public String registerBootstrap() {
+        return "register";
+    }
+
 
 
 

@@ -97,8 +97,8 @@ public class EventsServiceImpl implements EventsService {
     @Override
     public EventWithItemsDTO getEventWithItemsById(int id) {
         EventEntity eventEntity = eventRepository.findById(id);
-        UserRoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
-        UserRoleEntity userRoleVisitor = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+        RoleEntity userRoleVisitor = rolesRepository.findByName(VISITOR.getDescription());
         List<UserEventEntity> userEventEntityList = userEventRepository.findAllByEvent(eventEntity);
         UserDTO creator = usersMapper.toDTO(userEventEntityList.stream()
                 .filter(role -> role.getRole().equals(userRoleCreator))
@@ -175,7 +175,6 @@ public class EventsServiceImpl implements EventsService {
             // пустой тип и пустая дата
             case "011": cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByCity(cityEntity);
-                System.out.println("Hi");
                 break;
 
             // пустой город и дата
@@ -243,7 +242,7 @@ public class EventsServiceImpl implements EventsService {
     public List<EventDTO> getLastEventsByCreator(int userId) {
         UserEntity userEntity = userRepository.findById(userId);
 
-        UserRoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
 
         List<UserEventEntity> list = userEventRepository.findAllByUser(userEntity);
 

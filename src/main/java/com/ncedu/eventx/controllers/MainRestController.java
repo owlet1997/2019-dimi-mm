@@ -113,9 +113,9 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public List<EventWithItemsDTO> getEventBySearchParam (@RequestParam(name = "city") Optional < String > city,
-                @RequestParam(name = "type") Optional < String > type,
-                @RequestParam(name = "dateStart") Optional < String > dateStart){
+        public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional <String> city,
+                @RequestParam(name = "type") Optional <String> type,
+                @RequestParam(name = "dateStart") Optional <String> dateStart){
 
             return eventsService.getEventsBySearchParams(city.orElseGet(() -> ""),
                     type.orElseGet(() -> ""),
