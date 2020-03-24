@@ -1,14 +1,17 @@
 package com.ncedu.eventx.converters;
 
-import com.ncedu.eventx.models.DTO.UserRoleDTO;
-import com.ncedu.eventx.models.entities.UserRoleEntity;
+
+import com.ncedu.eventx.models.DTO.RoleDTO;
+import com.ncedu.eventx.models.entities.RoleEntity;
+
 import org.mapstruct.Mapper;
 
 @Mapper
 public interface UserRoleMapper {
 
-    UserRoleEntity toUserRoleEntity(UserRoleDTO userRoleDTO);
+    RoleEntity toUserRoleEntity(RoleDTO roleDTO);
 
-    UserRoleDTO toUserRoleDTO(UserRoleEntity userRoleEntity);
+    RoleDTO toUserRoleDTO(RoleEntity roleEntity);
+
 
 }

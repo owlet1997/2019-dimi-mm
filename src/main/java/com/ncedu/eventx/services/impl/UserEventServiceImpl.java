@@ -3,7 +3,10 @@ package com.ncedu.eventx.services.impl;
 import com.ncedu.eventx.models.DTO.EventDTO;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserRoleDTO;
+
+import com.ncedu.eventx.models.DTO.RoleDTO;
+
+
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventRepository;
 import com.ncedu.eventx.repositories.RolesRepository;
@@ -51,8 +54,10 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
-    public List<UserEventEntity> getAllByRole(UserRoleDTO roleDTO) {
-        UserRoleEntity entity = rolesRepository.findByName(roleDTO.getName());
+
+    public List<UserEventEntity> getAllByRole(RoleDTO roleDTO) {
+        RoleEntity entity = rolesRepository.findByName(roleDTO.getName());
+
         return userEventRepository.findAllByRole(entity);
     }
 
@@ -66,7 +71,9 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean createEvent(EventForCreateDTO createDTO) {
         UserEntity userEntity = userRepository.findById(Integer.parseInt(createDTO.getUserId()));
         EventEntity eventEntity = eventsService.createEvent(createDTO);
-        UserRoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
+
+        RoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
+
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
@@ -76,10 +83,11 @@ public class UserEventServiceImpl implements UserEventService {
 
 
     @Override
+
     public boolean visitEvent(int userId, int eventId) {
         UserEntity userEntity = userRepository.findById(userId);
         EventEntity eventEntity = eventRepository.findById(eventId);
-        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
@@ -91,7 +99,7 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean isVisited(int userId, int eventId) {
         UserEntity userEntity = userRepository.findById(userId);
         EventEntity eventEntity = eventRepository.findById(eventId);
-        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
         List<UserEventEntity> list = userEventRepository.findAllByEvent(eventEntity);
 
@@ -104,7 +112,7 @@ public class UserEventServiceImpl implements UserEventService {
 
     @Override
     public boolean deleteVisit(int userId, int eventId) {
-        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
         UserEventKey key = new UserEventKey(roleEntity.getId(),userId,eventId);
         UserEventEntity userEventEntity = userEventRepository.findById(key).get();

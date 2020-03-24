@@ -197,7 +197,9 @@ public class EventsServiceImpl implements EventsService {
 
     @Override
     public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
-        UserRoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+
+        RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+
         List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
 
         List<EventWithItemsDTO> withItemsDTOList = new ArrayList<>();
@@ -218,8 +220,10 @@ public class EventsServiceImpl implements EventsService {
     @Override
     public EventWithUsersDTO getEventWithUsers(int id) {
         EventEntity eventEntity = eventRepository.findById(id);
-        UserRoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
-        UserRoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+
+        RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+
 
         List<UserEventEntity> list = userEventRepository.findAllByEvent(eventEntity);
 
