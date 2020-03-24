@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
-@Table(name = "user_role", schema = "eventx")
-public class UserRoleEntity implements Serializable {
+@Table(name = "t_roles", schema = "eventx")
+public class RoleEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +32,7 @@ public class UserRoleEntity implements Serializable {
 
     @OneToMany(mappedBy = "role")
     private List<UserEventEntity> userEventList = new ArrayList<>();
+
+
 
 }

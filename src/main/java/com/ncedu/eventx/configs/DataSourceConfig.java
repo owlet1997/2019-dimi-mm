@@ -60,13 +60,27 @@ public class DataSourceConfig {
     // локальная база постгреса
     @Bean(name = "dataSource")
     public DataSource getDataSource(){
+
+        // подключение к локальной бд postgres
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
+        String userName = "postgres";
+        String password = "1";
+        String dbUrl = "jdbc:postgresql://localhost:5432/eventx";
+
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl(dbUrl);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+
+        return dataSource;
+
+
+       /* dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
         dataSource.setUrl(env.getProperty("spring.datasource.url"));
         dataSource.setUsername(env.getProperty("spring.datasource.username"));
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
-        return dataSource;
+        return dataSource; */
     }
 
 }

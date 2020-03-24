@@ -33,6 +33,7 @@ public class MainRestController {
         this.eventTypeService = eventTypeService;
         this.userEventService = userEventService;
     }
+
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     @RequestMapping("/api")
@@ -42,8 +43,8 @@ public class MainRestController {
     }
 
     @GetMapping(value = "/api/users", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-    })
+            produces = {MediaType.APPLICATION_JSON_VALUE
+            })
     @ResponseBody
     public List<UserDTO> getUsers() {
         return usersService.getAllUsers();
@@ -51,91 +52,94 @@ public class MainRestController {
 
 
     @GetMapping(value = "/api/users/{userNo}",
-            produces = { MediaType.APPLICATION_JSON_VALUE
-                    })
+            produces = {MediaType.APPLICATION_JSON_VALUE
+            })
     @ResponseBody
     public UserForUpdateDTO getUser(@PathVariable("userNo") int userNo) {
-        return usersMapper.toUserForCreateDTO(usersService.getUserById(userNo));
-    }
-
-    /////////////////////////////////////////////////
-
-    @GetMapping(value = "/api/places", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<CoordinatesDTO> getPlaces() {
-        return coordinatesService.getAllPlaces();
-    }
-
-    @GetMapping(value = "/api/cities", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<CityDTO> getCities() {
-        return citiesService.getCitiesList();
-    }
-
-    /////////////////////////////////////////////////
-
-    @GetMapping(value = "/api/events/{id}", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public EventWithItemsDTO getEventById(@PathVariable("id") int eventId) {
-        return eventsService.getEventWithItemsById(eventId);
-    }
-
-    @GetMapping(value = "/api/events/{id}/items", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<EventItemWithUsersDTO> getEventItemsByParent(@PathVariable("id") int eventId) {
-        return eventItemService.getEventItemsListByParent(eventId);
-    }
-
-    @GetMapping(value = "/api/event-types", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<EventTypeDTO> getEventTypes() {
-        return eventTypeService.getAllEventTypes();
-    }
-
-    @GetMapping(value = "/api/events", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional<String> city,
-                                                @RequestParam(name = "type") Optional<String> type,
-                                                @RequestParam(name = "dateStart") Optional<String> dateStart) {
-
-    return eventsService.getEventsBySearchParams(city.orElseGet(()->""),
-                                                type.orElseGet(()->""),
-                                                dateStart.orElseGet(()->""));
-    }
-
-    @GetMapping(value = "/api/events/{id}/creator", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public List<EventDTO> getEventsByCreator(@PathVariable("id") int id) {
-
-        return eventsService.getLastEventsByCreator(id);
-    }
-
-    @PostMapping(value = "/api/event-visit", //
-            produces = { MediaType.APPLICATION_JSON_VALUE
-            })
-    @ResponseBody
-    public boolean visitEvent(@RequestParam(name = "eventId") int eventId,
-                              @RequestParam(name = "userId") int userId) {
-
-        return userEventService.visitEvent(userId,eventId);
+        return usersMapper.toUserForUpdateDTO(usersService.getUserById(userNo));
     }
 
 
+//    public UserDTO getUser(@PathVariable("userNo") int userNo) {
+//        return usersMapper.toUserDTO(usersService.getUserById(userNo));
+//
+//    }
 
+        /////////////////////////////////////////////////
+
+        @GetMapping(value = "/api/places", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<CoordinatesDTO> getPlaces () {
+            return coordinatesService.getAllPlaces();
+        }
+
+        @GetMapping(value = "/api/cities", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<CityDTO> getCities () {
+            return citiesService.getCitiesList();
+        }
+
+        /////////////////////////////////////////////////
+
+        @GetMapping(value = "/api/events/{id}", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public EventWithItemsDTO getEventById ( @PathVariable("id") int eventId){
+            return eventsService.getEventWithItemsById(eventId);
+        }
+
+        @GetMapping(value = "/api/events/{id}/items", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventItemWithUsersDTO> getEventItemsByParent ( @PathVariable("id") int eventId){
+            return eventItemService.getEventItemsListByParent(eventId);
+        }
+
+        @GetMapping(value = "/api/event-types", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventTypeDTO> getEventTypes () {
+            return eventTypeService.getAllEventTypes();
+        }
+
+        @GetMapping(value = "/api/events", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventWithItemsDTO> getEventBySearchParam (@RequestParam(name = "city") Optional < String > city,
+                @RequestParam(name = "type") Optional < String > type,
+                @RequestParam(name = "dateStart") Optional < String > dateStart){
+
+            return eventsService.getEventsBySearchParams(city.orElseGet(() -> ""),
+                    type.orElseGet(() -> ""),
+                    dateStart.orElseGet(() -> ""));
+        }
+
+        @GetMapping(value = "/api/events/{id}/creator", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventDTO> getEventsByCreator ( @PathVariable("id") int id){
+
+            return eventsService.getLastEventsByCreator(id);
+        }
+
+        @PostMapping(value = "/api/event-visit", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId,
+        @RequestParam(name = "userId") int userId){
+
+            return userEventService.visitEvent(userId, eventId);
+        }
 
 
 

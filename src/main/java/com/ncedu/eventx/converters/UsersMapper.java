@@ -15,5 +15,9 @@ public interface  UsersMapper {
 
     List<UserDTO> toUserDTOList(List<UserEntity> userEntityList);
 
-    UserForUpdateDTO toUserForCreateDTO(UserDTO userDTO);
+    UserForUpdateDTO toUserForUpdateDTO(UserEntity user);
+
+    UserDTO toUserDTO(UserDTO userById);
+
+
 }
