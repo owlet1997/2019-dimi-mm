@@ -2,7 +2,7 @@ package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.entities.UserEntity;
 import com.ncedu.eventx.models.entities.UserRoleEntity;
 import com.ncedu.eventx.repositories.RolesRepository;
@@ -33,7 +33,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public boolean createRegisteredUser(UserForCreateDTO userDTO) {
+    public boolean createRegisteredUser(UserForUpdateDTO userDTO) {
         UserEntity userEntity = new UserEntity();
         UserRoleEntity role = rolesRepository.findByName("user");
 
@@ -42,7 +42,7 @@ public class UsersServiceImpl implements UsersService {
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setLogin(userDTO.getLogin());
         userEntity.setName(userDTO.getName());
-        userEntity.setPassword(userDTO.getPassword());
+//        userEntity.setPassword(userDTO.getPassword());
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);
@@ -52,13 +52,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserForCreateDTO updateUser(UserForCreateDTO userDTO) {
+    public UserForUpdateDTO updateUser(UserForUpdateDTO userDTO) {
         UserEntity userEntity = userRepository.findById(userDTO.getId());
 
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setLogin(userDTO.getLogin());
         userEntity.setName(userDTO.getName());
-        userEntity.setPassword(userDTO.getPassword());
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);

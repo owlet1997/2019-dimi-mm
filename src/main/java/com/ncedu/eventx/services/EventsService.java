@@ -22,4 +22,6 @@ public interface EventsService {
     List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList);
 
     EventWithUsersDTO getEventWithUsers(int id);
+
+    List<EventDTO> getLastEventsByCreator(int userId);
 }

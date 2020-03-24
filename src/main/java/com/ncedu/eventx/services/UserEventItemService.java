@@ -13,4 +13,8 @@ public interface UserEventItemService {
     boolean createEventItem(EventItemDTO itemDTO, UserDTO userDTO);
 
     boolean addToFeatured(EventItemDTO eventDTO, UserDTO userDTO);
+
+    boolean isFeatured(int itemId, int userId);
+
+    boolean removeFromFeatured(int itemId, int userId);
 }

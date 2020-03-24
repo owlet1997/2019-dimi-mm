@@ -9,6 +9,7 @@ import com.ncedu.eventx.repositories.UserEventItemRepository;
 import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.EventItemService;
 import com.ncedu.eventx.services.UserEventItemService;
+import com.ncedu.eventx.services.UserEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,17 +25,20 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     final UserEventItemRepository userEventItemRepository;
     final EventItemRepository eventItemRepository;
     final EventItemService eventItemService;
+    final UserEventService userEventService;
 
     public UserEventItemServiceImpl(UserRepository userRepository,
                                     RolesRepository rolesRepository,
                                     UserEventItemRepository eventItemRepository,
                                     EventItemRepository eventItemRepository1,
-                                    EventItemService eventItemService) {
+                                    EventItemService eventItemService,
+                                    UserEventService userEventService) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.userEventItemRepository = eventItemRepository;
         this.eventItemRepository = eventItemRepository1;
         this.eventItemService = eventItemService;
+        this.userEventService = userEventService;
     }
 
     @Override
@@ -67,6 +71,36 @@ public class UserEventItemServiceImpl implements UserEventItemService {
 
         userEventItemRepository.save(entity);
 
+        return true;
+    }
+
+    @Override
+    public boolean isFeatured(int itemId, int userId) {
+        EventItemEntity itemEntity = eventItemRepository.findById(itemId);
+        UserEntity userEntity = userRepository.findById(userId);
+
+        if (!userEventService.isVisited(userId,itemEntity.getParent().getId()))
+        userEventService.visitEvent(userId,itemEntity.getParent().getId());
+
+        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+
+        List<UserEventItemEntity> list = userEventItemRepository.getAllByItem(itemEntity);
+
+        UserEntity owner = list.stream().filter(role -> role.getRole().equals(roleEntity))
+                .filter(user -> user.getUser().equals(userEntity))
+                .map(UserEventItemEntity::getUser).findAny().get();
+
+        return owner != null;
+    }
+
+    @Override
+    public boolean removeFromFeatured(int itemId, int userId) {
+        UserRoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+
+        UserEventItemKey key = new UserEventItemKey(itemId,userId,roleEntity.getId());
+        UserEventItemEntity userEventItemEntity = userEventItemRepository.findById(key).get();
+
+        userEventItemRepository.delete(userEventItemEntity);
         return true;
     }
 }

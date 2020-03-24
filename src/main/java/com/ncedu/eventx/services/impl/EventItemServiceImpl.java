@@ -76,7 +76,7 @@ public class EventItemServiceImpl implements EventItemService {
                     .map(UserEventItemEntity::getUser).collect(Collectors.toList());;
 
             UserEntity speaker = userEventMap.stream().filter(role -> role.getRole().equals(userRoleSpeaker))
-                    .map(UserEventItemEntity::getUser).findAny().get();
+                    .map(UserEventItemEntity::getUser).findAny().orElseGet(null);
 
             EventItemWithUsersDTO item = new EventItemWithUsersDTO(eventItemMapper.toEventItemDTO(e),
                                                                    usersMapper.toDTO(speaker),
@@ -84,7 +84,7 @@ public class EventItemServiceImpl implements EventItemService {
             withUsersDTOList.add(item);
 
         }
-
+        withUsersDTOList.forEach(e-> System.out.println(e));
         return withUsersDTOList;
 
     }

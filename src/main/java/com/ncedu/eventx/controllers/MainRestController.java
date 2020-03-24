@@ -19,17 +19,19 @@ public class MainRestController {
     final EventItemService eventItemService;
     final CitiesService citiesService;
     final EventTypeService eventTypeService;
+    final UserEventService userEventService;
 
     public MainRestController(UsersService usersService,
                               CoordinatesService coordinatesService,
                               EventsService eventsService,
-                              EventItemService eventItemService, CitiesService citiesService, EventTypeService eventTypeService) {
+                              EventItemService eventItemService, CitiesService citiesService, EventTypeService eventTypeService, UserEventService userEventService) {
         this.usersService = usersService;
         this.coordinatesService = coordinatesService;
         this.eventsService = eventsService;
         this.eventItemService = eventItemService;
         this.citiesService = citiesService;
         this.eventTypeService = eventTypeService;
+        this.userEventService = userEventService;
     }
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
@@ -52,7 +54,7 @@ public class MainRestController {
             produces = { MediaType.APPLICATION_JSON_VALUE
                     })
     @ResponseBody
-    public UserForCreateDTO getUser(@PathVariable("userNo") int userNo) {
+    public UserForUpdateDTO getUser(@PathVariable("userNo") int userNo) {
         return usersMapper.toUserForCreateDTO(usersService.getUserById(userNo));
     }
 
@@ -80,8 +82,8 @@ public class MainRestController {
             produces = { MediaType.APPLICATION_JSON_VALUE
             })
     @ResponseBody
-    public EventDTO getEventById(@PathVariable("id") int eventId) {
-        return eventsService.getEventById(eventId);
+    public EventWithItemsDTO getEventById(@PathVariable("id") int eventId) {
+        return eventsService.getEventWithItemsById(eventId);
     }
 
     @GetMapping(value = "/api/events/{id}/items", //
@@ -113,13 +115,25 @@ public class MainRestController {
                                                 dateStart.orElseGet(()->""));
     }
 
-//    @GetMapping(value = "/api/events", //
-//            produces = { MediaType.APPLICATION_JSON_VALUE
-//            })
-//    @ResponseBody
-//    public List<EventWithItemsDTO> getEvents() {
-//        return eventsService.getEventsWithItemsList();
-//    }
+    @GetMapping(value = "/api/events/{id}/creator", //
+            produces = { MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public List<EventDTO> getEventsByCreator(@PathVariable("id") int id) {
+
+        return eventsService.getLastEventsByCreator(id);
+    }
+
+    @PostMapping(value = "/api/event-visit", //
+            produces = { MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public boolean visitEvent(@RequestParam(name = "eventId") int eventId,
+                              @RequestParam(name = "userId") int userId) {
+
+        return userEventService.visitEvent(userId,eventId);
+    }
+
 
 
 

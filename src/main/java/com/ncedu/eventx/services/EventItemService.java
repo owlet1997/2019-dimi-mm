@@ -2,6 +2,7 @@ package com.ncedu.eventx.services;
 
 import com.ncedu.eventx.models.DTO.EventItemDTO;
 import com.ncedu.eventx.models.DTO.EventItemWithUsersDTO;
+import com.ncedu.eventx.models.entities.EventEntity;
 import com.ncedu.eventx.models.entities.EventItemEntity;
 
 import java.util.List;

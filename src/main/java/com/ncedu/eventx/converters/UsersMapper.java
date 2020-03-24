@@ -1,7 +1,7 @@
 package com.ncedu.eventx.converters;
 
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.entities.UserEntity;
 import org.mapstruct.Mapper;
 
@@ -15,5 +15,5 @@ public interface  UsersMapper {
 
     List<UserDTO> toUserDTOList(List<UserEntity> userEntityList);
 
-    UserForCreateDTO toUserForCreateDTO(UserDTO userDTO);
+    UserForUpdateDTO toUserForCreateDTO(UserDTO userDTO);
 }

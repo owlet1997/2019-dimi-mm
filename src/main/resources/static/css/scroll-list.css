@@ -2,12 +2,28 @@ div.right-group, div.time, div.answers, div.person, div.time-and-counters{
 display: flex;
 }
 
+div.card-header{
+    padding: 15px;
+}
+
+div.card-header:after{
+    padding: 15px;
+}
+
+div.collapse.in{
+    padding: 10px 15px;
+    background: #fff0f2;
+}
+div.listItem{
+    padding: 5px 0px;
+}
+
 div.time-and-counters{
 justify-content:space-between;
 }
 
 div.time.text {
-width:max-content;                                                                  margin: none;
+width:max-content;
 vertical-align: center;
 }
 

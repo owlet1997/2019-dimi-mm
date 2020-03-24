@@ -7,13 +7,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserForCreateDTO {
+public class UserForUpdateDTO {
 
     private int id;
+    private String name;
     private String login;
     private String email;
-    private String password;
-    private String name;
     private String organizationName;
     private String positionName;
 
