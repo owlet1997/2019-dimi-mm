@@ -1,10 +1,6 @@
 package com.ncedu.eventx.services;
 
-import com.ncedu.eventx.models.DTO.EventDTO;
-import com.ncedu.eventx.models.DTO.EventForCreateDTO;
-import com.ncedu.eventx.models.DTO.UserDTO;
-
-import com.ncedu.eventx.models.DTO.RoleDTO;
+import com.ncedu.eventx.models.DTO.*;
 
 import com.ncedu.eventx.models.entities.UserEventEntity;
 
@@ -23,9 +19,10 @@ public interface UserEventService {
 
     boolean createEvent(EventForCreateDTO createDTO);
 
-    boolean visitEvent(UserDTO user, EventDTO eventDTO);
+    EventWithItemsDTO visitEvent(int userId, int evenId);
 
-    boolean deleteVisit(UserDTO userDTO, EventDTO eventDTO);
+    boolean deleteVisit(int userId, int eventId);
 
+    boolean isVisited(int userId, int evenId);
 
 }

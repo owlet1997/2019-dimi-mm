@@ -1,6 +1,7 @@
 package com.ncedu.eventx.services;
 
 import com.ncedu.eventx.models.DTO.EventItemDTO;
+import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.entities.UserEventItemEntity;
 
@@ -12,5 +13,9 @@ public interface UserEventItemService {
 
     boolean createEventItem(EventItemDTO itemDTO, UserDTO userDTO);
 
-    boolean addToFeatured(EventItemDTO eventDTO, UserDTO userDTO);
+    EventWithItemsDTO addToFeatured(int itemId, int userId);
+
+    boolean isFeatured(int itemId, int userId);
+
+    boolean removeFromFeatured(int itemId, int userId);
 }

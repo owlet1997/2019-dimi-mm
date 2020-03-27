@@ -18,10 +18,8 @@ import java.util.*;
 @Setter
 @Entity
 @ToString
-
-@Table(name="t_user", schema = "eventx")
+@Table(name="user", schema = "eventx")
 public class UserEntity implements Serializable, UserDetails {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +41,9 @@ public class UserEntity implements Serializable, UserDetails {
     private String password;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -61,18 +62,6 @@ public class UserEntity implements Serializable, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     @Override

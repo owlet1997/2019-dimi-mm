@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
-@Table(name = "t_roles", schema = "eventx")
+@Table(name = "user_role", schema = "eventx")
 public class RoleEntity implements Serializable {
 
     @Id

@@ -13,9 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDTO {
 
-    private int id;
 
-    private RoleDTO role;
+    private int id;
 
     private String email;
 
@@ -24,12 +23,12 @@ public class UserDTO {
     @Transient
     private String passwordConfirm;
 
+    private String name;
+
     private String username;
 
     private String organizationName;
 
     private String positionName;
-
-    private String avatarImg;
 
 }

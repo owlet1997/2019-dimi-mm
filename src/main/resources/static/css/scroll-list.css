@@ -1,13 +1,29 @@
-div.right-group, div.time, div.answers, div.person, div.time-and-counters{
+div.right-group, div.time, div.answers, div.person, div.time-and-counters, div.single-card-header{
 display: flex;
 }
 
-div.time-and-counters{
+div.card-header{
+    padding: 15px;
+}
+
+div.card-header:after{
+    padding: 15px;
+}
+
+div.collapse.in{
+    padding: 10px 15px;
+    background: #fff0f2;
+}
+div.listItem{
+    padding: 5px 0px;
+}
+
+div.time-and-counters, div.single-card-header{
 justify-content:space-between;
 }
 
 div.time.text {
-width:max-content;                                                                  margin: none;
+width:max-content;
 vertical-align: center;
 }
 

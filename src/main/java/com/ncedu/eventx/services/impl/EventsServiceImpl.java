@@ -5,16 +5,14 @@ import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
 import com.ncedu.eventx.services.CoordinatesService;
+import com.ncedu.eventx.services.EventItemService;
 import com.ncedu.eventx.services.EventsService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ncedu.eventx.enums.UserRoleItems.CREATOR;
@@ -32,21 +30,28 @@ public class EventsServiceImpl implements EventsService {
     final RolesRepository rolesRepository;
     final UserEventRepository userEventRepository;
     final CoordinatesService coordinatesService;
+    final UserRepository userRepository;
+    final EventItemService eventItemService;
 
-    CitiesMapper citiesMapper = Mappers.getMapper(CitiesMapper.class);
-    CoordinatesMapper coordinatesMapper = Mappers.getMapper(CoordinatesMapper.class);
-    EventTypesMapper eventTypesMapper = Mappers.getMapper(EventTypesMapper.class);
     EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
 
-    public EventsServiceImpl(EventRepository eventRepository, CitiesRepository citiesRepository, EventTypeRepository eventTypeRepository, RolesRepository rolesRepository, UserEventRepository userEventRepository, CoordinatesService coordinatesService) {
+    public EventsServiceImpl(EventRepository eventRepository,
+                             CitiesRepository citiesRepository,
+                             EventTypeRepository eventTypeRepository,
+                             RolesRepository rolesRepository,
+                             UserEventRepository userEventRepository,
+                             CoordinatesService coordinatesService,
+                             UserRepository userRepository, EventItemService eventItemService) {
         this.eventRepository = eventRepository;
         this.citiesRepository = citiesRepository;
         this.eventTypeRepository = eventTypeRepository;
         this.rolesRepository = rolesRepository;
         this.userEventRepository = userEventRepository;
         this.coordinatesService = coordinatesService;
+        this.userRepository = userRepository;
+        this.eventItemService = eventItemService;
     }
 
     @Override
@@ -90,9 +95,28 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public EventWithItemsDTO getEventWithItemsById(int id) {
-        EventEntity eventEntity = eventRepository.findById(id);
-        return eventMapper.toEventWithItemsDTO(eventEntity);
+    public EventWithItemsDTO getEventWithItemsById(int eventId, int userId) {
+        EventEntity eventEntity = eventRepository.findById(eventId);
+        UserEntity userEntity = userRepository.findById(userId);
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+        RoleEntity userRoleVisitor = rolesRepository.findByName(VISITOR.getDescription());
+        List<UserEventEntity> userEventEntityList = userEventRepository.findAllByEvent(eventEntity);
+        UserDTO creator = usersMapper.toDTO(userEventEntityList.stream()
+                .filter(role -> role.getRole().equals(userRoleCreator))
+                .map(UserEventEntity::getUser).findFirst().get());
+        List<UserEntity> userEntityList = userEventEntityList.stream()
+                .filter(role -> role.getRole().equals(userRoleVisitor))
+                .map(UserEventEntity::getUser).collect(Collectors.toList());
+        boolean visit = userEventEntityList.stream()
+                .filter(role -> role.getRole().equals(userRoleVisitor))
+                .filter(user -> user.getUser().equals(userEntity))
+                .map(UserEventEntity::getUser).findFirst().isPresent();
+        EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(eventEntity);
+        event.setCreator(creator);
+        event.setItemsList(eventItemService.getEventItemsListByParent(eventEntity.getId(), userEntity));
+        event.setVisitors(usersMapper.toUserDTOList(userEntityList));
+        event.setVisited(visit);
+        return event;
     }
 
     @Override
@@ -157,7 +181,6 @@ public class EventsServiceImpl implements EventsService {
             // пустой тип и пустая дата
             case "011": cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByCity(cityEntity);
-                System.out.println("Hi");
                 break;
 
             // пустой город и дата
@@ -179,7 +202,7 @@ public class EventsServiceImpl implements EventsService {
 
     @Override
     public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
-
+        UserEntity userEntity = userRepository.findById(20);
         RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
 
         List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
@@ -193,6 +216,7 @@ public class EventsServiceImpl implements EventsService {
             List<UserDTO> userDTOList = usersMapper.toUserDTOList(usersList);
             EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(e);
             event.setVisitors(userDTOList);
+            event.setItemsList(eventItemService.getEventItemsListByParent(e.getId(), userEntity));
             withItemsDTOList.add(event);
         }
         return withItemsDTOList;
@@ -218,5 +242,22 @@ public class EventsServiceImpl implements EventsService {
 
         return new EventWithUsersDTO(eventMapper.toDTO(eventEntity),
                 usersMapper.toDTO(creator),usersMapper.toUserDTOList(usersList));
+    }
+
+    @Override
+    public List<EventDTO> getLastEventsByCreator(int userId) {
+        UserEntity userEntity = userRepository.findById(userId);
+
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+
+        List<UserEventEntity> list = userEventRepository.findAllByUser(userEntity);
+
+        List<EventEntity> eventEntityList = list.stream().filter(role -> role.getRole().equals(userRoleCreator))
+                                                         .map(UserEventEntity::getEvent).collect(Collectors.toList());
+
+        Collections.reverse(eventEntityList);
+        List<EventEntity> result = eventEntityList.stream().limit(3).collect(Collectors.toList());
+
+        return eventMapper.toListDTO(result);
     }
 }

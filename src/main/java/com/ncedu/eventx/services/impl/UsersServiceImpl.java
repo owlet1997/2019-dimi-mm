@@ -3,6 +3,9 @@ package com.ncedu.eventx.services.impl;
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.UserDTO;
 
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
+
+
 import com.ncedu.eventx.models.entities.RoleEntity;
 import com.ncedu.eventx.models.entities.UserEntity;
 
@@ -41,15 +44,14 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
-
-    public boolean createRegisteredUser(UserDTO userDTO) {
+     public boolean createRegisteredUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
-        RoleEntity role = rolesRepository.findByName(userDTO.getUsername());
+        RoleEntity role = rolesRepository.findByName("user");
 
-        userEntity.setId(userDTO.getId());
         userEntity.setRole(role);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
+        userEntity.setName(userDTO.getName());
 
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setOrganizationName(userDTO.getOrganizationName());
@@ -61,21 +63,23 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
-
-    public boolean updateUser(UserDTO userDTO) {
+    public UserForUpdateDTO updateUser(UserForUpdateDTO userDTO) {
         UserEntity userEntity = userRepository.findById(userDTO.getId());
 
         userEntity.setEmail(userDTO.getEmail());
-        userEntity.setUsername(userDTO.getUsername());
+        userEntity.setUsername(userDTO.getLogin());
+        userEntity.setName(userDTO.getName());
 
-        userEntity.setPassword(userDTO.getPassword());
+//        userEntity.setPassword(userDTO.getPassword());
+
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);
 
         userRepository.save(userEntity);
 
-        return true;
+        return usersMapper.toUserForUpdateDTO(userEntity);
+//        return  true;
     }
 
     @Override
@@ -86,9 +90,8 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
-    public UserDTO getUserById(int id) {
-        UserEntity userEntity = userRepository.findById(id);
-        return usersMapper.toDTO(userEntity);
+    public UserEntity getUserById(int id) {
+        return userRepository.findById(id);
     }
 
 
