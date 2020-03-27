@@ -1330,6 +1330,7 @@ ul.bullets li a:hover {
   background-color: transparent;
   border: 2px dashed rgba(0, 0, 0, 0.1);
   min-height: 130px;
+  min-width: 130px;
   padding: 20px;
 }
 .dropzone:hover {

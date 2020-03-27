@@ -4767,9 +4767,8 @@ a.list-group-item-danger.active:focus {
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
 }
+
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;
 }
@@ -4965,18 +4964,18 @@ a.list-group-item-danger.active:focus {
   border-bottom-color: #ddd;
 }
 .panel-primary {
-  border-color: #428bca;
+  border-color: #ff513f;
 }
 .panel-primary > .panel-heading {
   color: #fff;
-  background-color: #428bca;
-  border-color: #428bca;
+  background-color: #ff513f;
+  border-color: #ff513f;
 }
 .panel-primary > .panel-heading + .panel-collapse .panel-body {
   border-top-color: #428bca;
 }
 .panel-primary > .panel-footer + .panel-collapse .panel-body {
-  border-bottom-color: #428bca;
+  border-bottom-color: #ff513f;
 }
 .panel-success {
   border-color: #d6e9c6;

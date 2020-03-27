@@ -15,12 +15,14 @@ public class EventWithItemsDTO {
     private int id;
     private CityDTO city;
     private String name;
-    private EventTypeDTO eventType;
+    private EventTypeDTO type;
     private CoordinatesDTO coord;
     private Date timeStart;
     private Date timeEnd;
     private String description;
     private String address;
-    private Set<EventItemDTO> items;
+    private UserDTO creator;
+    private List<EventItemWithUsersDTO> itemsList;
     private List<UserDTO> visitors;
+    private boolean isVisited;
 }

@@ -12,5 +12,6 @@ import java.util.List;
 public class EventItemWithUsersDTO {
     EventItemDTO eventItem;
     UserDTO speaker;
+    boolean isFeatured;
     List<UserDTO> users;
 }
