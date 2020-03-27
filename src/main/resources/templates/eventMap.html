@@ -29,7 +29,7 @@
         <div class="header">
             <div class="wrapper">
                 <div class="brand">
-                    <a href="index-directory.html"><img src="icons/logo.png" alt="logo" height="64px"></a>
+                    <a href="/"><img src="icons/logo.png" alt="logo" height="64px"></a>
                 </div>
                 <nav class="navigation-items">
                     <div class="wrapper">
@@ -72,12 +72,22 @@
 
                                 <!-- Card header -->
                                 <div class="card-header" role="tab" id="heading<%= item.id %>" >
-                                    <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
-                                       aria-controls="collapseOne1">
-                                        <h5 class="mb-0">
-                                            <%- item.name %>
-                                        </h5>
-                                    </a>
+                                    <div class="single-card-header">
+                                        <div class="header-name">
+                                            <a href="/event?id=<%= item.id %>">
+                                                <h5 class="mb-0">
+                                                <%- item.name %>
+                                                </h5>
+                                            </a>
+                                        </div>
+                                        <div class="header-angle">
+                                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
+                                               aria-controls="collapseOne1">
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <p class="address"><%- item.address %></p>
                                     <div class="time-and-counters">
                                         <div class="time">

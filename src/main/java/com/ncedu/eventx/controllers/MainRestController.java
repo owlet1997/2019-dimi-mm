@@ -20,11 +20,18 @@ public class MainRestController {
     final CitiesService citiesService;
     final EventTypeService eventTypeService;
     final UserEventService userEventService;
+    final UserEventItemService userEventItemService;
+
+    UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     public MainRestController(UsersService usersService,
                               CoordinatesService coordinatesService,
                               EventsService eventsService,
-                              EventItemService eventItemService, CitiesService citiesService, EventTypeService eventTypeService, UserEventService userEventService) {
+                              EventItemService eventItemService,
+                              CitiesService citiesService,
+                              EventTypeService eventTypeService,
+                              UserEventService userEventService,
+                              UserEventItemService userEventItemService) {
         this.usersService = usersService;
         this.coordinatesService = coordinatesService;
         this.eventsService = eventsService;
@@ -32,9 +39,8 @@ public class MainRestController {
         this.citiesService = citiesService;
         this.eventTypeService = eventTypeService;
         this.userEventService = userEventService;
+        this.userEventItemService = userEventItemService;
     }
-
-    UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     @RequestMapping("/api")
     @ResponseBody
@@ -58,6 +64,8 @@ public class MainRestController {
     public UserForUpdateDTO getUser(@PathVariable("userNo") int userNo) {
         return usersMapper.toUserForUpdateDTO(usersService.getUserById(userNo));
     }
+
+
 
 
 //    public UserDTO getUser(@PathVariable("userNo") int userNo) {
@@ -85,21 +93,15 @@ public class MainRestController {
 
         /////////////////////////////////////////////////
 
-        @GetMapping(value = "/api/events/{id}", //
+        @GetMapping(value = "/api/events/{eventId}/user/{userId}", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public EventWithItemsDTO getEventById ( @PathVariable("id") int eventId){
-            return eventsService.getEventWithItemsById(eventId);
+        public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId,
+                                                @PathVariable("userId") int userId){
+            return eventsService.getEventWithItemsById(eventId, userId);
         }
 
-        @GetMapping(value = "/api/events/{id}/items", //
-                produces = {MediaType.APPLICATION_JSON_VALUE
-                })
-        @ResponseBody
-        public List<EventItemWithUsersDTO> getEventItemsByParent ( @PathVariable("id") int eventId){
-            return eventItemService.getEventItemsListByParent(eventId);
-        }
 
         @GetMapping(value = "/api/event-types", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
@@ -135,10 +137,20 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId,
+        public EventWithItemsDTO visitEvent ( @RequestParam(name = "eventId") int eventId,
         @RequestParam(name = "userId") int userId){
 
             return userEventService.visitEvent(userId, eventId);
+        }
+
+        @PostMapping(value = "/api/item-visit", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public EventWithItemsDTO checkFeaturedEvent(@RequestParam(name = "itemId") int itemId,
+                                              @RequestParam(name = "userId") int userId){
+
+            return userEventItemService.addToFeatured(itemId, userId);
         }
 
 

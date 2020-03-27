@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/scroll-list.css" type="text/css">
 
 
-    <title>Spotter - Universal Directory Listing HTML Template</title>
+    <title>Детали события</title>
 
 </head>
 
@@ -36,15 +36,16 @@
                     <div class="wrapper">
                         <ul class="main-navigation navigation-top-header"></ul>
                         <ul class="user-area">
-                            <li><a href="/log-in">Sign In</a></li>
-                            <li><a href="/register"><strong>Register</strong></a></li>
+                            <li><a href="/log-in">Войти</a></li>
+                            <li><a href="/register"><strong>Зарегистрироваться</strong></a></li>
                         </ul>
                         <a href="/add-event" class="submit-item">
-                            <div class="content"><span>Submit Your Item</span></div>
+                            <div class="content"><span>Добавить событие</span></div>
                             <div class="icon">
                                 <i class="fa fa-plus"></i>
                             </div>
                         </a>
+                        <input id="hidden-id" name="userId" class="userId" type="hidden" value="20">
                     </div>
                 </nav>
             </div>
@@ -54,153 +55,121 @@
 
             <div id="page-content">
                 <section class="container">
-                    <div class="row event-head">
-                        <script type="text/template" class="templateEvent">
-                            <input id="hidden-id" name="userId" class="userId" type="hidden" value="20">
+                    <div class="row">
+                            <section class="block event-head" id="main-content">
 
-                            <section class="block" id="main-content">
-                            <header class="page-title">
-                                <div class="title">
-                                    <h1><%- item.name %></h1>
-                                    <figure><%- item.address %></figure>
-                                </div>
-                                <div class="info">
-                                    <div class="type">
-                                        <i><img src="assets/icons/restaurants-bars/restaurants/restaurant.png" alt=""></i>
-                                        <span><%- item.type.type %></span>
+                                <script type="text/template" class="templateEventTitle">
+                                    <header class="page-title">
+                                        <div class="title">
+                                            <h1><%- item.name %></h1>
+                                            <figure><%- item.address %></figure>
+                                        </div>
+                                        <div class="info">
+                                            <div class="type">
+                                                <span><%- item.type.type %></span>
+                                            </div>
+                                        </div>
+
+                                    </header>
+                                </script>
+
+                                    <div class="row event-sidebar">
+
+                                        <script type="text/template" class="templateEventSidebar">
+                                            <aside class="col-md-4 col-sm-4" id="detail-sidebar">
+
+                                                <section>
+                                                    <header><h3>Контакты организатора</h3></header>
+                                                    <address>
+                                                        <div><%- item.creator.name %></div>
+                                                        <div><strong><%- item.creator.organizationName %></strong></div>
+                                                        <div><%- item.creator.positionName %></div>
+                                                        <figure>
+                                                            <div class="info">
+                                                                <i class="fa fa-globe"></i>
+                                                                <a href="#"><%- item.creator.email %></a>
+                                                            </div>
+                                                        </figure>
+                                                    </address>
+                                                </section>
+
+                                            </aside>
+                                        </script>
+
+                                        <div class="col-md-8 col-sm-8">
+                                            <section>
+                                                <article class="block">
+                                                    <div class="block-header event-header">
+                                                        <script type="text/template" class="templateEventHeader">
+                                                            <div class="col-md-9">
+                                                                <header><h2>Дата начала</h2></header>
+                                                                <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
+                                                                <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
+
+                                                                <header><h2>Описание</h2></header>
+                                                                <p><%- item.description  %></p>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group eventVisit" id="eventVisit">
+                                                                    <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
+                                                                        <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
+                                                                        <input id="hidden-event-id" name="eventId" class="userId" type="hidden" value="<%= item.id %>">
+                                                                        <% if(item.visited==true) { %>
+                                                                        <button type="submit" class="btn btn-default">Отказаться от участия</button>
+                                                                        <% } else { %>
+                                                                        <button type="submit" class="btn btn-default">Посетить!</button>
+                                                                        <% } %>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </script>
+                                                    </div>
+
+                                                    <div class="block-header">
+                                                        <div class="col-md-12 event-body">
+                                                            <script type="text/template" class="templateEventBody">
+
+                                                                <% _.each( item.itemsList, function( listItem ){ %>
+                                                                <div class="item list">
+                                                                    <div class="col-md-7">
+                                                                        <div class="wrapper">
+                                                                            <h3 id="name" class="item-name"><%- listItem.eventItem.name %></h3>
+                                                                            <figure id="auditory"><%- listItem.eventItem.auditory  %></figure>
+                                                                            <figure id="timeStart"><%- _.identity(dateWrite(listItem.eventItem.timeStart)) %></figure>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="wrapper">
+                                                                            <div class="form-group">
+                                                                                <form name="featureItem" id="featureItem" role="form" method="post" action="?" >
+                                                                                    <input id="hidden-user-featur-id" name="userId" class="userId" type="hidden" value="">
+                                                                                    <input id="hidden-item-id" name="itemId" class="itemId" type="hidden" value="<%= listItem.eventItem.id %>">
+                                                                                    <% if (listItem.featured==true) { %>
+                                                                                    <button type="submit" class="btn btn-default">Убрать из избранных</button>
+                                                                                    <% } else { %>
+                                                                                    <button type="submit" class="btn btn-default">Добавить в избранные</button>
+                                                                                    <% } %>
+                                                                                </form>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <% }); %>
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </section>
+                                        </div>
                                     </div>
-                                </div>
-
-                            </header>
-                            <div class="row">
-
-                                <aside class="col-md-4 col-sm-4" id="detail-sidebar">
-
-                                    <section>
-                                        <header><h3>Контакты организатора</h3></header>
-                                        <address>
-                                            <div><%- item.creator.name %></div>
-                                            <div><strong><%- item.creator.organizationName %></strong></div>
-                                            <div><%- item.creator.positionName %></div>
-                                            <figure>
-                                                <div class="info">
-                                                    <i class="fa fa-mobile"></i>
-                                                    <span>818-832-5258</span>
-                                                </div>
-                                                <div class="info">
-                                                    <i class="fa fa-globe"></i>
-                                                    <a href="#"><%- item.creator.email %></a>
-                                                </div>
-                                            </figure>
-                                        </address>
-                                    </section>
-
-<!--                                    <section class="last-events">-->
-<!--                                        <header><h3>Последние события организатора</h3></header>-->
-<!--                                        <a href="#" class="show-more expand-content" data-expand="#detail-sidebar-event" >Show More</a>-->
-
-<!--                                    </section>-->
-
-                                </aside>
-
-                                <div class="col-md-8 col-sm-8 event-body">
-
-                                </div>
-
-                            </div>
                         </section>
 
-                        </script>
                     </div>
                 </section>
             </div>
-
         </div>
 
-
-        <script type="text/template" class="templateEventBody">
-
-        <section>
-        <article class="block">
-            <div class="col-md-9">
-                <header><h2>Дата начала</h2></header>
-                <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
-                <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
-
-                <header><h2>Описание</h2></header>
-                <p><%- item.description  %></p>
-                <% _.each( item.itemsList, function( listItem ){ %>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group eventVisit">
-                    <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
-                        <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
-                        <input id="hidden-event-id" name="eventId" class="userId" type="hidden" value="<%= item.id %>">
-                        <button type="submit" class="btn btn-default">Посетить!</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="item list">
-                <div class="col-md-7">
-                    <div class="wrapper">
-                        <h3 id="name" class="item-name"><%- listItem.name %></h3></a>
-                        <figure id="auditory"><%- listItem.auditory  %></figure>
-                        <figure id="timeStart"><%- _.identity(dateWrite(listItem.timeStart)) %></figure>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="wrapper">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default">Добавить в избранные</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% }); %>
-        </article>
-        </section>
-
-        </script>
-<!--        <section class="last-events">-->
-        <script type="text/template" class="templateList">
-            <figure>
-                <div class="card-header" role="tab" id="heading<%= item.id %>">
-                    <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
-                       aria-controls="collapseOne1">
-                        <h5 class="mb-0"><%- item.name %></h5>
-                    </a>
-                    <p class="address"><%- item.address %></p>
-                    <div class="time-and-counters">
-                        <div class="time">
-                            <div class="time image">
-                                <img src="icons/time.png" height="25px"></div>
-                            <div class="time text">
-                                <%- _.identity(dateWrite(item.timeStart)) %>
-                            </div>
-                        </div>
-
-                        <div class="right-group">
-                            <div class="answers">
-                                <div class="answers image">
-                                    <img src="icons/answers.png" height="25px"></div>
-                                <div class="answers text"><%- _.size(item.items) %></div>
-                            </div>
-
-                            <div class="person">
-                                <div class="person image">
-                                    <img src="icons/person.png" height="25px"></div>
-                                <div class="person text"><%- _.size(item.visitors) %></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </figure>
-        </script>
-
-        <!-- end Page Canvas-->
-        <!--Page Footer-->
         <footer id="page-footer">
             <div class="inner">
                 <div class="footer-top">
@@ -276,7 +245,6 @@
 <script type="text/javascript" src="js/before.load.js"></script>
 <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<!--<script type="text/javascript" src="js/smoothscroll.js"></script>-->
 <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
@@ -284,47 +252,6 @@
 <script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 <script type="text/javascript" src="js/my-scripts/listItem.js"></script>
-
-<script>
-    (function () {
-
-        const form = document.forms.visitevent;
-
-
-        // Слушаем, когда на форму подпишутся
-        $('.visitevent').on("submit", function (event) {
-            event.preventDefault();
-            var userFormId = document.getElementById('hidden-user-id');
-            userFormId.value = document.getElementById('hidden-id').value;
-
-            let body = {};
-
-            for (let element of form.elements) {
-                if (!(element.name === "")){
-                    body[element.name] = element.value;
-                }
-            }
-            console.log(body);
-
-
-            // Делаем запрос на сервер
-            fetch(`/api/event-visit?userId=`,{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(body)
-            })
-                // Получаем из ответа JSON
-                .then(res => res.json())
-                .then(res => alert(JSON.stringify(res)))
-                // Обрабатываем ошибки с сервера
-                .catch(error => console.log(error))
-            window.location.assign("/map");
-        })
-
-    })()
-</script>
 
 </body>
 </html>

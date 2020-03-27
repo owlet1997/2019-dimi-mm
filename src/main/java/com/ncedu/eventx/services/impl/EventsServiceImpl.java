@@ -95,8 +95,9 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public EventWithItemsDTO getEventWithItemsById(int id) {
-        EventEntity eventEntity = eventRepository.findById(id);
+    public EventWithItemsDTO getEventWithItemsById(int eventId, int userId) {
+        EventEntity eventEntity = eventRepository.findById(eventId);
+        UserEntity userEntity = userRepository.findById(userId);
         RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
         RoleEntity userRoleVisitor = rolesRepository.findByName(VISITOR.getDescription());
         List<UserEventEntity> userEventEntityList = userEventRepository.findAllByEvent(eventEntity);
@@ -106,10 +107,15 @@ public class EventsServiceImpl implements EventsService {
         List<UserEntity> userEntityList = userEventEntityList.stream()
                 .filter(role -> role.getRole().equals(userRoleVisitor))
                 .map(UserEventEntity::getUser).collect(Collectors.toList());
+        boolean visit = userEventEntityList.stream()
+                .filter(role -> role.getRole().equals(userRoleVisitor))
+                .filter(user -> user.getUser().equals(userEntity))
+                .map(UserEventEntity::getUser).findFirst().isPresent();
         EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(eventEntity);
         event.setCreator(creator);
-        event.setItemsList(eventItemService.getEventItemsListByParent(eventEntity.getId()));
+        event.setItemsList(eventItemService.getEventItemsListByParent(eventEntity.getId(), userEntity));
         event.setVisitors(usersMapper.toUserDTOList(userEntityList));
+        event.setVisited(visit);
         return event;
     }
 
@@ -196,7 +202,7 @@ public class EventsServiceImpl implements EventsService {
 
     @Override
     public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
-
+        UserEntity userEntity = userRepository.findById(20);
         RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
 
         List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
@@ -210,7 +216,7 @@ public class EventsServiceImpl implements EventsService {
             List<UserDTO> userDTOList = usersMapper.toUserDTOList(usersList);
             EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(e);
             event.setVisitors(userDTOList);
-            event.setItemsList(eventItemService.getEventItemsListByParent(e.getId()));
+            event.setItemsList(eventItemService.getEventItemsListByParent(e.getId(), userEntity));
             withItemsDTOList.add(event);
         }
         return withItemsDTOList;

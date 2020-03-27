@@ -48,7 +48,6 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         UserEntity userEntity = new UserEntity();
         RoleEntity role = rolesRepository.findByName("user");
 
-        userEntity.setId(userDTO.getId());
         userEntity.setRole(role);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());

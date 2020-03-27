@@ -46,6 +46,14 @@
                 </nav>
             </div>
         </div>
+
+        <script type="text/template" class="template">
+            <div class="row">
+                <section>
+                    <h3><i class="fa fa-user"></i>Регистрация прошла успешно!</h3>
+                </section>
+            </div>
+        </script>
         <!-- end Navigation-->
         <!-- Page Canvas-->
         <div id="page-canvas">
@@ -53,33 +61,46 @@
             <!--Page Content-->
             <div id="page-content">
                 <section class="container">
-                    <div class="block">
+                    <div class="block page">
                         <div class="row">
                             <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
                                 <header>
                                     <h1 class="page-title">Register</h1>
                                 </header>
                                 <hr>
-                                <form role="form" id="form-register" method="post" action="?">
+                                <form name="register" role="form" id="form-register" method="post" action="?">
+                                    <input type="hidden" class="form-control" id="form-register-id" name="id" value="">
+
                                     <div class="form-group">
-                                        <label for="form-register-full-name">Full Name:</label>
-                                        <input type="text" class="form-control" id="form-register-full-name" name="form-register-full-name" required>
+                                        <label for="form-register-full-name">Полное имя:</label>
+                                        <input type="text" class="form-control" id="form-register-full-name" name="name" required>
                                     </div><!-- /.form-group -->
                                     <div class="form-group">
-                                        <label for="form-register-full-name">Login:</label>
+                                        <label for="form-register-login">Логин:</label>
                                         <input type="text" class="form-control" id="form-register-login" name="username" required>
                                     </div><!-- /.form-group -->
                                     <div class="form-group">
                                         <label for="form-register-email">Email:</label>
-                                        <input type="email" class="form-control" id="form-register-email" name="form-register-email" required>
+                                        <input type="email" class="form-control" id="form-register-email" name="email" required>
                                     </div><!-- /.form-group -->
                                     <div class="form-group">
-                                        <label for="form-register-password">Password:</label>
-                                        <input type="password" class="form-control" id="form-register-password" name="form-register-password" required>
+                                        <label for="form-register-password">Пароль:</label>
+                                        <input type="password" class="form-control" id="form-register-password" name="password" required>
                                     </div><!-- /.form-group -->
+
                                     <div class="form-group">
-                                        <label for="form-register-confirm-password">Confirm Password:</label>
-                                        <input type="password" class="form-control" id="form-register-confirm-password" name="form-register-confirm-password" required>
+                                        <label for="form-register-confirm-password">Подтвердите пароль:</label>
+                                        <input type="password" class="form-control" id="form-register-confirm-password" name="confirm-password" required>
+                                    </div><!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="form-register-organization">Организация:</label>
+                                        <input type="text" class="form-control" id="form-register-organization" name="organizationName" required>
+                                    </div><!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="form-register-position">Должность:</label>
+                                        <input type="text" class="form-control" id="form-register-position" name="positionName" required>
                                     </div><!-- /.form-group -->
 
                                     <div class="form-group clearfix">
@@ -170,11 +191,13 @@
 <script type="text/javascript" src="js/before.load.js"></script>
 <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/smoothscroll.js"></script>
+<!--<script type="text/javascript" src="js/smoothscroll.js"></script>-->
 <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="js/icheck.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/my-scripts/registration.js"></script>
 
 </body>
 </html>

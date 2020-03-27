@@ -1,6 +1,7 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.models.DTO.EventItemDTO;
+import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventItemRepository;
@@ -8,6 +9,7 @@ import com.ncedu.eventx.repositories.RolesRepository;
 import com.ncedu.eventx.repositories.UserEventItemRepository;
 import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.EventItemService;
+import com.ncedu.eventx.services.EventsService;
 import com.ncedu.eventx.services.UserEventItemService;
 import com.ncedu.eventx.services.UserEventService;
 import org.springframework.stereotype.Service;
@@ -26,19 +28,21 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     final EventItemRepository eventItemRepository;
     final EventItemService eventItemService;
     final UserEventService userEventService;
+    final EventsService eventsService;
 
     public UserEventItemServiceImpl(UserRepository userRepository,
                                     RolesRepository rolesRepository,
                                     UserEventItemRepository eventItemRepository,
                                     EventItemRepository eventItemRepository1,
                                     EventItemService eventItemService,
-                                    UserEventService userEventService) {
+                                    UserEventService userEventService, EventsService eventsService) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.userEventItemRepository = eventItemRepository;
         this.eventItemRepository = eventItemRepository1;
         this.eventItemService = eventItemService;
         this.userEventService = userEventService;
+        this.eventsService = eventsService;
     }
 
     @Override
@@ -63,19 +67,21 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public boolean addToFeatured(EventItemDTO itemDTO, UserDTO user) {
-        EventItemEntity itemEntity = eventItemRepository.findById(itemDTO.getId());
-        UserEntity userEntity = userRepository.findById(user.getId());
+    public EventWithItemsDTO addToFeatured(int itemId, int userId) {
+        EventItemEntity itemEntity = eventItemRepository.findById(itemId);
+        UserEntity userEntity = userRepository.findById(userId);
 
-        RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        if(isFeatured(itemId, userId)){
+            removeFromFeatured(itemId, userId);
+        }
+        else {
+            RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
-        UserEventItemKey key = new UserEventItemKey(itemEntity.getId(),userEntity.getId(), roleEntity.getId());
-        UserEventItemEntity entity = new UserEventItemEntity(key,userEntity,itemEntity, roleEntity,1);
-
-
-        userEventItemRepository.save(entity);
-
-        return true;
+            UserEventItemKey key = new UserEventItemKey(itemEntity.getId(),userEntity.getId(), roleEntity.getId());
+            UserEventItemEntity entity = new UserEventItemEntity(key,userEntity,itemEntity, roleEntity,1);
+            userEventItemRepository.save(entity);
+        }
+        return eventsService.getEventWithItemsById(itemEntity.getParent().getId(),userId);
     }
 
     @Override
@@ -90,11 +96,11 @@ public class UserEventItemServiceImpl implements UserEventItemService {
 
         List<UserEventItemEntity> list = userEventItemRepository.getAllByItem(itemEntity);
 
-        UserEntity owner = list.stream().filter(role -> role.getRole().equals(roleEntity))
+        boolean owner = list.stream().filter(role -> role.getRole().equals(roleEntity))
                 .filter(user -> user.getUser().equals(userEntity))
-                .map(UserEventItemEntity::getUser).findAny().get();
+                .map(UserEventItemEntity::getUser).findAny().isPresent();
 
-        return owner != null;
+        return owner;
     }
 
     @Override

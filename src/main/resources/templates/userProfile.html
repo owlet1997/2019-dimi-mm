@@ -129,7 +129,7 @@
                             <!--Password-->
                             <div class="col-md-3 col-sm-9">
                                 <h3><i class="fa fa-asterisk"></i>Password Change</h3>
-                                <form class="framed" id="form-password" role="form" method="post" action="?" >
+                                <form name="changepassword" class="framed" id="form-password" role="form" method="post" action="?" >
                                     <div class="form-group">
                                         <label for="current-password">Current Password</label>
                                         <input type="password" class="form-control" id="current-password" name="current-password">
@@ -240,67 +240,8 @@
 <script type="text/javascript" src="js/dropzone.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript" src="js/underscore.js"></script>
-
-<script>
-    (function () {
-
-        const userId = window.location.search.split("=")[1];
-        console.log(userId);
-        _.templateSettings.variable = 'item';
-
-        var template = _.template(
-            $('script.template').html()
-        );
-
-        fetch( `/api/users/`+userId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        })
-            .then(res => res.json())
-            .then(res =>
-                    $('.user-info').prepend(template(res))
-            )
-            .catch(error => alert(error));
-
-    }())
-</script>
-<script>
-    // Константа с адресом сервера, доступ к ней должен быть везде
-    const SERVER_URL = "http://localhost:8080";
-    // Самовызывающаяся функция
-    (function () {
-        // Ищем форму по имени
-        const form = document.forms.userProfile;
-
-        // Слушаем, когда на форму подпишутся
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const userId = window.location.search.split("=")[1];
-
-            let body = {};
-            for (let element of form.elements) {
-                body[element.name] = element.value;
-            }
-            console.log(body);
-            // Делаем запрос на сервер
-            fetch(`${SERVER_URL}/user/`+ userId + `/update`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(body)
-            })
-
-                // Получаем из ответа JSON
-                .then(res => res.json())
-                .then(res => alert(JSON.stringify(res)))
-                // Обрабатываем ошибки с сервера
-                .catch(error => alert(error))
-        })
-    })()
-</script>
+<script type="text/javascript" src="js/my-scripts/updateUser.js"></script>
+<script type="text/javascript" src="js/my-scripts/userProfile.js"></script>
 
 </body>
 </html>

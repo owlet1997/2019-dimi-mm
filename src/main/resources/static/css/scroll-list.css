@@ -1,4 +1,4 @@
-div.right-group, div.time, div.answers, div.person, div.time-and-counters{
+div.right-group, div.time, div.answers, div.person, div.time-and-counters, div.single-card-header{
 display: flex;
 }
 
@@ -18,7 +18,7 @@ div.listItem{
     padding: 5px 0px;
 }
 
-div.time-and-counters{
+div.time-and-counters, div.single-card-header{
 justify-content:space-between;
 }
 

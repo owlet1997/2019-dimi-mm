@@ -15,7 +15,7 @@ public interface EventsService {
 
     List<EventDTO> getEventsList();
 
-    EventWithItemsDTO getEventWithItemsById(int id);
+    EventWithItemsDTO getEventWithItemsById(int id, int userId);
 
     List<EventWithItemsDTO> getEventsBySearchParams(String city, String type, String dateStart);
 

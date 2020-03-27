@@ -5,13 +5,19 @@ import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
 import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
+import com.ncedu.eventx.models.entities.UserEntity;
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
+import org.apache.tomcat.jni.User;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class WebController {
@@ -42,16 +48,8 @@ public class WebController {
 //    }
 
 
-    @PostMapping("/add-event")
-    @ResponseBody
-    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
-        userEventService.createEvent(event);
-        return event;
-    }
-
     @PutMapping("/user/{id}/update")
     @ResponseBody
-
     public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
 //    public UserDTO updateUser(@RequestBody UserDTO user){
         usersService.updateUser(user);
@@ -69,7 +67,7 @@ public class WebController {
         return "submit";
     }
 
-    @GetMapping(value = "/map")
+    @GetMapping(value = "/")
     public String map(Model model) {
         return "eventMap";
     }
@@ -80,10 +78,10 @@ public class WebController {
         return "listItem";
     }
 
-    @GetMapping(value = "/")
-    public String index(Model model) {
-        return "startPage";
-    }
+//    @GetMapping(value = "/")
+//    public String index(Model model) {
+//        return "startPage";
+//    }
 
     @PostMapping(value = "/login")
     public String authorize(Model model) {
@@ -116,6 +114,21 @@ public class WebController {
         return "register";
     }
 
+
+    @PostMapping("/add-event")
+    @ResponseBody
+    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
+        userEventService.createEvent(event);
+        return event;
+    }
+
+    @PostMapping(value = "/register")
+    @ResponseBody
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
+    {
+        usersService.createRegisteredUser(user);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
 
 
