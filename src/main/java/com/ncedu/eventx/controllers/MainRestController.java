@@ -137,7 +137,7 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public EventWithItemsDTO visitEvent ( @RequestParam(name = "eventId") int eventId,
+        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId,
         @RequestParam(name = "userId") int userId){
 
             return userEventService.visitEvent(userId, eventId);
@@ -147,7 +147,7 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public EventWithItemsDTO checkFeaturedEvent(@RequestParam(name = "itemId") int itemId,
+        public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId,
                                               @RequestParam(name = "userId") int userId){
 
             return userEventItemService.addToFeatured(itemId, userId);

@@ -36,11 +36,48 @@
             $('.event-header').append(templateEventHeader(res));
             $('.event-body').append(templateEventBody(res));
 
-            const form = document.forms.visitevent;
-            const formFeat = document.forms.featureItem;
+            var items = res["itemsList"];
+            console.log(items);
 
-            var container = document.querySelector('.event-header');
-            var containerSecond = document.querySelector('.event-body');
+            items.forEach(function (element) {
+                console.log('featureItem'+element.eventItem.id);
+            const formName = document.forms.namedItem('featureItem'+element.eventItem.id);
+                formName.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    var userFormId = document.getElementById('hidden-user-featur-id'+element.eventItem.id);
+                    userFormId.value = document.getElementById('hidden-id').value;
+
+                    let newbody = {};
+
+                    for (let element of formName.elements) {
+                        if (!(element.name === "")){
+                            newbody[element.name] = element.value;
+                        }
+                    }
+                    console.log(newbody);
+
+                    // Делаем запрос на сервер
+                    fetch(`/api/item-visit?itemId=`+newbody["itemId"] + `&userId=` + newbody["userId"],{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        }
+                    })
+                        // Получаем из ответа JSON
+                        .then(res => res.json())
+                        .then(res => {
+                                console.log(res);
+                                let buttonItem = document.getElementById('item-featured' + newbody["itemId"]);
+                                buttonItem.value = visitItem(res);
+                        })
+                        .catch(error => console.log(error))
+
+                })
+            })
+
+            let buttonVisit = document.getElementById('item-visited');
+
+            const form = document.forms.visitevent;
 
             form.addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -66,47 +103,14 @@
                     // Получаем из ответа JSON
                     .then(res => res.json())
                     .then(res => {
-                        while (container.firstChild) {
-                            container.removeChild(container.firstChild);
-                        }
-                        $('.event-header').append(templateEventHeader(res));
+                        buttonVisit.value = visitEvent(res);
+                        console.log(buttonVisit.value);
+
                     })
                     .catch(error => console.log(error))
 
             })
 
-            formFeat.addEventListener("submit", function (event) {
-                event.preventDefault();
-                var userFormId = document.getElementById('hidden-user-featur-id');
-                userFormId.value = document.getElementById('hidden-id').value;
-
-                let newbody = {};
-
-                for (let element of formFeat.elements) {
-                    if (!(element.name === "")){
-                        newbody[element.name] = element.value;
-                    }
-                }
-                console.log(newbody);
-
-                // Делаем запрос на сервер
-                fetch(`/api/item-visit?itemId=`+newbody["itemId"] + `&userId=` + newbody["userId"],{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    }
-                })
-                    // Получаем из ответа JSON
-                    .then(res => res.json())
-                    .then(res => {
-                        while (containerSecond.firstChild) {
-                            containerSecond.removeChild(containerSecond.firstChild);
-                        }
-                        $('.event-body').append(templateEventBody(res));
-                    })
-                    .catch(error => console.log(error))
-
-            })
         })
         .catch(error => alert(error));
 }())

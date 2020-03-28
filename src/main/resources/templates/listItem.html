@@ -45,7 +45,7 @@
                                 <i class="fa fa-plus"></i>
                             </div>
                         </a>
-                        <input id="hidden-id" name="userId" class="userId" type="hidden" value="1">
+                        <input id="hidden-id" name="userId" class="userId" type="hidden" value="20">
                     </div>
                 </nav>
             </div>
@@ -101,7 +101,7 @@
                                                 <article class="block">
                                                     <div class="block-header event-header">
                                                         <script type="text/template" class="templateEventHeader">
-                                                            <div class="col-md-9">
+                                                            <div class="col-md-8">
                                                                 <header><h2>Дата начала</h2></header>
                                                                 <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
                                                                 <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
@@ -109,16 +109,14 @@
                                                                 <header><h2>Описание</h2></header>
                                                                 <p><%- item.description  %></p>
                                                             </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group eventVisit" id="eventVisit">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group eventVisit">
                                                                     <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
                                                                         <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
                                                                         <input id="hidden-event-id" name="eventId" class="userId" type="hidden" value="<%= item.id %>">
-                                                                        <% if(item.visited==true) { %>
-                                                                        <button type="submit" class="btn btn-default">Отказаться от участия</button>
-                                                                        <% } else { %>
-                                                                        <button type="submit" class="btn btn-default">Посетить!</button>
-                                                                        <% } %>
+
+                                                                        <input type="submit" class="btn btn-default" id="item-visited" value="<%= visitEvent(item.visited) %>">
+
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -141,15 +139,10 @@
                                                                     <div class="col-md-4">
                                                                         <div class="wrapper">
                                                                             <div class="form-group">
-                                                                                <form name="featureItem" id="featureItem" role="form" method="post" action="?" >
-                                                                                    <input id="hidden-user-featur-id" name="userId" class="userId" type="hidden" value="">
-                                                                                    <input id="hidden-item-id" name="itemId" class="itemId" type="hidden" value="<%= listItem.eventItem.id %>">
-                                                                                    <% if (listItem.featured==true) { %>
-                                                                                    <button type="submit" class="btn btn-default">Убрать из избранных</button>
-                                                                                    <% } else { %>
-                                                                                    <button type="submit" class="btn btn-default">Добавить в избранные</button>
-                                                                                    <% } %>
-                                                                                </form>
+                                                                                <form name="featureItem<%= listItem.eventItem.id %>" id="featureItem<%= listItem.eventItem.id %>" role="form" method="post" action="?" >
+                                                                                    <input id="hidden-user-featur-id<%= listItem.eventItem.id %>" name="userId" class="userId" type="hidden" value="">
+                                                                                    <input id="hidden-item-id<%= listItem.eventItem.id %>" name="itemId" class="itemId" type="hidden" value="<%= listItem.eventItem.id %>">
+                                                                                    <input type="submit" class="btn btn-default" id="item-featured<%= listItem.eventItem.id %>" value="<%= visitItem(listItem.featured) %>">                                                                                </form>
 
                                                                             </div>
                                                                         </div>
@@ -251,6 +244,7 @@
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
+<script type="text/javascript" src="js/my-scripts/buttonClassVisitEvent.js"></script>
 <script type="text/javascript" src="js/my-scripts/listItem.js"></script>
 
 </body>

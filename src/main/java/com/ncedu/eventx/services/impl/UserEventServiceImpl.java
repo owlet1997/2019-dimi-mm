@@ -79,9 +79,10 @@ public class UserEventServiceImpl implements UserEventService {
 
 
     @Override
-    public EventWithItemsDTO visitEvent(int userId, int eventId) {
+    public boolean visitEvent(int userId, int eventId) {
         if (isVisited(userId, eventId)){
             deleteVisit(userId, eventId);
+            return false;
         }
         else {
             UserEntity userEntity = userRepository.findById(userId);
@@ -92,7 +93,7 @@ public class UserEventServiceImpl implements UserEventService {
             UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
             userEventRepository.save(userEventEntity);
         }
-        return eventsService.getEventWithItemsById(eventId,userId);
+        return true;
     }
 
     @Override

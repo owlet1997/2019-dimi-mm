@@ -19,7 +19,7 @@ public interface UserEventService {
 
     boolean createEvent(EventForCreateDTO createDTO);
 
-    EventWithItemsDTO visitEvent(int userId, int evenId);
+    boolean visitEvent(int userId, int evenId);
 
     boolean deleteVisit(int userId, int eventId);
 

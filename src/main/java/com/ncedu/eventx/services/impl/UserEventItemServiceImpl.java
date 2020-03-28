@@ -1,7 +1,6 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.models.DTO.EventItemDTO;
-import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventItemRepository;
@@ -67,12 +66,13 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public EventWithItemsDTO addToFeatured(int itemId, int userId) {
+    public boolean addToFeatured(int itemId, int userId) {
         EventItemEntity itemEntity = eventItemRepository.findById(itemId);
         UserEntity userEntity = userRepository.findById(userId);
 
         if(isFeatured(itemId, userId)){
             removeFromFeatured(itemId, userId);
+            return false;
         }
         else {
             RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
@@ -81,7 +81,7 @@ public class UserEventItemServiceImpl implements UserEventItemService {
             UserEventItemEntity entity = new UserEventItemEntity(key,userEntity,itemEntity, roleEntity,1);
             userEventItemRepository.save(entity);
         }
-        return eventsService.getEventWithItemsById(itemEntity.getParent().getId(),userId);
+        return true;
     }
 
     @Override
