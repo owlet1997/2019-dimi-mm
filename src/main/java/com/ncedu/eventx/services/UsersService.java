@@ -1,7 +1,10 @@
 package com.ncedu.eventx.services;
 
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
+import com.ncedu.eventx.models.entities.UserEntity;
+
 
 import java.util.List;
 
@@ -9,9 +12,12 @@ public interface UsersService {
 
     List<UserDTO> getAllUsers();
 
-    boolean createRegisteredUser(UserForCreateDTO userDTO);
+    UserForUpdateDTO updateUser(UserForUpdateDTO userDTO);
 
-    UserDTO getUserById(int id);
+    boolean createRegisteredUser(UserDTO userDTO);
 
-    UserForCreateDTO updateUser(UserForCreateDTO userDTO);
+    UserEntity getUserById(int id);
+
+    boolean deleteUser(int id);
+
 }

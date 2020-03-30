@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name="CITY", schema = "eventx")
+@Table(name="city", schema = "eventx")
 public class CityEntity implements Serializable {
 
     @Id

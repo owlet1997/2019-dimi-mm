@@ -3,15 +3,21 @@ package com.ncedu.eventx.controllers;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.DTO.UserForCreateDTO;
+import com.ncedu.eventx.models.entities.UserEntity;
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
+import org.apache.tomcat.jni.User;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class WebController {
@@ -26,39 +32,32 @@ public class WebController {
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
 
-    @GetMapping(value = "/user/{id}")
-    public ModelAndView userPage(@PathVariable("id") int userId) {
-        UserDTO user = usersService.getUserById(userId);
 
-        ModelAndView modelAndView = new ModelAndView("registrationPages/UserPage");
-        modelAndView.addObject("user",user);
-        return modelAndView;
+    @GetMapping("/user")
+    public String userPage(@RequestParam("id") int id) {
+        return "userProfile";
     }
 
-    @GetMapping("/user/{id}/update")
-    public ModelAndView updateUser(){
-        return new ModelAndView("registrationPages/UpdateUser");
-    }
+//    @GetMapping(value = "/user/{id}")
+//    public ModelAndView userPage(@PathVariable("id") int userId) {
+//        UserDTO user = usersService.getUserById(userId);
+//
+//        ModelAndView modelAndView = new ModelAndView("registrationPages/UserPage");
+//        modelAndView.addObject("user",user);
+//        return modelAndView;
+//    }
 
-    @PostMapping("/add-event")
-    @ResponseBody
-    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
-
-        userEventService.createEvent(event);
-        return event;
-    }
 
     @PutMapping("/user/{id}/update")
     @ResponseBody
-    public UserForCreateDTO updateUser(@RequestBody UserForCreateDTO user){
-
+    public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
+//    public UserDTO updateUser(@RequestBody UserDTO user){
         usersService.updateUser(user);
-        return usersMapper.toUserForCreateDTO(usersService.getUserById(user.getId()));
+        return usersMapper.toUserForUpdateDTO(usersService.getUserById(user.getId()));
     }
 
     @GetMapping(value = "/list")
     public String list(Model model) {
-
         return "EventList";
     }
 
@@ -68,20 +67,72 @@ public class WebController {
         return "submit";
     }
 
-    @GetMapping(value = "/map")
+    @GetMapping(value = "/")
     public String map(Model model) {
-
         return "eventMap";
     }
 
-    @GetMapping(value = "/test")
-    public String test(Model model) {
+    @GetMapping(value = "/event")
+    public String test(@RequestParam("id") int id) {
 
-        return "test";
+        return "listItem";
+    }
+
+//    @GetMapping(value = "/")
+//    public String index(Model model) {
+//        return "startPage";
+//    }
+
+    @PostMapping(value = "/login")
+    public String authorize(Model model) {
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/login")
+    public String login(Model model) {
+        return "login";
+    }
+
+    @GetMapping(value = "/registration")
+    public String registrationGet() {
+        return "registration";
+    }
+
+    @PostMapping(value = "/registration")
+    public String registrationPost(@RequestBody UserDTO user) {
+        usersService.createRegisteredUser(user);
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/log-in")
+    public String loginBootstrap(Model model) {
+        return "sign-in";
+    }
+
+    @GetMapping(value = "/register")
+    public String registerBootstrap() {
+        return "register";
     }
 
 
-//    // Личный кабинет
+    @PostMapping("/add-event")
+    @ResponseBody
+    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
+        userEventService.createEvent(event);
+        return event;
+    }
+
+    @PostMapping(value = "/register")
+    @ResponseBody
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
+    {
+        usersService.createRegisteredUser(user);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+
+
+   //    // Личный кабинет
 //    @GetMapping(value = "/login")
 //    public String logIn(Model model) {
 //

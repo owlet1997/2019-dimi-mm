@@ -2,13 +2,16 @@ package com.ncedu.eventx.models.entities;
 
 import lombok.*;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+
 
 @Data
 @Getter
@@ -16,16 +19,17 @@ import java.util.Set;
 @Entity
 @ToString
 @Table(name="user", schema = "eventx")
-public class UserEntity implements Serializable {
+public class UserEntity implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(nullable = false)
-    private UserRoleEntity role;
+    private RoleEntity role;
 
     @OneToMany(mappedBy = "user")
     List<UserEventEntity> userEvents = new ArrayList<>();
@@ -34,26 +38,50 @@ public class UserEntity implements Serializable {
     List<UserEventItemEntity> userEventItems = new ArrayList<>();
 
     @Column(nullable = false)
-    private String login;
-
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(name="organization_name", nullable = false)
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String organizationName;
 
-    @Column(name="position_name", nullable = false)
+    @Column(nullable = false)
     private String positionName;
 
-    @Column(name="avatar_img", nullable = false)
+    @Column(nullable = false)
     private String avatarImg;
 
-    @Email(message = "Email address has invalid format: ${validatedValue}",
-            regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
+    @Email
     @Column(nullable = false)
     private String email;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
 }

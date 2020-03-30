@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
     <link rel="stylesheet" href="css/scroll-list.css" type="text/css">
-    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/user.style.css" type="text/css">
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=d0d09cfa-6955-4a10-acbc-8a964c4fef39" type="text/javascript"></script>
@@ -30,14 +29,14 @@
         <div class="header">
             <div class="wrapper">
                 <div class="brand">
-                    <a href="index-directory.html"><img src="icons/logo.png" alt="logo" height="64px"></a>
+                    <a href="/"><img src="icons/logo.png" alt="logo" height="64px"></a>
                 </div>
                 <nav class="navigation-items">
                     <div class="wrapper">
                         <ul class="main-navigation navigation-top-header"></ul>
                         <ul class="user-area">
-                            <li><a href="sign-in.html">Sign In</a></li>
-                            <li><a href="/registration"><strong>Register</strong></a></li>
+                            <li><a href="/log-in">Sign In</a></li>
+                            <li><a href="/register"><strong>Register</strong></a></li>
                         </ul>
                         <a href="/add-event" class="submit-item">
                             <div class="content"><span>Submit Your Item</span></div>
@@ -58,7 +57,7 @@
                 <section class="container">
                     <div class="row">
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="panel panel-primary" id="result_panel">
                                 <div class="panel-heading"><h3 class="panel-title">Список событий</h3></div>
                                 <div class="panel-body">
@@ -73,12 +72,22 @@
 
                                 <!-- Card header -->
                                 <div class="card-header" role="tab" id="heading<%= item.id %>" >
-                                    <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
-                                       aria-controls="collapseOne1">
-                                        <h5 class="mb-0">
-                                            <%- item.name %>
-                                        </h5>
-                                    </a>
+                                    <div class="single-card-header">
+                                        <div class="header-name">
+                                            <a href="/event?id=<%= item.id %>">
+                                                <h5 class="mb-0">
+                                                <%- item.name %>
+                                                </h5>
+                                            </a>
+                                        </div>
+                                        <div class="header-angle">
+                                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
+                                               aria-controls="collapseOne1">
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <p class="address"><%- item.address %></p>
                                     <div class="time-and-counters">
                                         <div class="time">
@@ -109,14 +118,8 @@
                                 <div id="collapse<%= item.id %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= item.id %>"
                                      data-parent="#accordionEx">
                                     <div class="card-body">
-                                        <p class="type"><%- item.type %></p>
-                                        <div class="time">
-                                            <div class="time image">
-                                                <img src="icons/time.png" height="25px"></div>
-                                            <div class="time text">
-                                                <%- _.identity(dateWrite(item.timeStart)) %>
-                                            </div>
-                                        </div>
+                                        <p class="type">Тип события: <%- item.type.type %></p>
+
                                         <div class="time">
                                             <div class="time image">
                                                 <img src="icons/time.png" height="25px"></div>
@@ -125,8 +128,8 @@
                                             </div>
                                         </div>
                                         <p class="descr"><%- item.description %></p>
-                                        <% _.each( item.items, function( listItem ){ %>
-
+                                        <% _.each( item.itemsList, function( listItem ){ %>
+                                        <div class="listItem">
                                         <h5 class="mb-0">
                                             <%- listItem.name %>
                                         </h5>
@@ -149,6 +152,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
 
                                         <% }); %>
                                     </div>
@@ -157,7 +161,7 @@
                             </div>
                         </script>
 
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div id="map"></div>
                         </div>
 
@@ -286,6 +290,7 @@
 <script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
 <script type="text/javascript" src="js/my-scripts/listEvents.js"></script>
 <script type="text/javascript" src="js/my-scripts/findEvents.js"></script>
+<script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 
 </body>
 </html>

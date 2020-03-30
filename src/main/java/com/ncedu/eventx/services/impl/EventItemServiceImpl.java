@@ -59,34 +59,43 @@ public class EventItemServiceImpl implements EventItemService {
     }
 
     @Override
-    public List<EventItemWithUsersDTO> getEventItemsListByParent(int id) {
+    public List<EventItemWithUsersDTO> getEventItemsListByParent(int id, UserEntity userEntity) {
         EventEntity eventEntity = eventRepository.findById(id);
         List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
-
-        UserRoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
-        UserRoleEntity userRoleSpeaker = rolesRepository.findByName(SPEAKER.getDescription());
 
         List<EventItemWithUsersDTO> withUsersDTOList = new ArrayList<>();
 
         for (EventItemEntity e: list) {
-            List<UserEventItemEntity> userEventMap = userEventItemRepository.getAllByItem(e);
-
-            List<UserEntity> usersList = userEventMap.stream()
-                    .filter(role -> role.getRole().equals(userRoleVisit))
-                    .map(UserEventItemEntity::getUser).collect(Collectors.toList());;
-
-            UserEntity speaker = userEventMap.stream().filter(role -> role.getRole().equals(userRoleSpeaker))
-                    .map(UserEventItemEntity::getUser).findAny().get();
-
-            EventItemWithUsersDTO item = new EventItemWithUsersDTO(eventItemMapper.toEventItemDTO(e),
-                                                                   usersMapper.toDTO(speaker),
-                                                                   usersMapper.toUserDTOList(usersList));
+            EventItemWithUsersDTO item = getEventItemWithUsers(e,userEntity);
             withUsersDTOList.add(item);
-
         }
-
         return withUsersDTOList;
-
     }
+
+    @Override
+    public EventItemWithUsersDTO getEventItemWithUsers(EventItemEntity e, UserEntity userEntity){
+        RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity userRoleSpeaker = rolesRepository.findByName(SPEAKER.getDescription());
+
+        List<UserEventItemEntity> userEventMap = userEventItemRepository.getAllByItem(e);
+
+        List<UserEntity> usersList = userEventMap.stream()
+                .filter(role -> role.getRole().equals(userRoleVisit))
+                .map(UserEventItemEntity::getUser).collect(Collectors.toList());;
+
+        UserEntity speaker = userEventMap.stream().filter(role -> role.getRole().equals(userRoleSpeaker))
+                .map(UserEventItemEntity::getUser).findAny().orElseGet(null);
+
+        boolean featured = userEventMap.stream()
+                .filter(role -> role.getRole().equals(userRoleVisit))
+                .filter(user -> user.getUser().equals(userEntity))
+                .map(UserEventItemEntity::getUser).findFirst().isPresent();
+
+        return new EventItemWithUsersDTO(eventItemMapper.toEventItemDTO(e),
+                usersMapper.toDTO(speaker),
+                featured,
+                usersMapper.toUserDTOList(usersList));
+    }
+
 
 }

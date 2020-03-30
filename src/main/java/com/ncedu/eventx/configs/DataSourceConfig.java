@@ -25,48 +25,61 @@ public class DataSourceConfig {
 
 
     //    бин для подключения к хероку
+    @Bean(name = "dataSource")
+    public DataSource getDataSource(){
+        String databaseUrl = env.getProperty("spring.datasource.URI");
+
+        log.info("Initializing PostgreSQL database: " + databaseUrl);
+
+        URI dbUri;
+        try{
+            dbUri = new URI(databaseUrl);
+        } catch (URISyntaxException e) {
+            log.info(String.format("Invalid DATABASE_URL: %s", databaseUrl));
+            return null;
+        }
+
+        String userName = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
+                + dbUri.getPort() + dbUri.getPath();
+
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl(dbUrl);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+        dataSource.setTestOnBorrow(true);
+        dataSource.setTestWhileIdle(true);
+        dataSource.setTestOnReturn(true);
+        dataSource.setValidationQuery("SELECT 1");
+
+        return dataSource;
+    }
+    // локальная база постгреса
 //    @Bean(name = "dataSource")
 //    public DataSource getDataSource(){
-//        String databaseUrl = System.getenv("URI");
 //
-//        log.info("Initializing PostgreSQL database:" + databaseUrl);
+//        // подключение к локальной бд postgres
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 //
-//        URI dbUri;
-//        try{
-//            dbUri = new URI(databaseUrl);
-//        } catch (URISyntaxException e) {
-//            log.info(String.format("Invalid DATABASE_URL: %s", databaseUrl));
-//            return null;
-//        }
-//
-//        String userName = dbUri.getUserInfo().split(":")[0];
-//        String password = dbUri.getUserInfo().split(":")[1];
-//        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-//                + dbUri.getPort() + dbUri.getPath();
-//
-//        org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+//        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
+//        dataSource.setUrl(env.getProperty("spring.datasource.url"));
+//        dataSource.setUsername(env.getProperty("spring.datasource.username"));
+//        dataSource.setPassword(env.getProperty("spring.datasource.password"));
+//        return dataSource;
+//    }
+
+}
+
+//        String userName = "postgres";
+//        String password = "1";
+//        String dbUrl = "jdbc:postgresql://localhost:5432/eventx";
 //
 //        dataSource.setDriverClassName("org.postgresql.Driver");
 //        dataSource.setUrl(dbUrl);
 //        dataSource.setUsername(userName);
 //        dataSource.setPassword(password);
-//        dataSource.setTestOnBorrow(true);
-//        dataSource.setTestWhileIdle(true);
-//        dataSource.setTestOnReturn(true);
-//        dataSource.setValidationQuery("SELECT 1");
-//
+
 //        return dataSource;
-//    }
-    // локальная база постгреса
-    @Bean(name = "dataSource")
-    public DataSource getDataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
-        dataSource.setUrl(env.getProperty("spring.datasource.url"));
-        dataSource.setUsername(env.getProperty("spring.datasource.username"));
-        dataSource.setPassword(env.getProperty("spring.datasource.password"));
-        return dataSource;
-    }
-
-}

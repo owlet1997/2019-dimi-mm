@@ -17,7 +17,6 @@ public interface EventMapper {
 
     EventEntity toEventEntity(EventDTO eventDTO);
 
-    @Mapping(target = "items", source = "items")
     EventWithItemsDTO toEventWithItemsDTO(EventEntity eventEntity);
 
 
