@@ -78,11 +78,6 @@ public class WebController {
         return "listItem";
     }
 
-//    @GetMapping(value = "/")
-//    public String index(Model model) {
-//        return "startPage";
-//    }
-
     @PostMapping(value = "/login")
     public String authorize(Model model) {
         return "redirect:/";
@@ -93,7 +88,7 @@ public class WebController {
         return "login";
     }
 
-    @GetMapping(value = "/registration")
+   /* @GetMapping(value = "/registration")
     public String registrationGet() {
         return "registration";
     }
@@ -102,7 +97,7 @@ public class WebController {
     public String registrationPost(@RequestBody UserDTO user) {
         usersService.createRegisteredUser(user);
         return "redirect:/";
-    }
+    } */
 
     @GetMapping(value = "/log-in")
     public String loginBootstrap(Model model) {
@@ -114,14 +109,6 @@ public class WebController {
         return "register";
     }
 
-
-    @PostMapping("/add-event")
-    @ResponseBody
-    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
-        userEventService.createEvent(event);
-        return event;
-    }
-
     @PostMapping(value = "/register")
     @ResponseBody
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
@@ -130,49 +117,14 @@ public class WebController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/add-event")
+    @ResponseBody
+    public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
+        userEventService.createEvent(event);
+        return event;
+    }
 
 
-   //    // Личный кабинет
-//    @GetMapping(value = "/login")
-//    public String logIn(Model model) {
-//
-//        model.addAttribute(new UserEntity()); // Добавить проверку на пользователя
-//        return "primaryCabinetPages/LogIn";
-//    }
-//
-//    @PostMapping(value = "/login")
-//    public  String logIn(@ModelAttribute UserEntity user, Model model) {
-//
-//        model.addAttribute(user);
-//        if(user.getLogin().equals("123") && user.getPassword().equals("123")) {
-//            return "primaryCabinetPages/AuthorizedPage";
-//        }
-//        return "registrationPages/RegistrationPage";
-//    }
-//
-//    @RequestMapping(value = "/primaryCabinet", method = RequestMethod.GET)
-//    public String primaryCabinet(@ModelAttribute UserEntity user, Model model) {
-//        model.addAttribute(user);
-//        return "primaryCabinetPages/PrimaryCabinet";
-//    }
-
-//    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-//    public String deleteUser() {
-//        return "primaryCabinetPages/Delete";
-//    }
-//
-//    @RequestMapping(value = "/editProfile", method = RequestMethod.GET)
-//    public String editUser(Model model) {
-//        model.addAttribute(new UserEntity());
-//        return "primaryCabinetPages/EditUser";
-//    }
-//
-//    @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
-//    public String changePassword(Model model) {
-//
-//        model.addAttribute(new UserEntity());
-//        return "primaryCabinetPages/ChangePassword";
-//    }
 
 }
 

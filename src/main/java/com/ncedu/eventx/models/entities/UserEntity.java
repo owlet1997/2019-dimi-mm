@@ -18,7 +18,7 @@ import java.util.*;
 @Setter
 @Entity
 @ToString
-@Table(name="user", schema = "eventx")
+@Table(name="t_user", schema = "eventx")
 public class UserEntity implements Serializable, UserDetails {
 
     @Id
@@ -61,6 +61,16 @@ public class UserEntity implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
         return null;
     }
 

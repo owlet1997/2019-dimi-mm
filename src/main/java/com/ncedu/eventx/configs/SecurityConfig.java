@@ -24,14 +24,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /*@Autowired
-    UsersServiceImpl usersService;
+    UsersServiceImpl usersService; */
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
+    /*@Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf()

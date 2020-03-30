@@ -14,10 +14,12 @@ import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +32,15 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     final UserRepository userRepository;
     final RolesRepository rolesRepository;
 
+    @Autowired
+    final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
-    public UsersServiceImpl(UserRepository userRepository, RolesRepository rolesRepository) {
+    public UsersServiceImpl(UserRepository userRepository, RolesRepository rolesRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -48,12 +54,16 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         UserEntity userEntity = new UserEntity();
         RoleEntity role = rolesRepository.findByName("user");
 
+        if(userRepository.findByUsername(userDTO.getUsername()) != null) {
+            return false;
+        }
+
         userEntity.setRole(role);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setName(userDTO.getName());
 
-        userEntity.setPassword(userDTO.getPassword());
+        userEntity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);
