@@ -3,9 +3,8 @@ package com.ncedu.eventx.controllers;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
-import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.entities.UserEntity;
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
@@ -87,15 +86,6 @@ public class WebController {
     public String loginPost(@RequestParam String username,@RequestParam String password) {
         UserDTO userFromDb = usersService.getUserByUsername(username);
 
-       // password = bCryptPasswordEncoder.encode(password);
-
-      //  UserDTO user = usersMapper.toDTO(usersService.getUserById(8));
-//        System.out.println("!!!!!!!!!!!!!!!!");
-//        System.out.println("userFromDb = " + userFromDb);
-//        System.out.println("password = " + password);
-//        userFromDb.setUsername(username);
-//        userFromDb.setPassword(password);
-       // System.out.println("user = " + user);
         if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
             return "redirect:/user?id=" + userFromDb.getId();
         }
@@ -114,8 +104,12 @@ public class WebController {
     @ResponseBody
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
     {
-        usersService.createRegisteredUser(user);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (user.getPassword().equals(user.getPasswordConfirm())) {
+
+            usersService.createRegisteredUser(user);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @PostMapping("/add-event")
