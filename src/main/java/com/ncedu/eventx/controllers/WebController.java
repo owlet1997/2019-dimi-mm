@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class WebController {
 
@@ -22,6 +24,8 @@ public class WebController {
     final UserEventService userEventService;
 
     final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    HttpSession session = null;
 
     public WebController(UsersService usersService, UserEventService userEventService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.usersService = usersService;
@@ -37,20 +41,10 @@ public class WebController {
         return "userProfile";
     }
 
-//    @GetMapping(value = "/user/{id}")
-//    public ModelAndView userPage(@PathVariable("id") int userId) {
-//        UserDTO user = usersService.getUserById(userId);
-//
-//        ModelAndView modelAndView = new ModelAndView("registrationPages/UserPage");
-//        modelAndView.addObject("user",user);
-//        return modelAndView;
-//    }
-
 
     @PutMapping("/user/{id}/update")
     @ResponseBody
     public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
-//    public UserDTO updateUser(@RequestBody UserDTO user){
         usersService.updateUser(user);
         return usersMapper.toUserForUpdateDTO(usersService.getUserById(user.getId()));
     }
@@ -62,6 +56,7 @@ public class WebController {
 
     @GetMapping(value = "/add-event")
     public String addEvent(Model model) {
+        System.out.println("id = " + session.getId());
 
         return "submit";
     }
@@ -89,9 +84,6 @@ public class WebController {
         if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
             return "redirect:/user?id=" + userFromDb.getId();
         }
-        if(password.equals(userFromDb.getPassword())) {
-            return "redirect:/user?id=" + userFromDb.getId();
-        }
         return "redirect:/register";
     }
 
@@ -105,7 +97,6 @@ public class WebController {
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
     {
         if (user.getPassword().equals(user.getPasswordConfirm())) {
-
             usersService.createRegisteredUser(user);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
