@@ -18,8 +18,8 @@ import java.util.*;
 @Setter
 @Entity
 @ToString
-//@Table(name="t_user", schema = "eventx")
-@Table(name="user", schema = "eventx")
+@Table(name="t_user", schema = "eventx")
+//@Table(name="user", schema = "eventx")
 public class UserEntity implements Serializable, UserDetails {
 
     @Id
@@ -67,12 +67,12 @@ public class UserEntity implements Serializable, UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override

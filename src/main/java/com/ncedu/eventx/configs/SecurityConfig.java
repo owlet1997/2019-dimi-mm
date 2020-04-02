@@ -30,38 +30,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+//
+//     @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .csrf()
+//                .disable()
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll();
+//             //   .anyRequest().authenticated();
+//        http
+//            .formLogin()
+//                .loginPage("/log-in")
+//                .permitAll()
+//                .and()
+//            .logout()
+//                .permitAll();
+//    }
+//
+//
      @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers("/").permitAll();
-             //   .anyRequest().authenticated();
-        http
-            .formLogin()
-                .loginPage("/log-in")
-                .permitAll()
-                .and()
-            .logout()
-                .permitAll();
-    }
-
-
-   /*  @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/register").not().fullyAuthenticated()
-                .antMatchers("/").permitAll()
-                .anyRequest().authenticated();  } */
-
-    @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-       // auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder());
-        auth.inMemoryAuthentication().withUser("user").password("password").roles("user");
-    }
-
-
+                .antMatchers("/").permitAll(); }
+                //.anyRequest().authenticated();  }
+//
+//    @Autowired
+//    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        //auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder());
+//        auth.inMemoryAuthentication().withUser("user").password("password").roles("user");
+//    }
+//
+//
 }
