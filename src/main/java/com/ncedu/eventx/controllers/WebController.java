@@ -86,13 +86,19 @@ public class WebController {
     @PostMapping(value = "/log-in")
     public String loginPost(@RequestParam String username,@RequestParam String password) {
         UserDTO userFromDb = usersService.getUserByUsername(username);
-        userFromDb.setUsername(username);
-        password = bCryptPasswordEncoder.encode(password);
-        userFromDb.setPassword(password);
+
+       // password = bCryptPasswordEncoder.encode(password);
+
       //  UserDTO user = usersMapper.toDTO(usersService.getUserById(8));
-       // System.out.println("!!!!!!!!!!!!!!!!");
-        //System.out.println("userFromDb = " + userFromDb);
+//        System.out.println("!!!!!!!!!!!!!!!!");
+//        System.out.println("userFromDb = " + userFromDb);
+//        System.out.println("password = " + password);
+//        userFromDb.setUsername(username);
+//        userFromDb.setPassword(password);
        // System.out.println("user = " + user);
+        if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
+            return "redirect:/user?id=" + userFromDb.getId();
+        }
         if(password.equals(userFromDb.getPassword())) {
             return "redirect:/user?id=" + userFromDb.getId();
         }
