@@ -31,7 +31,7 @@ import java.util.List;
 
 @Service
 
-public class UsersServiceImpl implements UsersService, UserDetailsService {
+public class UsersServiceImpl implements UsersService{
 
 
     final UserRepository userRepository;
@@ -119,26 +119,6 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         return userRepository.findById(id);
     }
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                true, true, true, true, getAuthorities("ROLE_USER"));
-
-    }
-
-    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
-
-        return Arrays.asList(new SimpleGrantedAuthority(role));
-    }
 
 
 }

@@ -38,10 +38,8 @@ public class WebController {
 
     @GetMapping("/user")
     public String user() {
-//        System.out.println("Secure = " + SecurityContextHolder.getContext().getAuthentication().getName());
 
         UserDTO user = usersService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-//        System.out.println("user = " + user);
 
         return ("redirect:/userInfo?id=" + user.getId());
     }
@@ -98,7 +96,7 @@ public class WebController {
         UserDTO userFromDb = usersService.getUserByUsername(username);
 
         if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
-            return "redirect:/user?id=" + userFromDb.getId();
+            return "redirect:/user";
         }
         return "redirect:/register";
     }
@@ -126,7 +124,10 @@ public class WebController {
         return event;
     }
 
-
+//    @GetMapping("/logout")
+//    public String logout() {
+//        return "redirect:/logout";
+//    }
 
 }
 
