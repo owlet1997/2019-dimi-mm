@@ -10,13 +10,11 @@
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
-<!--    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">-->
-<!--    <link rel="stylesheet" href="css/dropzone.css" type="text/css">-->
     <link rel="stylesheet" href="css/jquery.ui.timepicker.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/user.style.css" type="text/css">
 
-    <title>Spotter - Universal Directory Listing HTML Template</title>
+    <title>Добавить событие</title>
 
 </head>
 
@@ -160,7 +158,42 @@
 
         </div>
 
-        <footer id="page-footer">
+        <script type="text/template" class="template">
+            <div class="itemevent">
+                <section>
+                    <div class="form-group large">
+                        <label for="titleItem">Название</label>
+                        <input type="text" class="form-control" id="titleItem" name="name">
+                    </div>
+                </section>
+                <section>
+                    <div class="form-group large">
+                        <label for="auditoryItem">Аудитория</label>
+                        <input type="text" class="form-control" id="auditoryItem" name="auditory">
+                    </div>
+                </section>
+                <section>
+                    <h3>Укажите время начала</h3>
+                    <div class="opening-hours">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <tr class="day">
+                                    <td class="day-name">День начала</td>
+                                    <td class="from">
+                                        <input name="dateStart" type="date" class="form-control" id="dateStartItem">
+                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" >
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </script>
+
+            <footer id="page-footer">
             <div class="inner">
                 <div class="footer-top">
                     <div class="container">

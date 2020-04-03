@@ -65,9 +65,6 @@ public class MainRestController {
         return usersMapper.toUserForUpdateDTO(usersService.getUserById(userNo));
     }
 
-
-
-
 //    public UserDTO getUser(@PathVariable("userNo") int userNo) {
 //        return usersMapper.toUserDTO(usersService.getUserById(userNo));
 //
@@ -100,6 +97,22 @@ public class MainRestController {
         public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId,
                                                 @PathVariable("userId") int userId){
             return eventsService.getEventWithItemsById(eventId, userId);
+        }
+
+        @GetMapping(value = "/api/user/{userId}/events", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventDTO> getEventsByUserId(@PathVariable("userId") int userId){
+            return eventsService.getEventsByUserId(userId);
+        }
+
+        @GetMapping(value = "/api/user/{userId}/items", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventItemDTO> getItemsByUserId(@PathVariable("userId") int userId){
+            return eventItemService.getItemsByUser(userId);
         }
 
 

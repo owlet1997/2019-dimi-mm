@@ -8,6 +8,10 @@
         $('script.template').html()
     );
 
+    var templateTitle = _.template(
+        $('script.templateTitle').html()
+    );
+
     fetch( `/api/users/`+userId, {
         method: 'GET',
         headers: {
@@ -15,9 +19,10 @@
         }
     })
         .then(res => res.json())
-        .then(res =>
-            $('.user-info').prepend(template(res))
-        )
+        .then(res =>{
+            $('.user-info').prepend(template(res));
+            $('.nav-pills').prepend(templateTitle(res))
+        })
         .catch(error => alert(error));
 
 }())

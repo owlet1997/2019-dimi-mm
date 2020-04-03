@@ -53,6 +53,12 @@ public class WebController {
     }
 
 
+    @GetMapping("/user-items")
+    public String userItemsPage(@RequestParam("id") int id) {
+        return "items";
+    }
+
+
     @PutMapping("/user/{id}/update")
     @ResponseBody
     public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
