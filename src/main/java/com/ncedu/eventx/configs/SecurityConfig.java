@@ -1,7 +1,7 @@
 package com.ncedu.eventx.configs;
 
 
-import com.ncedu.eventx.services.impl.UsersServiceImpl;
+import com.ncedu.eventx.services.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    UsersServiceImpl usersService;
+    UserDetailsServiceImpl usersService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -34,11 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                     .antMatchers("/register").not().fullyAuthenticated()
+                    .antMatchers("/log-in").not().fullyAuthenticated()
                     .antMatchers("/").permitAll()
                     .antMatchers("/list").authenticated()
                     .antMatchers("/user").authenticated()
+                    .antMatchers("/userInfo").authenticated()
                     .antMatchers("/add-event").authenticated()
                     .antMatchers("/event").authenticated()
+                    .antMatchers("/logout").authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/log-in")

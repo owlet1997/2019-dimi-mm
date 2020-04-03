@@ -4,6 +4,7 @@ import com.ncedu.eventx.models.DTO.UserDTO;
 
 import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.entities.UserEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.List;
