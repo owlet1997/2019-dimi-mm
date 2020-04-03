@@ -120,6 +120,16 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
+    public List<EventDTO> getEventsByUserId(int userId){
+        UserEntity userEntity = userRepository.findById(userId);
+
+        List<UserEventEntity> userEventEntityList = userEventRepository.findAllByUser(userEntity);
+        List<EventEntity> list = userEventEntityList.stream().map(UserEventEntity::getEvent).collect(Collectors.toList());
+
+        return eventMapper.toListDTO(list);
+    }
+
+    @Override
     public EventDTO getEventById(int id) {
         EventEntity eventEntity = eventRepository.findById(id);
         return eventMapper.toDTO(eventEntity);

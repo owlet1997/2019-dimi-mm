@@ -38,6 +38,12 @@ public class WebController {
         return "userProfile";
     }
 
+    @GetMapping("/user-items")
+    public String userItemsPage(@RequestParam("id") int id) {
+        return "items";
+    }
+
+
 //    @GetMapping(value = "/user/{id}")
 //    public ModelAndView userPage(@PathVariable("id") int userId) {
 //        UserDTO user = usersService.getUserById(userId);

@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <link href="assets/fonts/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/user.style.css" type="text/css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/user.style.css" type="text/css">
 
-    <title>Spotter - Universal Directory Listing HTML Template</title>
+    <title>Мои события</title>
 
 </head>
 
@@ -27,23 +27,25 @@
         <div class="header">
             <div class="wrapper">
                 <div class="brand">
-                    <a href="index-directory.html"><img src="assets/img/logo.png" alt="logo"></a>
+                    <a href="/"><img src="icons/logo.png" alt="logo" height="64px"></a>
                 </div>
                 <div class="navigation-items">
                     <div class="wrapper">
                         <ul class="main-navigation navigation-top-header"></ul>
                         <ul class="user-area">
-                            <li><a href="/user/"><strong>John Doe</strong></a></li>
-                            <li><a href="">My Items</a></li>
+                            <script type="text/template" class="templateHeader">
+                                <li><a href="/user?id=<%= item.id %>"><strong><%- item.name %></strong></a></li>
+                            <li><a href="/user-items?id=<%= item.id %>">Мои события</a></li>
                             <li><a href="#"><i class="fa fa-cog"></i></a></li>
+                            </script>
                         </ul>
-                        <a href="submit.html" class="submit-item">
-                            <div class="content"><span>Submit Your Item</span></div>
+                        <a href="/add-event" class="submit-item">
+                            <div class="content"><span>Добавить событие</span></div>
                             <div class="icon">
                                 <i class="fa fa-plus"></i>
                             </div>
                         </a>
-
+                        <input id="hidden-id" name="userId" class="userId" type="hidden" value="20">
                     </div>
                 </div>
             </div>
@@ -56,55 +58,34 @@
                 <section class="container">
                     <header>
                         <ul class="nav nav-pills">
-                            <li><a href="userProfile.html"><h1 class="page-title">John Doe</h1></a></li>
-                            <li class="active"><a href="my-items.html"><h1 class="page-title">My Items</h1></a></li>
+                            <script type="text/template" class="templateTitle">
+
+                            <li><a href="/user?id=<%= item.id %>"><h1 class="page-title"><%- item.name %></h1></a></li>
+                            <li class="active"><a href="/user-items?id=<%= item.id %>"><h1 class="page-title">События</h1></a></li>
+                            </script>
                         </ul>
                     </header>
                     <div class="row">
                         <div class="col-md-3 col-sm-3">
                             <aside id="sidebar">
                                 <ul class="navigation-sidebar list-unstyled">
-                                    <li class="active">
-                                        <a href="#">
+                                    <li id="all-events">
+                                        <a>
                                             <i class="fa fa-folder"></i>
                                             <span>Все события</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#">
+                                    <li id="all-items">
+                                        <a>
                                             <i class="fa fa-check"></i>
-                                            <span>Event items</span>
+                                            <span>Избранное</span>
                                         </a>
                                     </li>
                                 </ul>
                             </aside>
                         </div>
                         <div class="col-md-9 col-sm-9">
-                            <section id="items">
-                                <div class="item list admin-view">
-
-                                    <div class="wrapper">
-                                        <a href="item-detail.html"><h3>Cash Cow Restaurante</h3></a>
-                                        <figure>63 Birch Street</figure>
-                                        <div class="info">
-                                            <div class="type">
-                                                <i><img src="assets/icons/restaurants-bars/restaurants/restaurant.png" alt=""></i>
-                                                <span>Restaurant</span>
-                                            </div>
-                                            <div class="rating" data-rating="4"></div>
-                                        </div>
-                                    </div>
-                                    <div class="description">
-                                        <ul class="list-unstyled actions">
-                                            <li><a href="#"><i class="fa fa-pencil"></i></a></li>
-                                            <li><a href="#" class="hide-item"><i class="fa fa-eye"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-trash"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="ribbon approved">
-                                        <i class="fa fa-check"></i>
-                                    </div>
-                                </div>
+                            <section id="items" class="items">
 
                             </section>
                         </div>
@@ -113,6 +94,51 @@
             </div>
             <!-- end Page Content-->
         </div>
+
+        <script type="text/template" class="templateEvent">
+
+            <div class="item list">
+                <div class="col-md-12">
+                    <div class="wrapper">
+                        <h3 class="item-name"><%- item.city.name %></h3>
+
+                        <header class="page-title">
+                            <div class="title">
+                                <a href="/event?id=<%= item.id %>"><h1><%- item.name %></h1></a>
+                                <figure><%- item.address %></figure>
+                            </div>
+                            <div class="info">
+                                <div class="type">
+                                    <span><%- item.type.type %></span>
+                                </div>
+                            </div>
+                        </header>
+                        <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                        </div>
+                </div>
+            </div>
+
+        </script>
+
+        <script type="text/template" class="templateItem">
+
+            <div class="item list">
+                <div class="col-md-12">
+                    <div class="wrapper">
+                        <a href="/event?id=<%= item.parent.id %>"><h3 class="item-name">Событие: <%- item.parent.name %></h3></a>
+                        <header class="page-title">
+                            <div class="title">
+                                <h1><%- item.name %></h1>
+                                <figure><%- item.auditory %></figure>
+                            </div>
+                        </header>
+                        <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                    </div>
+                </div>
+
+            </div>
+
+        </script>
         <!-- end Page Canvas-->
         <!--Page Footer-->
         <footer id="page-footer">
@@ -185,18 +211,18 @@
 </div>
 <!-- end Outer Wrapper-->
 
-<script type="text/javascript" src="assets/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="assets/js/before.load.js"></script>
-<script type="text/javascript" src="assets/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script type="text/javascript" src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="assets/js/smoothscroll.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="assets/js/jquery.hotkeys.js"></script>
-<script type="text/javascript" src="assets/js/custom.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/before.load.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/moment.js"></script>
+<script type="text/javascript" src="js/my-scripts/personalItems.js"></script>
+<script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 
-<!--[if lte IE 9]>
-<script type="text/javascript" src="assets/js/ie-scripts.js"></script>
-<![endif]-->
 </body>
 </html>

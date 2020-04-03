@@ -6,10 +6,7 @@ import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventItemDTO;
 import com.ncedu.eventx.models.DTO.EventItemWithUsersDTO;
 import com.ncedu.eventx.models.entities.*;
-import com.ncedu.eventx.repositories.EventItemRepository;
-import com.ncedu.eventx.repositories.EventRepository;
-import com.ncedu.eventx.repositories.RolesRepository;
-import com.ncedu.eventx.repositories.UserEventItemRepository;
+import com.ncedu.eventx.repositories.*;
 import com.ncedu.eventx.services.EventItemService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -28,15 +25,17 @@ public class EventItemServiceImpl implements EventItemService {
     final EventRepository eventRepository;
     final RolesRepository rolesRepository;
     final UserEventItemRepository userEventItemRepository;
+    final UserRepository userRepository;
 
     public EventItemServiceImpl(EventItemRepository eventItemRepository,
                                 EventRepository eventRepository,
                                 RolesRepository rolesRepository,
-                                UserEventItemRepository userEventItemRepository) {
+                                UserEventItemRepository userEventItemRepository, UserRepository userRepository) {
         this.eventItemRepository = eventItemRepository;
         this.eventRepository = eventRepository;
         this.rolesRepository = rolesRepository;
         this.userEventItemRepository = userEventItemRepository;
+        this.userRepository = userRepository;
     }
 
     EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
@@ -47,7 +46,7 @@ public class EventItemServiceImpl implements EventItemService {
     public EventItemEntity createEventItem(EventItemDTO eventItemDTO) {
         EventItemEntity eventItemEntity = new EventItemEntity();
 
-        EventEntity parentEntity = eventMapper.toEventEntity(eventItemDTO.getParentId());
+        EventEntity parentEntity = eventMapper.toEventEntity(eventItemDTO.getParent());
 
         eventItemEntity.setParent(parentEntity);
         eventItemEntity.setName(eventItemDTO.getName());
@@ -70,6 +69,17 @@ public class EventItemServiceImpl implements EventItemService {
             withUsersDTOList.add(item);
         }
         return withUsersDTOList;
+    }
+
+    @Override
+    public List<EventItemDTO> getItemsByUser(int userId) {
+        UserEntity userEntity = userRepository.findById(userId);
+
+        List<UserEventItemEntity> userEventItemEntityList = userEventItemRepository.getAllByUser(userEntity);
+
+        List<EventItemEntity> list = userEventItemEntityList.stream().map(UserEventItemEntity::getItem).collect(Collectors.toList());
+
+        return eventItemMapper.toListDTO(list);
     }
 
     @Override

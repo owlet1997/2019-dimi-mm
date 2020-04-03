@@ -12,7 +12,7 @@ import java.util.Date;
 public class EventItemDTO {
 
     private int id;
-    private EventDTO parentId;
+    private EventDTO parent;
     private String name;
     private String auditory;
     private Date timeStart;

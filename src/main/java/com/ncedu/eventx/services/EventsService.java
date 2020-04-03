@@ -11,9 +11,11 @@ public interface EventsService {
 
     EventEntity createEvent(EventForCreateDTO createDTO);
 
-    public EventDTO getEventById(int id);
+    EventDTO getEventById(int id);
 
     List<EventDTO> getEventsList();
+
+    List<EventDTO> getEventsByUserId(int userId);
 
     EventWithItemsDTO getEventWithItemsById(int id, int userId);
 

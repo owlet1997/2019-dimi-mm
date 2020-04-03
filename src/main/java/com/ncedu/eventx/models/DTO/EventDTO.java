@@ -15,7 +15,7 @@ public class EventDTO {
     private int id;
     private CityDTO city;
     private String name;
-    private EventTypeDTO eventType;
+    private EventTypeDTO type;
     private CoordinatesDTO coord;
     private Date timeStart;
     private Date timeEnd;
