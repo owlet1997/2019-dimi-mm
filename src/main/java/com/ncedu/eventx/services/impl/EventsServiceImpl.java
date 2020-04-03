@@ -95,9 +95,9 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public EventWithItemsDTO getEventWithItemsById(int eventId, int userId) {
+    public EventWithItemsDTO getEventWithItemsById(int eventId, String username) {
         EventEntity eventEntity = eventRepository.findById(eventId);
-        UserEntity userEntity = userRepository.findById(userId);
+        UserEntity userEntity = userRepository.findByUsername(username);
         RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
         RoleEntity userRoleVisitor = rolesRepository.findByName(VISITOR.getDescription());
         List<UserEventEntity> userEventEntityList = userEventRepository.findAllByEvent(eventEntity);

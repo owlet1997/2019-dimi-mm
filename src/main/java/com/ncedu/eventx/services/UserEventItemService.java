@@ -12,9 +12,9 @@ public interface UserEventItemService {
 
     boolean createEventItem(EventItemDTO itemDTO, UserDTO userDTO);
 
-    boolean addToFeatured(int itemId, int userId);
+    boolean addToFeatured(int itemId, String username);
 
-    boolean isFeatured(int itemId, int userId);
+    boolean isFeatured(int itemId, String username);
 
-    boolean removeFromFeatured(int itemId, int userId);
+    boolean removeFromFeatured(int itemId, String username);
 }

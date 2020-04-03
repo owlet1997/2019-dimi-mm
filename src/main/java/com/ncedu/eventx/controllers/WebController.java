@@ -11,6 +11,7 @@ import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,6 +70,8 @@ public class WebController {
 
     @GetMapping(value = "/add-event")
     public String addEvent(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
 
         return "submit";
     }
@@ -127,7 +130,10 @@ public class WebController {
     @PostMapping("/add-event")
     @ResponseBody
     public EventForCreateDTO createEvent(@RequestBody EventForCreateDTO event){
-        userEventService.createEvent(event);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
+
+        userEventService.createEvent(event, username);
         return event;
     }
 

@@ -5,6 +5,7 @@ import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.services.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,13 +91,13 @@ public class MainRestController {
 
         /////////////////////////////////////////////////
 
-        @GetMapping(value = "/api/events/{eventId}/user/{userId}", //
+        @GetMapping(value = "/api/events/{eventId}", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId,
-                                                @PathVariable("userId") int userId){
-            return eventsService.getEventWithItemsById(eventId, userId);
+        public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId){
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            return eventsService.getEventWithItemsById(eventId, username);
         }
 
         @GetMapping(value = "/api/user/{userId}/events", //
@@ -131,7 +132,8 @@ public class MainRestController {
         public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional <String> city,
                 @RequestParam(name = "type") Optional <String> type,
                 @RequestParam(name = "dateStart") Optional <String> dateStart){
-
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            System.out.println(username);
             return eventsService.getEventsBySearchParams(city.orElseGet(() -> ""),
                     type.orElseGet(() -> ""),
                     dateStart.orElseGet(() -> ""));
@@ -150,20 +152,22 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId,
-        @RequestParam(name = "userId") int userId){
+        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId){
 
-            return userEventService.visitEvent(userId, eventId);
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            return userEventService.visitEvent(username, eventId);
         }
 
         @PostMapping(value = "/api/item-visit", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId,
-                                              @RequestParam(name = "userId") int userId){
+        public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId){
 
-            return userEventItemService.addToFeatured(itemId, userId);
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            return userEventItemService.addToFeatured(itemId, username);
         }
 
 

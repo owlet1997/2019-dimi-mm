@@ -66,12 +66,12 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public boolean addToFeatured(int itemId, int userId) {
+    public boolean addToFeatured(int itemId, String username) {
         EventItemEntity itemEntity = eventItemRepository.findById(itemId);
-        UserEntity userEntity = userRepository.findById(userId);
+        UserEntity userEntity = userRepository.findByUsername(username);
 
-        if(isFeatured(itemId, userId)){
-            removeFromFeatured(itemId, userId);
+        if(isFeatured(itemId, username)){
+            removeFromFeatured(itemId, username);
             return false;
         }
         else {
@@ -85,12 +85,12 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public boolean isFeatured(int itemId, int userId) {
+    public boolean isFeatured(int itemId, String username) {
         EventItemEntity itemEntity = eventItemRepository.findById(itemId);
-        UserEntity userEntity = userRepository.findById(userId);
+        UserEntity userEntity = userRepository.findByUsername(username);
 
-        if (!userEventService.isVisited(userId,itemEntity.getParent().getId()))
-        userEventService.visitEvent(userId,itemEntity.getParent().getId());
+        if (!userEventService.isVisited(username,itemEntity.getParent().getId()))
+        userEventService.visitEvent(username,itemEntity.getParent().getId());
 
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
@@ -104,10 +104,11 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public boolean removeFromFeatured(int itemId, int userId) {
+    public boolean removeFromFeatured(int itemId, String username) {
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        UserEntity userEntity = userRepository.findByUsername(username);
 
-        UserEventItemKey key = new UserEventItemKey(itemId,userId,roleEntity.getId());
+        UserEventItemKey key = new UserEventItemKey(itemId, userEntity.getId(),roleEntity.getId());
         UserEventItemEntity userEventItemEntity = userEventItemRepository.findById(key).get();
 
         userEventItemRepository.delete(userEventItemEntity);

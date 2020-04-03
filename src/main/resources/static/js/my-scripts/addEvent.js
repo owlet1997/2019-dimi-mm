@@ -25,7 +25,7 @@
             .then(res => alert(JSON.stringify(res)))
             // Обрабатываем ошибки с сервера
             .catch(error => console.log(error))
-        window.location.assign("/map");
+        window.location.assign("/");
     })
 
 })()
