@@ -20,4 +20,5 @@ public interface UsersService {
 
     boolean deleteUser(int id);
 
+    UserDTO getUserByUsername(String username);
 }

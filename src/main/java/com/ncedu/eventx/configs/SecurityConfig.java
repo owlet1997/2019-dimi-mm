@@ -23,51 +23,47 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    /*@Autowired
+    @Autowired
     UsersServiceImpl usersService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/registration").not().fullyAuthenticated()
-                //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/news").hasRole("USER")
-                //Доступ разрешен всем пользователей
-                .antMatchers("/", "/resources/**").permitAll()
-                //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
-                .and()
-                //Настройка для входа в систему
-                .formLogin()
-                .loginPage("/login")
-                //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll()
-                .logoutSuccessUrl("/");
-    }
-
-    @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder());
-    } */
-
+//
+//     @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .csrf()
+//                .disable()
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll();
+//             //   .anyRequest().authenticated();
+//        http
+//            .formLogin()
+//                .loginPage("/log-in")
+//                .permitAll()
+//                .and()
+//            .logout()
+//                .permitAll();
+//    }
+//
+//
      @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable();  }
-
-
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/register").not().fullyAuthenticated()
+                .antMatchers("/").permitAll(); }
+                //.anyRequest().authenticated();  }
+//
+//    @Autowired
+//    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        //auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder());
+//        auth.inMemoryAuthentication().withUser("user").password("password").roles("user");
+//    }
+//
+//
 }

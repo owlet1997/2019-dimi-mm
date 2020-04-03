@@ -14,12 +14,19 @@ import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.UsersService;
 import org.mapstruct.factory.Mappers;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,11 +37,14 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     final UserRepository userRepository;
     final RolesRepository rolesRepository;
 
+    final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
-    public UsersServiceImpl(UserRepository userRepository, RolesRepository rolesRepository) {
+    public UsersServiceImpl(UserRepository userRepository, RolesRepository rolesRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -46,14 +56,18 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     @Override
      public boolean createRegisteredUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
-        RoleEntity role = rolesRepository.findByName("user");
+        RoleEntity role = rolesRepository.findByName("ROLE_USER");
+
+        if(userRepository.findByUsername(userDTO.getUsername()) != null) {
+            return false;
+        }
 
         userEntity.setRole(role);
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setName(userDTO.getName());
 
-        userEntity.setPassword(userDTO.getPassword());
+        userEntity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);
@@ -90,6 +104,19 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     }
 
     @Override
+    public UserDTO getUserByUsername(String username) {
+
+
+        UserEntity user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(username + "!!!!!!!!!!!!");
+        }
+
+        return usersMapper.toDTO(user);
+    }
+
+    @Override
     public UserEntity getUserById(int id) {
         return userRepository.findById(id);
     }
@@ -103,7 +130,17 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return (UserDetails) user;
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                true, true, true, true, getAuthorities("ROLE_USER"));
+
     }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
+
+        return Arrays.asList(new SimpleGrantedAuthority(role));
+    }
+
 
 }
