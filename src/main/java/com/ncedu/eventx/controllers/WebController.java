@@ -7,9 +7,13 @@ import com.ncedu.eventx.models.DTO.UserDTO;
 import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
+import com.ncedu.eventx.services.impl.UsersServiceImpl;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +29,6 @@ public class WebController {
 
     final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    HttpSession session = null;
-
     public WebController(UsersService usersService, UserEventService userEventService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.usersService = usersService;
         this.userEventService = userEventService;
@@ -34,10 +36,19 @@ public class WebController {
     }
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
-
-
     @GetMapping("/user")
+    public String user() {
+//        System.out.println("Secure = " + SecurityContextHolder.getContext().getAuthentication().getName());
+
+        UserDTO user = usersService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        System.out.println("user = " + user);
+
+        return ("redirect:/userInfo?id=" + user.getId());
+    }
+
+    @GetMapping("/userInfo")
     public String userPage(@RequestParam("id") int id) {
+
         return "userProfile";
     }
 
@@ -56,7 +67,6 @@ public class WebController {
 
     @GetMapping(value = "/add-event")
     public String addEvent(Model model) {
-        System.out.println("id = " + session.getId());
 
         return "submit";
     }

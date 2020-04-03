@@ -84,8 +84,6 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
         userEntity.setUsername(userDTO.getLogin());
         userEntity.setName(userDTO.getName());
 
-//        userEntity.setPassword(userDTO.getPassword());
-
         userEntity.setOrganizationName(userDTO.getOrganizationName());
         userEntity.setPositionName(userDTO.getPositionName());
         userEntity.setAvatarImg(null);
