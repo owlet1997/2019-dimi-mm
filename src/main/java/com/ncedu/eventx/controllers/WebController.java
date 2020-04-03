@@ -3,18 +3,23 @@ package com.ncedu.eventx.controllers;
 
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventForCreateDTO;
-import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.models.DTO.UserDTO;
-import com.ncedu.eventx.models.entities.UserEntity;
+import com.ncedu.eventx.models.DTO.UserForUpdateDTO;
 import com.ncedu.eventx.services.UserEventService;
 import com.ncedu.eventx.services.UsersService;
+import com.ncedu.eventx.services.impl.UsersServiceImpl;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class WebController {
@@ -31,12 +36,22 @@ public class WebController {
     }
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
-
-
     @GetMapping("/user")
+    public String user() {
+//        System.out.println("Secure = " + SecurityContextHolder.getContext().getAuthentication().getName());
+
+        UserDTO user = usersService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        System.out.println("user = " + user);
+
+        return ("redirect:/userInfo?id=" + user.getId());
+    }
+
+    @GetMapping("/userInfo")
     public String userPage(@RequestParam("id") int id) {
+
         return "userProfile";
     }
+
 
     @GetMapping("/user-items")
     public String userItemsPage(@RequestParam("id") int id) {
@@ -44,20 +59,9 @@ public class WebController {
     }
 
 
-//    @GetMapping(value = "/user/{id}")
-//    public ModelAndView userPage(@PathVariable("id") int userId) {
-//        UserDTO user = usersService.getUserById(userId);
-//
-//        ModelAndView modelAndView = new ModelAndView("registrationPages/UserPage");
-//        modelAndView.addObject("user",user);
-//        return modelAndView;
-//    }
-
-
     @PutMapping("/user/{id}/update")
     @ResponseBody
     public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
-//    public UserDTO updateUser(@RequestBody UserDTO user){
         usersService.updateUser(user);
         return usersMapper.toUserForUpdateDTO(usersService.getUserById(user.getId()));
     }
@@ -93,19 +97,7 @@ public class WebController {
     public String loginPost(@RequestParam String username,@RequestParam String password) {
         UserDTO userFromDb = usersService.getUserByUsername(username);
 
-       // password = bCryptPasswordEncoder.encode(password);
-
-      //  UserDTO user = usersMapper.toDTO(usersService.getUserById(8));
-//        System.out.println("!!!!!!!!!!!!!!!!");
-//        System.out.println("userFromDb = " + userFromDb);
-//        System.out.println("password = " + password);
-//        userFromDb.setUsername(username);
-//        userFromDb.setPassword(password);
-       // System.out.println("user = " + user);
         if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
-            return "redirect:/user?id=" + userFromDb.getId();
-        }
-        if(password.equals(userFromDb.getPassword())) {
             return "redirect:/user?id=" + userFromDb.getId();
         }
         return "redirect:/register";
@@ -120,8 +112,11 @@ public class WebController {
     @ResponseBody
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
     {
-        usersService.createRegisteredUser(user);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (user.getPassword().equals(user.getPasswordConfirm())) {
+            usersService.createRegisteredUser(user);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @PostMapping("/add-event")

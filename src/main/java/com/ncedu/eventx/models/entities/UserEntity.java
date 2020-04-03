@@ -3,6 +3,7 @@ package com.ncedu.eventx.models.entities;
 import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -18,8 +19,7 @@ import java.util.*;
 @Setter
 @Entity
 @ToString
-@Table(name="t_user", schema = "eventx")
-//@Table(name="user", schema = "eventx")
+@Table(name="user", schema = "eventx")
 public class UserEntity implements Serializable, UserDetails {
 
     @Id
@@ -53,7 +53,7 @@ public class UserEntity implements Serializable, UserDetails {
     @Column(nullable = false)
     private String positionName;
 
-    @Column(nullable = false)
+    @Column
     private String avatarImg;
 
     @Email
@@ -62,7 +62,7 @@ public class UserEntity implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class UserEntity implements Serializable, UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class UserEntity implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
 }
