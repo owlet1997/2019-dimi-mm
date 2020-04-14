@@ -50,6 +50,7 @@ public class WebController {
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     @GetMapping("/user")
+
     public String userPage(@RequestParam("id") int id) {
         return "userProfile";
     }
@@ -58,6 +59,7 @@ public class WebController {
     public String userItemsPage(@RequestParam("id") int id) {
         return "items";
     }
+
 
     @PutMapping("/user/{id}/change-passwd")
     @ResponseBody
@@ -112,7 +114,9 @@ public class WebController {
         UserDTO userFromDb = usersService.getUserByUsername(username);
 
         if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
+
             return usersMapper.toUserForUpdateDTO(userFromDb);
+
         }
         System.out.println("Error!");
         return null;
@@ -154,6 +158,7 @@ public class WebController {
         return eventItemDTO;
     }
 
+
     @GetMapping(value = "/check-auth",
             produces = {MediaType.APPLICATION_JSON_VALUE
     })
@@ -164,10 +169,6 @@ public class WebController {
         System.out.println("В системе пользователь " + userDTO);
         return userDTO.orElse(null);
     }
-
-
-
-
 
 
 

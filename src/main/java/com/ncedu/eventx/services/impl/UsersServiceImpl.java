@@ -36,7 +36,7 @@ import java.util.List;
 
 @Service
 
-public class UsersServiceImpl implements UsersService, UserDetailsService {
+public class UsersServiceImpl implements UsersService{
 
     final UserRepository userRepository;
     final RolesRepository rolesRepository;
@@ -147,6 +147,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
     public UserEntity getUserById(int id) {
         return userRepository.findById(id);
     }
+
 
 
     @Override
