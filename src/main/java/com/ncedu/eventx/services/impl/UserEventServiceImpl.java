@@ -1,5 +1,7 @@
 package com.ncedu.eventx.services.impl;
 
+import com.ncedu.eventx.converters.EventMapper;
+import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.*;
 
 
@@ -10,6 +12,7 @@ import com.ncedu.eventx.repositories.UserEventRepository;
 import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.EventsService;
 import com.ncedu.eventx.services.UserEventService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +41,8 @@ public class UserEventServiceImpl implements UserEventService {
         this.eventsService = eventsService;
     }
 
+    EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
+    UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
     @Override
     public List<UserEventEntity> getAllList() {
         return userEventRepository.findAll();
@@ -64,19 +69,20 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
-    public boolean createEvent(EventForCreateDTO createDTO, String username) {
+    public EventWithUsersDTO createEvent(EventForCreateDTO createDTO, String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
         EventEntity eventEntity = eventsService.createEvent(createDTO);
 
         System.out.println(createDTO);
-        System.out.println(username);
 
         RoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
         userEventRepository.save(userEventEntity);
-        return true;
+        EventWithUsersDTO eventWithUsersDTO = eventMapper.toEventWithUsersDTO(eventEntity);
+        eventWithUsersDTO.setCreator(usersMapper.toDTO(userEntity));
+        return eventWithUsersDTO;
     }
 
 

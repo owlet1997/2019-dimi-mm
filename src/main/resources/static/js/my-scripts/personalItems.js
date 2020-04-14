@@ -5,10 +5,6 @@
         $('script.templateEvent').html()
     );
 
-    var templateHeader = _.template(
-        $('script.templateHeader').html()
-    );
-
     var templateItem = _.template(
         $('script.templateItem').html()
     );
@@ -21,8 +17,6 @@
     var buttonEvents = document.getElementById('all-events');
 
     var buttonItems = document.getElementById('all-items');
-
-    var owner = document.getElementById('hidden-id').value;
 
     const userId = window.location.search.split("=")[1];
     console.log(userId);
@@ -38,21 +32,6 @@
         .then(res => {
             console.log(res);
             $('.nav-pills').append(templateTitle(res));
-        })
-        // Обрабатываем ошибки с сервера
-        .catch(error => console.log(error))
-
-    fetch(`/api/users/`+owner,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        }
-    })
-        // Получаем из ответа JSON
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-            $('.user-area').append(templateHeader(res));
         })
         // Обрабатываем ошибки с сервера
         .catch(error => console.log(error))

@@ -4,16 +4,18 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
     <link rel="stylesheet" href="css/scroll-list.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/head-style.css" type="text/css">
     <link rel="stylesheet" href="css/user.style.css" type="text/css">
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=d0d09cfa-6955-4a10-acbc-8a964c4fef39" type="text/javascript"></script>
-
+    <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/my-scripts/map.js"></script>
+    <script type="text/javascript" src="js/my-scripts/jsoncoord.js"></script>
 
     <title>Главная страница</title>
 
@@ -21,163 +23,152 @@
 
 <body onunload="" class="page-subpage page-listing-list navigation-off-canvas" id="page-top">
 
-<!-- Outer Wrapper-->
 <div id="outer-wrapper">
-    <!-- Inner Wrapper -->
     <div id="inner-wrapper">
-        <!-- Navigation-->
         <div class="header">
-            <div class="wrapper">
+            <div class="wrapper top-event-header">
                 <div class="brand">
-                    <a href="/"><img src="icons/logo.png" alt="logo" height="64px"></a>
+                    <a href="/">
+                        <img src="icons/logo.png" alt="logo" height="64px">
+                        <img src="icons/text.png" alt="logo" height="30px">
+                    </a>
                 </div>
-                <nav class="navigation-items">
-                    <div class="wrapper">
-                        <ul class="main-navigation navigation-top-header"></ul>
-                        <ul class="user-area">
-                            <li><a href="/log-in">Войти</a></li>
-                            <li><a href="/register"><strong>Регистрация</strong></a></li>
-                        </ul>
-                        <a href="/add-event" class="submit-item">
-                            <div class="content"><span>Добавить событие</span></div>
-                            <div class="icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                        </a>
-                    </div>
-                </nav>
+                <div class="brand">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить событие</button>
+                    </a>
+                </div>
+                <div class="brand">
+                    <nav class="navigation-items">
+                        <div class="navigation nav-header">
+
+                        </div>
+                    </nav>
+                </div>
             </div>
         </div>
-        <!-- end Navigation-->
-        <!-- Page Canvas-->
-        <div id="page-canvas">
 
-            <!--Page Content-->
+        <script type="text/template" class="templateHeaderUnauth">
+        <div class="wrapper">
+            <ul class="user-area header-wrapper">
+                <li><a href="/login">Войти</a></li>
+                <li><a href="/register"><strong>Регистрация</strong></a></li>
+            </ul>
+        </div>
+        </script>
+
+        <script type="text/template" class="templateHeaderAuth">
+            <div class="wrapper">
+                <ul class="user-area">
+                    <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
+                    <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="template">
+            <div class="card">
+                <div class="card-header" role="tab" id="heading<%= item.id %>" >
+                    <div class="single-card-header">
+                        <div class="header-name">
+                            <a href="/event?id=<%= item.id %>">
+                                <h5 class="mb-0"><%- item.name %></h5>
+                            </a>
+                        </div>
+                        <div class="header-angle">
+                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
+                               aria-controls="collapseOne1">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <p class="address"><%- item.address %></p>
+                    <div class="time-and-counters">
+                        <div class="time">
+                            <div class="time image">
+                                <img src="icons/time.png" height="25px"></div>
+                            <div class="time text">
+                                <%- _.identity(dateWrite(item.timeStart)) %>
+                            </div>
+                        </div>
+
+                        <div class="right-group">
+                            <div class="answers">
+                                <div class="answers image">
+                                    <img src="icons/answers.png" height="25px"></div>
+                                <div class="answers text"><%- _.size(item.itemsList) %></div>
+                            </div>
+
+                            <div class="person">
+                                <div class="person image">
+                                    <img src="icons/person.png" height="25px"></div>
+                                <div class="person text"><%- _.size(item.visitors) %></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse<%= item.id %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= item.id %>"
+                     data-parent="#accordionEx">
+                    <div class="card-body">
+                        <p class="type">Тип события: <%- item.type.type %></p>
+                        <div class="time">
+                            <div class="time image"><img src="icons/time.png" height="25px"></div>
+                            <div class="time text"><%- _.identity(dateWrite(item.timeEnd)) %></div>
+                        </div>
+                        <p class="descr"><%- item.description %></p>
+                        <% _.each( item.itemsList, function( listItem ){ %>
+                        <div class="listItem">
+                            <h5 class="mb-0"><%- listItem.eventItem.name %></h5>
+                            <p class="address"><%- listItem.eventItem.auditory %></p>
+                            <div class="time-and-counters">
+                                <div class="time">
+                                    <div class="time image"><img src="icons/time.png" height="25px"></div>
+                                    <div class="time text"><%- _.identity(dateWrite(listItem.eventItem.timeStart)) %></div>
+                                </div>
+
+                                <div class="right-group">
+                                    <div class="person">
+                                        <div class="person image"><img src="icons/person.png" height="25px"></div>
+                                        <div class="person text"><%- _.size(listItem.users) %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <div id="page-canvas">
             <div id="page-content">
                 <section class="container">
                     <div class="row">
-
                         <div class="col-md-4">
                             <div class="panel panel-primary" id="result_panel">
-                                <div class="panel-heading"><h3 class="panel-title">Список событий</h3></div>
+                                <div class="panel-heading"><h3 class="panel-title">Список мероприятий</h3></div>
                                 <div class="panel-body">
                                     <div class="accordion md-accordion js-events" id="accordionEx" role="tablist" aria-multiselectable="true">
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <script type="text/template" class="template">
-                            <div class="card">
-
-                                <!-- Card header -->
-                                <div class="card-header" role="tab" id="heading<%= item.id %>" >
-                                    <div class="single-card-header">
-                                        <div class="header-name">
-                                            <a href="/event?id=<%= item.id %>">
-                                                <h5 class="mb-0">
-                                                <%- item.name %>
-                                                </h5>
-                                            </a>
-                                        </div>
-                                        <div class="header-angle">
-                                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse<%= item.id %>" aria-expanded="true"
-                                               aria-controls="collapseOne1">
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <p class="address"><%- item.address %></p>
-                                    <div class="time-and-counters">
-                                        <div class="time">
-                                            <div class="time image">
-                                                <img src="icons/time.png" height="25px"></div>
-                                            <div class="time text">
-                                                <%- _.identity(dateWrite(item.timeStart)) %>
-                                            </div>
-                                        </div>
-
-                                        <div class="right-group">
-                                            <div class="answers">
-                                                <div class="answers image">
-                                                    <img src="icons/answers.png" height="25px"></div>
-                                                <div class="answers text"><%- _.size(item.items) %></div>
-                                            </div>
-
-                                            <div class="person">
-                                                <div class="person image">
-                                                    <img src="icons/person.png" height="25px"></div>
-                                                <div class="person text"><%- _.size(item.visitors) %></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Card body -->
-                                <div id="collapse<%= item.id %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= item.id %>"
-                                     data-parent="#accordionEx">
-                                    <div class="card-body">
-                                        <p class="type">Тип события: <%- item.type.type %></p>
-
-                                        <div class="time">
-                                            <div class="time image">
-                                                <img src="icons/time.png" height="25px"></div>
-                                            <div class="time text">
-                                                <%- _.identity(dateWrite(item.timeEnd)) %>
-                                            </div>
-                                        </div>
-                                        <p class="descr"><%- item.description %></p>
-                                        <% _.each( item.itemsList, function( listItem ){ %>
-                                        <div class="listItem">
-                                        <h5 class="mb-0">
-                                            <%- listItem.name %>
-                                        </h5>
-                                        </a>
-                                        <p class="address"><%- listItem.auditory %></p>
-                                        <div class="time-and-counters">
-                                            <div class="time">
-                                                <div class="time image">
-                                                    <img src="icons/time.png" height="25px"></div>
-                                                <div class="time text">
-                                                    <%- _.identity(dateWrite(listItem.timeStart)) %>
-                                                </div>
-                                            </div>
-
-                                            <div class="right-group">
-                                                <div class="person">
-                                                    <div class="person image">
-                                                        <img src="icons/person.png" height="25px"></div>
-                                                    <div class="person text"><%- _.size(listItem.users) %></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-
-                                        <% }); %>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </script>
-
                         <div class="col-md-5">
                             <div id="map"></div>
                         </div>
-
                         <div class="col-md-3 col-sm-4">
                             <aside id="sidebar">
                                 <section>
                                     <form name="find" role="form" action="?" method="post" class="background-color-white">
-                                        <header><h2>Найти события</h2></header>
+                                        <header><h2>Найти мероприятия</h2></header>
                                         <label for="city">Выберите город</label>
-
                                         <div class="form-group">
                                             <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true">
                                                 <option value="" selected>Город не выбран</option>
                                             </select>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="keyword">Поиск по дате</label>
                                             <input name="dateStart" type="date" class="form-control" id="keyword">
@@ -191,38 +182,30 @@
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-default">Найти!</button>
                                         </div>
-
                                     </form>
-                                </section>
-                            </aside>
-                        </div>
-
-        </div>
+                            </section>
+                        </aside>
+                    </div>
+                </div>
         </section>
     </div>
-    <!-- end Page Content-->
 </div>
-<!-- end Page Canvas-->
-<!--Page Footer-->
+
 <footer id="page-footer">
     <div class="inner">
         <div class="footer-top">
             <div class="container">
                 <div class="row">
-
                     <div class="col-md-4 col-sm-4">
                         <section>
-                            <h2>About Us</h2>
+                            <h2>О нас</h2>
                             <address>
                                 <div>Группа DEV-2</div>
                                 <div>DIMI-MM</div>
                             </address>
-
                         </section>
                     </div>
-                    <!--/.col-md-4-->
                     <div class="col-md-4 col-sm-4">
-                        <!--New Items-->
                         <section>
                             <h2>Об авторах</h2>
                             <figure>
@@ -233,12 +216,9 @@
                                     <span>Таиров Александр</span>
                                 </div>
                             </figure>
-                            <!--/.item-horizontal small-->
                         </section>
-                        <!--end New Items-->
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <!--New Items-->
                         <section>
                             <h2>Вот здесь нас нет</h2>
                             <div class="social">
@@ -246,47 +226,35 @@
                                 <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
                                 <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
                             </div>
-
-                            <!--/.item-horizontal small-->
                         </section>
-                        <!--end New Items-->
                     </div>
                 </div>
-                <!--/.row-->
             </div>
-            <!--/.container-->
         </div>
-        <!--/.footer-top-->
         <div class="footer-bottom">
             <div class="container">
-                <span class="left">(C) EventX, NetCracker, 2020. Students don't have rights</span>
+                <span class="left">(C) EventX, NetCracker, 2020.</span>
                 <span class="right">
-                                <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
-                            </span>
+                    <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
+                </span>
             </div>
         </div>
-        <!--/.footer-bottom-->
     </div>
 </footer>
-<!--end Page Footer-->
-</div>
-<!-- end Inner Wrapper -->
-</div>
-<!-- end Outer Wrapper -->
 
-
+</div>
+</div>
 
 <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="js/before.load.js"></script>
 <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<!--<script type="text/javascript" src="js/smoothscroll.js"></script>-->
 <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/underscore.js"></script>
-<script type="text/javascript" src="js/my-scripts/map.js"></script>
+<script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
 <script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
 <script type="text/javascript" src="js/my-scripts/listEvents.js"></script>
 <script type="text/javascript" src="js/my-scripts/findEvents.js"></script>

@@ -1,7 +1,7 @@
 package com.ncedu.eventx.enums;
 
 public enum UserRoleItems {
-    USER("user"),
+    USER("ROLE_USER"),
     CREATOR("creator"),
     SPEAKER("speaker"),
     VISITOR("visitor");

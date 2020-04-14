@@ -17,6 +17,8 @@ public interface  UsersMapper {
 
     UserForUpdateDTO toUserForUpdateDTO(UserEntity user);
 
+    UserForUpdateDTO toUserForUpdateDTO(UserDTO user);
+
     UserDTO toUserDTO(UserDTO userById);
 
 

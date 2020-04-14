@@ -113,7 +113,7 @@ public class EventsServiceImpl implements EventsService {
                 .map(UserEventEntity::getUser).findFirst().isPresent();
         EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(eventEntity);
         event.setCreator(creator);
-        event.setItemsList(eventItemService.getEventItemsListByParent(eventEntity.getId(), userEntity));
+        event.setItemsList(eventItemService.getEventItemWithUsersListByParent(eventEntity.getId(), userEntity));
         event.setVisitors(usersMapper.toUserDTOList(userEntityList));
         event.setVisited(visit);
         return event;
@@ -226,7 +226,7 @@ public class EventsServiceImpl implements EventsService {
             List<UserDTO> userDTOList = usersMapper.toUserDTOList(usersList);
             EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(e);
             event.setVisitors(userDTOList);
-            event.setItemsList(eventItemService.getEventItemsListByParent(e.getId(), userEntity));
+            event.setItemsList(eventItemService.getEventItemWithUsersListByParent(e.getId(), userEntity));
             withItemsDTOList.add(event);
         }
         return withItemsDTOList;
@@ -236,22 +236,17 @@ public class EventsServiceImpl implements EventsService {
     public EventWithUsersDTO getEventWithUsers(int id) {
         EventEntity eventEntity = eventRepository.findById(id);
 
-        RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
         RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
 
-
         List<UserEventEntity> list = userEventRepository.findAllByEvent(eventEntity);
-
-        List<UserEntity> usersList = list.stream()
-                .filter(e -> e.getRole().equals(userRoleVisit))
-                .map(UserEventEntity::getUser).collect(Collectors.toList());
 
         UserEntity creator = list.stream()
                 .filter(e -> e.getRole().equals(userRoleCreator))
                 .map(UserEventEntity::getUser).findFirst().get();
+        EventWithUsersDTO event = eventMapper.toEventWithUsersDTO(eventEntity);
+        event.setCreator(usersMapper.toDTO(creator));
 
-        return new EventWithUsersDTO(eventMapper.toDTO(eventEntity),
-                usersMapper.toDTO(creator),usersMapper.toUserDTOList(usersList));
+        return event;
     }
 
     @Override

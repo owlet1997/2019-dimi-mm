@@ -51,7 +51,6 @@
                     }
                     console.log(newbody);
 
-                    // Делаем запрос на сервер
                     fetch(`/api/item-visit?itemId=`+newbody["itemId"],{
                         method: 'POST',
                         headers: {
@@ -63,7 +62,8 @@
                         .then(res => {
                                 console.log(res);
                                 let buttonItem = document.getElementById('item-featured' + newbody["itemId"]);
-                                buttonItem.value = visitItem(res);
+                                buttonItem.src = visitItem(res);
+                                // buttonItem.value = visitItem(res);
                         })
                         .catch(error => console.log(error))
 

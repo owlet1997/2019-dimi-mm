@@ -17,7 +17,7 @@ public interface UserEventService {
 
     List<UserEventEntity> getAllByUser(UserDTO userDTO);
 
-    boolean createEvent(EventForCreateDTO createDTO, String username);
+    EventWithUsersDTO createEvent(EventForCreateDTO createDTO, String username);
 
     boolean visitEvent(String username, int evenId);
 

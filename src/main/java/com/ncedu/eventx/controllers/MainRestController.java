@@ -144,7 +144,6 @@ public class MainRestController {
                 })
         @ResponseBody
         public List<EventDTO> getEventsByCreator ( @PathVariable("id") int id){
-
             return eventsService.getLastEventsByCreator(id);
         }
 
@@ -153,9 +152,7 @@ public class MainRestController {
                 })
         @ResponseBody
         public boolean visitEvent ( @RequestParam(name = "eventId") int eventId){
-
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
             return userEventService.visitEvent(username, eventId);
         }
 
@@ -164,9 +161,7 @@ public class MainRestController {
                 })
         @ResponseBody
         public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId){
-
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
             return userEventItemService.addToFeatured(itemId, username);
         }
 

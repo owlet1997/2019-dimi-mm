@@ -1,7 +1,8 @@
 package com.ncedu.eventx.services.impl;
 
+import com.ncedu.eventx.converters.EventItemMapper;
 import com.ncedu.eventx.models.DTO.EventItemDTO;
-import com.ncedu.eventx.models.DTO.UserDTO;
+import com.ncedu.eventx.models.DTO.EventItemForCreateDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.EventItemRepository;
 import com.ncedu.eventx.repositories.RolesRepository;
@@ -11,12 +12,12 @@ import com.ncedu.eventx.services.EventItemService;
 import com.ncedu.eventx.services.EventsService;
 import com.ncedu.eventx.services.UserEventItemService;
 import com.ncedu.eventx.services.UserEventService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.ncedu.eventx.enums.UserRoleItems.SPEAKER;
-import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
+import static com.ncedu.eventx.enums.UserRoleItems.*;
 
 @Service
 public class UserEventItemServiceImpl implements UserEventItemService {
@@ -34,7 +35,8 @@ public class UserEventItemServiceImpl implements UserEventItemService {
                                     UserEventItemRepository eventItemRepository,
                                     EventItemRepository eventItemRepository1,
                                     EventItemService eventItemService,
-                                    UserEventService userEventService, EventsService eventsService) {
+                                    UserEventService userEventService,
+                                    EventsService eventsService) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.userEventItemRepository = eventItemRepository;
@@ -43,6 +45,7 @@ public class UserEventItemServiceImpl implements UserEventItemService {
         this.userEventService = userEventService;
         this.eventsService = eventsService;
     }
+    EventItemMapper eventItemMapper = Mappers.getMapper(EventItemMapper.class);
 
     @Override
     public List<UserEventItemEntity> getAll() {
@@ -50,19 +53,24 @@ public class UserEventItemServiceImpl implements UserEventItemService {
     }
 
     @Override
-    public boolean createEventItem(EventItemDTO eventItemDTO, UserDTO user) {
-        UserEntity userEntity = userRepository.findById(user.getId());
+    public EventItemDTO createEventItem(EventItemForCreateDTO eventItemDTO, String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        UserEntity userEntitySpeaker = userRepository.findById(eventItemDTO.getSpeaker());
         EventItemEntity eventItemEntity = eventItemService.createEventItem(eventItemDTO);
 
-        RoleEntity roleEntity = rolesRepository.findByName(SPEAKER.getDescription());
+        RoleEntity roleEntitySpeaker = rolesRepository.findByName(SPEAKER.getDescription());
+        RoleEntity roleEntityCreate = rolesRepository.findByName(CREATOR.getDescription());
 
-        UserEventItemKey key = new UserEventItemKey(eventItemEntity.getId(),userEntity.getId(), roleEntity.getId());
-        UserEventItemEntity entity = new UserEventItemEntity(key,userEntity,eventItemEntity, roleEntity,1);
+        UserEventItemKey key = new UserEventItemKey(eventItemEntity.getId(),userEntity.getId(), roleEntityCreate.getId());
+        UserEventItemEntity entity = new UserEventItemEntity(key,userEntity,eventItemEntity, roleEntityCreate,1);
 
+        UserEventItemKey keySpeaker = new UserEventItemKey(eventItemEntity.getId(),userEntitySpeaker.getId(), roleEntitySpeaker.getId());
+        UserEventItemEntity entitySpeaker = new UserEventItemEntity(keySpeaker,userEntitySpeaker,eventItemEntity, roleEntitySpeaker,1);
 
         userEventItemRepository.save(entity);
+        userEventItemRepository.save(entitySpeaker);
 
-        return true;
+        return eventItemMapper.toEventItemDTO(eventItemEntity);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class PointToJsonSerializer extends JsonSerializer<Point> {
             if(point != null) {
                 double lat = point.getY();
                 double lon = point.getX();
-                jsonValue = String.format("[%s,%s]", lat, lon);
+                jsonValue = String.format("%s,%s", lat, lon);
             }
         }
         catch(Exception e) {}
