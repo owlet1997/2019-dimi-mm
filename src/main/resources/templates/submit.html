@@ -4,65 +4,58 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
-<!--    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">-->
-<!--    <link rel="stylesheet" href="css/dropzone.css" type="text/css">-->
     <link rel="stylesheet" href="css/jquery.ui.timepicker.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/head-style.css" type="text/css">
     <link rel="stylesheet" href="css/user.style.css" type="text/css">
 
-    <title>Spotter - Universal Directory Listing HTML Template</title>
+    <title>Добавить событие</title>
 
 </head>
 
 <body onunload="" class="page-subpage page-submit navigation-off-canvas" id="page-top">
 
-<!-- Outer Wrapper-->
 <div id="outer-wrapper">
-    <!-- Inner Wrapper -->
     <div id="inner-wrapper">
-        <!-- Navigation-->
         <div class="header">
-            <div class="wrapper">
+            <div class="wrapper top-event-header">
                 <div class="brand">
-                    <a href="/map"><img src="icons/logo.png" alt="logo" height="64px"></a>
+                    <a href="/">
+                        <img src="icons/logo.png" alt="logo" height="64px">
+                        <img src="icons/text.png" alt="logo" height="30px">
+                    </a>
                 </div>
-                <nav class="navigation-items">
-                    <div class="wrapper">
-                        <ul class="main-navigation navigation-top-header"></ul>
-                        <ul class="user-area">
-                            <li><a href="/log-in">Sign In</a></li>
-                            <li><a href="/register"><strong>Register</strong></a></li>
-                        </ul>
-                        <a href="/add-event" class="submit-item">
-                            <div class="content"><span>Submit Your Item</span></div>
-                            <div class="icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                        </a>
-                    </div>
-                </nav>
+                <div class="brand">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить событие</button>
+                    </a>
+                </div>
+                <div class="brand">
+                    <nav class="navigation-items">
+                        <div class="navigation nav-header">
+
+                        </div>
+                    </nav>
+                </div>
             </div>
         </div>
-        <!-- end Navigation-->
-        <!-- Page Canvas-->
-        <div id="page-canvas">
 
-            <!--Page Content-->
+        <div id="page-canvas">
             <div id="page-content">
                 <section class="container">
                     <div class="row">
-                        <!--Content-->
-                        <div class="col-md-9">
+                        <div class="event" id="event"></div>
+                        <div class="event-items" id="event-items"></div>
+                        <div class="col-md-9" id="add-event-container">
+                        <div class="add-event" id="add-event">
                             <header>
                                 <h1 class="page-title">Добавить событие</h1>
                             </header>
-                            <form name="addevent" id="addevent" role="form" method="post" action="?" enctype="multipart/form-data">
+                            <form name="addevent" role="form" method="post" action="?" enctype="multipart/form-data">
                                 <section>
                                     <div class="form-group large">
                                         <label for="title">Название</label>
@@ -71,29 +64,32 @@
                                 </section>
                                 <section>
                                     <h3>Детали события</h3>
-                                    <div class="row">
-                                        <div class="col-md-5">
+                                    <div class="form-group large">
+                                        <div class="col-md-12">
                                             <div class="row">
-                                                <div class="form-group">
-                                                        <label for="city">City</label>
-                                                        <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true">
-                                                        <option value="" selected>Город не выбран</option>
-                                                    </select>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label for="city">Город</label>
+                                                            <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true">
+                                                                <option value="" selected>Город не выбран</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label for="type">Тип</label>
+                                                            <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true">
+                                                                <option value="" selected>Тип не выбран</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <label for="type">Тип</label>
-                                                <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true">
-                                                    <option value="" selected>Тип не выбран</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
                                     </div>
-
                                 </section>
                                 <section>
                                     <div class="form-group large">
@@ -101,18 +97,12 @@
                                         <input type="text" class="form-control" id="description" name="description">
                                         <input id="hidden-address" name="address" class="form-address" type="hidden" value="">
                                         <input id="hidden-coords" name="coord" class="form-coord" type="hidden" value="">
-                                        <input id="hidden-id" name="userId" class="userId" type="hidden" value="1">
                                     </div>
                                 </section>
-                                <!--/#address-contact-->
                                 <section>
                                     <h3>Map</h3>
-
-                                <div id="map"></div>
-
+                                    <div id="map"></div>
                                 </section>
-
-                                <!--Opening Hours-->
                                 <section>
                                     <h3>Укажите время события</h3>
                                     <div class="opening-hours">
@@ -121,50 +111,183 @@
                                                 <tbody>
                                                 <tr class="day">
                                                     <td class="day-name">День начала</td>
-
                                                     <td class="from">
                                                         <input name="dateStart" type="date" class="form-control" id="dateStart">
                                                         <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" >
                                                     </td>
-
                                                 </tr>
                                                 <tr class="day">
                                                     <td class="day-name">День конца</td>
-
                                                     <td class="to">
                                                         <input name="dateEnd" type="date" class="form-control" id="dateEnd">
                                                         <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" >
                                                     </td>
-
                                                 </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </section>
-
-                                <hr>
                                 <section>
-
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-default pull-right" id="submit">Добавить событие</button>
                                     </div>
-
                                 </section>
                             </form>
                         </div>
                     </div>
+                    <div class="col-md-9">
+                        <div class="add-item-event" id="add-item-event" hidden>
+                            <header>
+                                <h1 class="page-title">Добавить площадку</h1>
+                            </header>
+                            <form name="additem" id="additem" role="form" method="post" action="?" enctype="multipart/form-data">
+                                <input type="hidden" class="form-control" id="hiddenId" name="parent" value="">
+                                <section>
+                                    <div class="form-group large">
+                                        <label for="titleItem">Название</label>
+                                        <input type="text" class="form-control" id="titleItem" name="name">
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="form-group large">
+                                        <label for="auditoryItem">Аудитория</label>
+                                        <input type="text" class="form-control" id="auditoryItem" name="auditory">
+                                    </div>
+                                </section>
+                                <section>
+                                    <h3>Укажите время начала</h3>
+                                    <div class="opening-hours">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr class="day">
+                                                        <td class="day-name">День начала</td>
+                                                        <td class="from">
+                                                            <input name="dateStart" type="date" class="form-control" id="dateStartItem">
+                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" >
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <label for="speaker">Выберите спикера</label>
+                                    <div class="form-group">
+                                        <select id="speaker" class="framed js-speaker" name="speaker" title="Спикер" data-live-search="true">
+                                            <option value="" selected>Спикер не выбран</option>
+                                        </select>
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-default pull-right" id="add-item-button">Добавить элемент события</button>
+                                    </div>
+                                </section>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
                 </section>
             </div>
-
         </div>
+
+        <script type="text/template" class="templateHeaderAuth">
+            <div class="wrapper">
+                <ul class="user-area">
+                    <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
+                    <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateHeaderUnauth">
+            <div class="wrapper">
+                <ul class="user-area header-wrapper">
+                    <li><a href="/login">Войти</a></li>
+                    <li><a href="/register"><strong>Регистрация</strong></a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="event-template">
+            <div class="event-info">
+                <section class="block event-head" id="main-content">
+
+                    <header class="page-title">
+                        <div class="title">
+                            <h1><%- item.name %></h1>
+                            <figure><%- item.address %></figure>
+                        </div>
+                        <div class="info">
+                            <div class="type">
+                                <span><%- item.type.type %></span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="row event-sidebar">
+                        <aside class="col-md-4 col-sm-4" id="detail-sidebar">
+                            <section>
+                                <header><h3>Контакты организатора</h3></header>
+                                <address>
+                                <div><%- item.creator.name %></div>
+                                <div><strong><%- item.creator.organizationName %></strong></div>
+                                <div><%- item.creator.positionName %></div>
+                                <figure>
+                                    <div class="info">
+                                    <i class="fa fa-globe"></i>
+                                    <a href="#"><%- item.creator.email %></a>
+                                    </div>
+                                </figure>
+                                </address>
+                            </section>
+                        </aside>
+
+                        <div class="col-md-8 col-sm-8">
+                            <section>
+                                <article class="block">
+                                    <div class="block-header event-header">
+                                        <div class="col-md-12">
+                                            <header><h2>Дата начала</h2></header>
+                                            <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
+                                            <header><h2>Дата окончания</h2></header>
+                                            <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
+                                            <header><h2>Описание</h2></header>
+                                            <p><%- item.description  %></p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </script>
+
+        <script type="text/template" class="items-list-template">
+            <div class="block-header">
+                <div class="col-md-12 event-body">
+                    <div class="item list">
+                        <div class="col-md-12">
+                            <div class="wrapper">
+                                <h3 id="name" class="item-name"><%- item.name %></h3>
+                                <figure id="auditory"><%- item.auditory  %></figure>
+                                <figure id="timeStart"><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
 
         <footer id="page-footer">
             <div class="inner">
                 <div class="footer-top">
                     <div class="container">
                         <div class="row">
-
                             <div class="col-md-4 col-sm-4">
                                 <section>
                                     <h2>About Us</h2>
@@ -172,12 +295,9 @@
                                         <div>Группа DEV-2</div>
                                         <div>DIMI-MM</div>
                                     </address>
-
                                 </section>
                             </div>
-                            <!--/.col-md-4-->
                             <div class="col-md-4 col-sm-4">
-                                <!--New Items-->
                                 <section>
                                     <h2>Об авторах</h2>
                                     <figure>
@@ -188,12 +308,9 @@
                                             <span>Таиров Александр</span>
                                         </div>
                                     </figure>
-                                    <!--/.item-horizontal small-->
                                 </section>
-                                <!--end New Items-->
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <!--New Items-->
                                 <section>
                                     <h2>Вот здесь нас нет</h2>
                                     <div class="social">
@@ -201,31 +318,22 @@
                                         <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
                                         <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
                                     </div>
-
-                                    <!--/.item-horizontal small-->
                                 </section>
-                                <!--end New Items-->
                             </div>
                         </div>
-                        <!--/.row-->
                     </div>
-                    <!--/.container-->
                 </div>
-                <!--/.footer-top-->
                 <div class="footer-bottom">
                     <div class="container">
-                        <span class="left">(C) EventX, NetCracker, 2020. Students don't have rights</span>
+                        <span class="left">(C) EventX, NetCracker, 2020.</span>
                         <span class="right">
-                                <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
-                            </span>
+                           <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
+                        </span>
                     </div>
                 </div>
-                <!--/.footer-bottom-->
             </div>
         </footer>
-
     </div>
-
 </div>
 
 <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=d0d09cfa-6955-4a10-acbc-8a964c4fef39" type="text/javascript"></script>
@@ -241,12 +349,14 @@
 <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="js/jquery.ui.timepicker.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
-
 <script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/moment.js"></script>
+
 <script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
 <script type="text/javascript" src="js/my-scripts/addEventMap.js"></script>
 <script type="text/javascript" src="js/my-scripts/addEvent.js"></script>
+<script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
+<script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
 
 
 </body>

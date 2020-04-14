@@ -9,12 +9,12 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventItemDTO {
+public class EventItemForCreateDTO {
 
-    private int id;
-    private EventDTO parent;
+    private int parent;
+    private int speaker;
     private String name;
     private String auditory;
-    private Date timeStart;
-
+    private String dateStart;
+    private String timeStart;
 }

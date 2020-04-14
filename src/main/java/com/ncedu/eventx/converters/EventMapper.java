@@ -2,6 +2,7 @@ package com.ncedu.eventx.converters;
 
 import com.ncedu.eventx.models.DTO.EventDTO;
 import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
+import com.ncedu.eventx.models.DTO.EventWithUsersDTO;
 import com.ncedu.eventx.models.entities.EventEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,5 +20,6 @@ public interface EventMapper {
 
     EventWithItemsDTO toEventWithItemsDTO(EventEntity eventEntity);
 
+    EventWithUsersDTO toEventWithUsersDTO(EventEntity eventEntity);
 
 }

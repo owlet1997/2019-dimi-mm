@@ -1,5 +1,7 @@
 package com.ncedu.eventx.services.impl;
 
+import com.ncedu.eventx.converters.EventMapper;
+import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.*;
 
 
@@ -10,6 +12,7 @@ import com.ncedu.eventx.repositories.UserEventRepository;
 import com.ncedu.eventx.repositories.UserRepository;
 import com.ncedu.eventx.services.EventsService;
 import com.ncedu.eventx.services.UserEventService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +41,8 @@ public class UserEventServiceImpl implements UserEventService {
         this.eventsService = eventsService;
     }
 
+    EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
+    UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
     @Override
     public List<UserEventEntity> getAllList() {
         return userEventRepository.findAll();
@@ -64,27 +69,31 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
-    public boolean createEvent(EventForCreateDTO createDTO) {
-        UserEntity userEntity = userRepository.findById(Integer.parseInt(createDTO.getUserId()));
+    public EventWithUsersDTO createEvent(EventForCreateDTO createDTO, String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
         EventEntity eventEntity = eventsService.createEvent(createDTO);
 
-        RoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
+        System.out.println(createDTO);
 
+        RoleEntity roleEntity = rolesRepository.findByName(CREATOR.getDescription());
 
         UserEventKey key = new UserEventKey(eventEntity.getId(),userEntity.getId(),roleEntity.getId());
         UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
         userEventRepository.save(userEventEntity);
-        return true;
+        EventWithUsersDTO eventWithUsersDTO = eventMapper.toEventWithUsersDTO(eventEntity);
+        eventWithUsersDTO.setCreator(usersMapper.toDTO(userEntity));
+        return eventWithUsersDTO;
     }
 
 
     @Override
-    public EventWithItemsDTO visitEvent(int userId, int eventId) {
-        if (isVisited(userId, eventId)){
-            deleteVisit(userId, eventId);
+    public boolean visitEvent(String username, int eventId) {
+        if (isVisited(username, eventId)){
+            deleteVisit(username, eventId);
+            return false;
         }
         else {
-            UserEntity userEntity = userRepository.findById(userId);
+            UserEntity userEntity = userRepository.findByUsername(username);
             EventEntity eventEntity = eventRepository.findById(eventId);
             RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
@@ -92,12 +101,12 @@ public class UserEventServiceImpl implements UserEventService {
             UserEventEntity userEventEntity = new UserEventEntity(key,userEntity,eventEntity,roleEntity,1);
             userEventRepository.save(userEventEntity);
         }
-        return eventsService.getEventWithItemsById(eventId,userId);
+        return true;
     }
 
     @Override
-    public boolean isVisited(int userId, int eventId) {
-        UserEntity userEntity = userRepository.findById(userId);
+    public boolean isVisited(String username, int eventId) {
+        UserEntity userEntity = userRepository.findByUsername(username);
         EventEntity eventEntity = eventRepository.findById(eventId);
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
 
@@ -111,10 +120,11 @@ public class UserEventServiceImpl implements UserEventService {
     }
 
     @Override
-    public boolean deleteVisit(int userId, int eventId) {
+    public boolean deleteVisit(String username, int eventId) {
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+        UserEntity userEntity = userRepository.findByUsername(username);
 
-        UserEventKey key = new UserEventKey(eventId,userId,roleEntity.getId());
+        UserEventKey key = new UserEventKey(eventId, userEntity.getId(),roleEntity.getId());
 
         userEventRepository.deleteById(key);
         return true;

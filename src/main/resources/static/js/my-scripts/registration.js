@@ -2,9 +2,10 @@
 var template = _.template(
     $('script.template').html()
 );
-var container = document.querySelector('.page');
 
-var form = document.forms.register;
+var container = document.querySelector('.registr');
+
+const form = document.forms.register;
 
 form.addEventListener("submit", function (event) {
 
@@ -16,8 +17,10 @@ form.addEventListener("submit", function (event) {
             body[element.name] = element.value;
         }
     }
+    console.log(body);
 
-    fetch(`/register`,{
+
+fetch(`/register`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -30,11 +33,12 @@ form.addEventListener("submit", function (event) {
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
             }
-            container.append(template(res));
-            console.log(JSON.stringify(res))})
+            $('.registr').append(template);
+            console.log(JSON.stringify(res));
+        })
         // Обрабатываем ошибки с сервера
-        .catch(error => {
-            console.log(error)})
-    // window.location.assign("/log-in");
+        .catch(error =>
+            console.log(error))
+    // window.location.assign("/login");
 
 })

@@ -15,16 +15,16 @@ import java.util.logging.Logger;
 @Configuration
 public class DataSourceConfig {
 
-//    private final Environment env;
-//
-//    Logger log = Logger.getLogger("log");
-//
-//    public DataSourceConfig(Environment env) {
-//        this.env = env;
-//    }
-//
-//
-//    //    бин для подключения к хероку
+    private final Environment env;
+
+    Logger log = Logger.getLogger("log");
+
+    public DataSourceConfig(Environment env) {
+        this.env = env;
+    }
+
+
+    //    бин для подключения к хероку
 //    @Bean(name = "dataSource")
 //    public DataSource getDataSource(){
 //        String databaseUrl = env.getProperty("spring.datasource.URI");
@@ -61,29 +61,15 @@ public class DataSourceConfig {
     @Bean(name = "dataSource")
     public DataSource getDataSource(){
 
+        // подключение к локальной бд postgres
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        String userName = "postgres";
-        String password = "1";
-        String dbUrl = "jdbc:postgresql://localhost:5432/eventx";
-
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
-
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
+        dataSource.setUrl(env.getProperty("spring.datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.password"));
         return dataSource;
     }
-
-        // подключение к локальной бд postgres
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//
-//        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name")));
-//        dataSource.setUrl(env.getProperty("spring.datasource.url"));
-//        dataSource.setUsername(env.getProperty("spring.datasource.username"));
-//        dataSource.setPassword(env.getProperty("spring.datasource.password"));
-//        return dataSource;
-//    }
 
 }
 
