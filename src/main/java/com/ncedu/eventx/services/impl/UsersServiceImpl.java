@@ -148,31 +148,4 @@ public class UsersServiceImpl implements UsersService{
         return userRepository.findById(id);
     }
 
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Hello from hidden method");
-        System.out.println("Username:" +username);
-        UserEntity user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        User user1 = new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                true, true, true, true, getAuthorities("ROLE_USER"));
-
-        System.out.println(user1);
-
-        return user1;
-    }
-
-    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
-
-        return Arrays.asList(new SimpleGrantedAuthority(role));
-    }
-
-
 }

@@ -6012,10 +6012,10 @@ body.navigation-top-header .header .wrapper .toggle-navigation {
   margin-top: 30px;
   padding-top: 50px;
   position: relative;
-  min-height: max-content;
+  min-height:150px;
 }
 #page-footer .inner {
-  padding-top: 60px;
+  padding-top: 90px;
 }
 #page-footer .inner address figure {
   margin-top: 20px;
