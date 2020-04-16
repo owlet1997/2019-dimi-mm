@@ -214,6 +214,8 @@ public class EventsServiceImpl implements EventsService {
     public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
         UserEntity userEntity = userRepository.findById(20);
         RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
+
 
         List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
 
@@ -223,13 +225,20 @@ public class EventsServiceImpl implements EventsService {
                     .filter(event -> event.getEvent().equals(e))
                     .filter(role -> role.getRole().equals(userRoleVisit))
                     .map(UserEventEntity::getUser).collect(Collectors.toList());
+            UserDTO creator = usersMapper.toDTO(userEventEntityList.stream()
+                    .filter(role -> role.getRole().equals(userRoleCreator))
+                    .map(UserEventEntity::getUser).findFirst().get());
             List<UserDTO> userDTOList = usersMapper.toUserDTOList(usersList);
             EventWithItemsDTO event = eventMapper.toEventWithItemsDTO(e);
             event.setVisitors(userDTOList);
+            event.setCreator(creator);
             event.setItemsList(eventItemService.getEventItemWithUsersListByParent(e.getId(), userEntity));
             withItemsDTOList.add(event);
         }
-        return withItemsDTOList;
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        Date now = today.getTime();
+        return withItemsDTOList.stream().filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now)).sorted(Comparator.comparing(EventWithItemsDTO::getTimeStart)).collect(Collectors.toList());
     }
 
     @Override
