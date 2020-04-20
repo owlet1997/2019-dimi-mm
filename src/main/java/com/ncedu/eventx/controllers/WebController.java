@@ -171,6 +171,13 @@ public class WebController {
     }
 
 
+    @PostMapping("/upload")
+    @ResponseBody
+    public void uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        usersService.savePicture(file, username);
+    }
 
 }
 
