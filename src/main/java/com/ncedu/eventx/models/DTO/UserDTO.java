@@ -4,6 +4,7 @@ import com.ncedu.eventx.models.entities.RoleEntity;
 import lombok.*;
 
 import javax.persistence.Transient;
+import java.sql.Blob;
 import java.util.List;
 
 @Data
@@ -30,5 +31,7 @@ public class UserDTO {
     private String organizationName;
 
     private String positionName;
+
+    private Blob avatarImg;
 
 }
