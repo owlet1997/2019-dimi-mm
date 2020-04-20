@@ -120,11 +120,16 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public List<EventDTO> getEventsByUserId(int userId){
+    public List<EventDTO> getEventsByUserId(int userId, String role){
         UserEntity userEntity = userRepository.findById(userId);
+        RoleEntity roleEntity = rolesRepository.findByName(role);
 
         List<UserEventEntity> userEventEntityList = userEventRepository.findAllByUser(userEntity);
-        List<EventEntity> list = userEventEntityList.stream().map(UserEventEntity::getEvent).collect(Collectors.toList());
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        Date now = today.getTime();
+        List<EventEntity> list = userEventEntityList.stream().filter(e -> e.getRole().equals(roleEntity)).map(UserEventEntity::getEvent).filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart()
+                .after(now)).sorted(Comparator.comparing(EventEntity::getTimeStart)).collect(Collectors.toList());
 
         return eventMapper.toListDTO(list);
     }

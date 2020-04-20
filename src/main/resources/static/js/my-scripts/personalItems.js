@@ -12,9 +12,16 @@
     var templateTitle = _.template(
         $('script.templateTitle').html()
     );
+
+    var templateEmpty = _.template(
+        $('script.templateEmpty').html()
+    );
+
     var container = document.getElementById('items');
 
     var buttonEvents = document.getElementById('all-events');
+
+    var buttonEventsCreator = document.getElementById('all-events-creator');
 
     var buttonItems = document.getElementById('all-items');
 
@@ -37,7 +44,7 @@
         .catch(error => console.log(error))
 
 
-    fetch(`/api/user/`+userId+`/events`,{
+    fetch(`/api/user/`+userId+`/events/guest`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -47,9 +54,16 @@
         .then(res => res.json())
         .then(res => {
             console.log(res);
-            res.forEach(function (element) {
-                $('.items').append(templateEvent(element));
-            })
+            if (res.length>0){
+                res.forEach(function (element) {
+                    $('.items').append(templateEvent(element));
+                })
+            }
+            else {
+                var answer = { name: "Нет посещенных мероприятий"};
+                $('.items').append(templateEmpty(answer));
+            }
+
         })
         // Обрабатываем ошибки с сервера
         .catch(error => console.log(error))
@@ -57,7 +71,7 @@
     buttonEvents.onclick = function (event) {
         event.preventDefault();
 
-        fetch(`/api/user/`+userId+`/events`,{
+        fetch(`/api/user/`+userId+`/events/guest`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -71,11 +85,46 @@
                 while (container.firstChild) {
                     container.removeChild(container.firstChild)
                 }
-                res.forEach(function (element) {
+                if (res.length>0){
+                    res.forEach(function (element) {
+                        $('.items').append(templateEvent(element));
+                    })
+                }
+                else {
+                    var answer = { name: "Нет посещенных мероприятий"};
+                    $('.items').append(templateEmpty(answer));
+                }
+            })
+            // Обрабатываем ошибки с сервера
+            .catch(error => console.log(error))
+    }
 
-                    $('.items').append(templateEvent(element));
+    buttonEventsCreator.onclick = function (event) {
+        event.preventDefault();
 
-                })
+        fetch(`/api/user/`+userId+`/events/creator`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+            // Получаем из ответа JSON
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+
+                while (container.firstChild) {
+                    container.removeChild(container.firstChild)
+                }
+                if (res.length>0){
+                    res.forEach(function (element) {
+                        $('.items').append(templateEvent(element));
+                    })
+                }
+                else {
+                    var answer = { name: "Нет созданных мероприятий"};
+                    $('.items').append(templateEmpty(answer));
+                }
             })
             // Обрабатываем ошибки с сервера
             .catch(error => console.log(error))
@@ -98,9 +147,15 @@
                 while (container.firstChild) {
                     container.removeChild(container.firstChild)
                 }
-                res.forEach(function (element) {
-                    $('.items').append(templateItem(element));
-                })
+                if (res.length>0){
+                    res.forEach(function (element) {
+                        $('.items').append(templateItem(element));
+                    })
+                }
+                else {
+                    var answer = { name: "Нет избранных площадок"};
+                    $('.items').append(templateEmpty(answer));
+                }
             })
             // Обрабатываем ошибки с сервера
             .catch(error => console.log(error))

@@ -15,7 +15,7 @@ public interface EventsService {
 
     List<EventDTO> getEventsList();
 
-    List<EventDTO> getEventsByUserId(int userId);
+    List<EventDTO> getEventsByUserId(int userId, String role);
 
     EventWithItemsDTO getEventWithItemsById(int id, String username);
 

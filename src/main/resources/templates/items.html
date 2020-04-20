@@ -53,7 +53,10 @@
                             <aside id="sidebar">
                                 <ul class="navigation-sidebar list-unstyled">
                                     <li id="all-events">
-                                        <a><i class="fa fa-folder"></i><span>Все мероприятия</span></a>
+                                        <a><i class="fa fa-folder"></i><span>Мероприятия: гость</span></a>
+                                    </li>
+                                    <li id="all-events-creator">
+                                        <a><i class="fa fa-folder"></i><span>Мероприятия: организатор</span></a>
                                     </li>
                                     <li id="all-items">
                                         <a><i class="fa fa-check"></i><span>Избранное</span></a>
@@ -127,6 +130,20 @@
                             </div>
                         </header>
                         <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateEmpty">
+            <div class="item list">
+                <div class="col-md-12">
+                    <div class="wrapper">
+                        <header class="page-title">
+                            <div class="title">
+                                <h1><%- item.name %></h1>
+                            </div>
+                        </header>
                     </div>
                 </div>
             </div>

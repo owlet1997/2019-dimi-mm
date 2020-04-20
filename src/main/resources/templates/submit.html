@@ -59,7 +59,7 @@
                                 <section>
                                     <div class="form-group large">
                                         <label for="title">Название</label>
-                                        <input type="text" class="form-control" id="title" name="name">
+                                        <input type="text" class="form-control" id="title" name="name" required>
                                     </div>
                                 </section>
                                 <section>
@@ -70,7 +70,7 @@
                                                     <div class="row">
                                                         <div class="form-group">
                                                             <label for="city">Город</label>
-                                                            <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true">
+                                                            <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true" required>
                                                                 <option value="" selected>Город не выбран</option>
                                                             </select>
                                                         </div>
@@ -80,7 +80,7 @@
                                                     <div class="row">
                                                         <div class="form-group">
                                                             <label for="type">Тип</label>
-                                                            <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true">
+                                                            <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true" required>
                                                                 <option value="" selected>Тип не выбран</option>
                                                             </select>
                                                         </div>
@@ -92,13 +92,13 @@
                                 <section>
                                     <div class="form-group large">
                                         <label for="title">Описание</label>
-                                        <input type="text" class="form-control" id="description" name="description">
+                                        <input type="text" class="form-control" id="description" name="description" required>
                                         <input id="hidden-address" name="address" class="form-address" type="hidden" value="">
                                         <input id="hidden-coords" name="coord" class="form-coord" type="hidden" value="">
                                     </div>
                                 </section>
                                 <section>
-                                    <h3>Map</h3>
+                                    <h3>Укажите событие на карте</h3>
                                     <div id="map"></div>
                                 </section>
                                 <section>
@@ -110,15 +110,15 @@
                                                 <tr class="day">
                                                     <td class="day-name">День начала</td>
                                                     <td class="from">
-                                                        <input name="dateStart" type="date" class="form-control" id="dateStart">
-                                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" >
+                                                        <input name="dateStart" type="date" class="form-control" id="dateStart" required>
+                                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>
                                                     </td>
                                                 </tr>
                                                 <tr class="day">
                                                     <td class="day-name">День окончания</td>
                                                     <td class="to">
-                                                        <input name="dateEnd" type="date" class="form-control" id="dateEnd">
-                                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" >
+                                                        <input name="dateEnd" type="date" class="form-control" id="dateEnd" required>
+                                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" required>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -144,13 +144,13 @@
                                 <section>
                                     <div class="form-group large">
                                         <label for="titleItem">Название</label>
-                                        <input type="text" class="form-control" id="titleItem" name="name">
+                                        <input type="text" class="form-control" id="titleItem" name="name" required>
                                     </div>
                                 </section>
                                 <section>
                                     <div class="form-group large">
                                         <label for="auditoryItem">Аудитория</label>
-                                        <input type="text" class="form-control" id="auditoryItem" name="auditory">
+                                        <input type="text" class="form-control" id="auditoryItem" name="auditory" required>
                                     </div>
                                 </section>
                                 <section>
@@ -162,8 +162,8 @@
                                                     <tr class="day">
                                                         <td class="day-name">День начала</td>
                                                         <td class="from">
-                                                            <input name="dateStart" type="date" class="form-control" id="dateStartItem">
-                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" >
+                                                            <input name="dateStart" type="date" class="form-control" id="dateStartItem" required>
+                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -174,7 +174,7 @@
                                 <section>
                                     <label for="speaker">Выберите спикера</label>
                                     <div class="form-group">
-                                        <select id="speaker" class="framed js-speaker" name="speaker" title="Спикер" data-live-search="true">
+                                        <select id="speaker" class="framed js-speaker" name="speaker" title="Спикер" data-live-search="true" required>
                                             <option value="" selected>Спикер не выбран</option>
                                         </select>
                                     </div>

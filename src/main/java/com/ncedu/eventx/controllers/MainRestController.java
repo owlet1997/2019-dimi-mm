@@ -1,6 +1,7 @@
 package com.ncedu.eventx.controllers;
 
 import com.ncedu.eventx.converters.UsersMapper;
+import com.ncedu.eventx.enums.UserRoleItems;
 import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.services.*;
 import org.mapstruct.factory.Mappers;
@@ -100,12 +101,21 @@ public class MainRestController {
             return eventsService.getEventWithItemsById(eventId, username);
         }
 
-        @GetMapping(value = "/api/user/{userId}/events", //
+        @GetMapping(value = "/api/user/{userId}/events/guest", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public List<EventDTO> getEventsByUserId(@PathVariable("userId") int userId){
-            return eventsService.getEventsByUserId(userId);
+        public List<EventDTO> getGuestEventsByUserId(@PathVariable("userId") int userId){
+
+            return eventsService.getEventsByUserId(userId, UserRoleItems.VISITOR.getDescription());
+        }
+
+        @GetMapping(value = "/api/user/{userId}/events/creator", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventDTO> getCreatorEventsByUserId(@PathVariable("userId") int userId){
+            return eventsService.getEventsByUserId(userId, UserRoleItems.CREATOR.getDescription());
         }
 
         @GetMapping(value = "/api/user/{userId}/items", //
