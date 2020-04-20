@@ -1442,6 +1442,13 @@
     };
   };
 
+  _.unquote = function(str, quoteChar) {
+    quoteChar = quoteChar || '"';
+    if (str[0] === quoteChar && str[str.length - 1] === quoteChar)
+      return str.slice(1, str.length - 1);
+    else return str;
+  };
+
   // Run a function **n** times.
   _.times = function(n, iteratee, context) {
     var accum = Array(Math.max(0, n));

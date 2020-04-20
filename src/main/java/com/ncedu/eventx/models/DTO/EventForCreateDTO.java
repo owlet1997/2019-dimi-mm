@@ -14,7 +14,6 @@ import org.locationtech.jts.geom.Point;
 @AllArgsConstructor
 public class EventForCreateDTO {
 
-    private String userId;
     private String city;
     private String name;
     private int type;

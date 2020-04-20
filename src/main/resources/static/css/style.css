@@ -424,7 +424,7 @@ ul.bullets li a:hover {
 }
 
 .block {
-  padding: 40px 0;
+  padding: 40px 0 0 0;
   transform: translateZ(0);
   overflow: hidden;
 }
@@ -942,7 +942,6 @@ ul.bullets li a:hover {
 }
 
 #page-content {
-  padding-bottom: 60px;
   z-index: 0;
   position: relative;
 }
@@ -6013,9 +6012,10 @@ body.navigation-top-header .header .wrapper .toggle-navigation {
   margin-top: 30px;
   padding-top: 50px;
   position: relative;
+  min-height:150px;
 }
 #page-footer .inner {
-  padding-top: 60px;
+  padding-top: 90px;
 }
 #page-footer .inner address figure {
   margin-top: 20px;

@@ -17,12 +17,12 @@ public interface UserEventService {
 
     List<UserEventEntity> getAllByUser(UserDTO userDTO);
 
-    boolean createEvent(EventForCreateDTO createDTO);
+    EventWithUsersDTO createEvent(EventForCreateDTO createDTO, String username);
 
-    boolean visitEvent(int userId, int evenId);
+    boolean visitEvent(String username, int evenId);
 
-    boolean deleteVisit(int userId, int eventId);
+    boolean deleteVisit(String username, int eventId);
 
-    boolean isVisited(int userId, int evenId);
+    boolean isVisited(String username, int evenId);
 
 }

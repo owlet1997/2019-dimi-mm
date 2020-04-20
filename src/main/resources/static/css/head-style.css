@@ -1,0 +1,9 @@
+.brand {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrapper.top-event-header {
+    display: flex;
+    justify-content: space-between;
+}

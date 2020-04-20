@@ -4,6 +4,7 @@ import com.ncedu.eventx.converters.EventItemMapper;
 import com.ncedu.eventx.converters.EventMapper;
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.EventItemDTO;
+import com.ncedu.eventx.models.DTO.EventItemForCreateDTO;
 import com.ncedu.eventx.models.DTO.EventItemWithUsersDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
@@ -11,8 +12,10 @@ import com.ncedu.eventx.services.EventItemService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static com.ncedu.eventx.enums.UserRoleItems.SPEAKER;
@@ -26,6 +29,8 @@ public class EventItemServiceImpl implements EventItemService {
     final RolesRepository rolesRepository;
     final UserEventItemRepository userEventItemRepository;
     final UserRepository userRepository;
+    SimpleDateFormat formatCreate = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+
 
     public EventItemServiceImpl(EventItemRepository eventItemRepository,
                                 EventRepository eventRepository,
@@ -43,22 +48,27 @@ public class EventItemServiceImpl implements EventItemService {
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     @Override
-    public EventItemEntity createEventItem(EventItemDTO eventItemDTO) {
+    public EventItemEntity createEventItem(EventItemForCreateDTO eventItemDTO) {
         EventItemEntity eventItemEntity = new EventItemEntity();
 
-        EventEntity parentEntity = eventMapper.toEventEntity(eventItemDTO.getParent());
+        EventEntity parentEntity = eventRepository.findById(eventItemDTO.getParent());
 
         eventItemEntity.setParent(parentEntity);
         eventItemEntity.setName(eventItemDTO.getName());
         eventItemEntity.setAuditory(eventItemDTO.getAuditory());
-        eventItemEntity.setTimeStart(eventItemDTO.getTimeStart());
+        String dateStart = eventItemDTO.getDateStart() + " " + eventItemDTO.getTimeStart();
+        try {
+            eventItemEntity.setTimeStart(formatCreate.parse(dateStart));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         eventItemRepository.save(eventItemEntity);
         return eventItemEntity;
     }
 
     @Override
-    public List<EventItemWithUsersDTO> getEventItemsListByParent(int id, UserEntity userEntity) {
+    public List<EventItemWithUsersDTO> getEventItemWithUsersListByParent(int id, UserEntity userEntity) {
         EventEntity eventEntity = eventRepository.findById(id);
         List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
 
@@ -72,6 +82,12 @@ public class EventItemServiceImpl implements EventItemService {
     }
 
     @Override
+    public List<EventItemDTO> getEventItemListByParent(int id){
+        EventEntity eventEntity = eventRepository.findById(id);
+        List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
+        return eventItemMapper.toListDTO(list);
+    }
+
     public List<EventItemDTO> getItemsByUser(int userId) {
         UserEntity userEntity = userRepository.findById(userId);
 

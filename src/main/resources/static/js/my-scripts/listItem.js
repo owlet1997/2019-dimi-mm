@@ -20,9 +20,7 @@
         $('script.templateEventBody').html()
     );
 
-    let userId = document.getElementById('hidden-id').value;
-
-    fetch(`/api/events/`+eventId+`/user/`+userId, {
+    fetch(`/api/events/`+eventId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -44,9 +42,6 @@
             const formName = document.forms.namedItem('featureItem'+element.eventItem.id);
                 formName.addEventListener("submit", function (event) {
                     event.preventDefault();
-                    var userFormId = document.getElementById('hidden-user-featur-id'+element.eventItem.id);
-                    userFormId.value = document.getElementById('hidden-id').value;
-
                     let newbody = {};
 
                     for (let element of formName.elements) {
@@ -56,8 +51,7 @@
                     }
                     console.log(newbody);
 
-                    // Делаем запрос на сервер
-                    fetch(`/api/item-visit?itemId=`+newbody["itemId"] + `&userId=` + newbody["userId"],{
+                    fetch(`/api/item-visit?itemId=`+newbody["itemId"],{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
@@ -68,7 +62,8 @@
                         .then(res => {
                                 console.log(res);
                                 let buttonItem = document.getElementById('item-featured' + newbody["itemId"]);
-                                buttonItem.value = visitItem(res);
+                                buttonItem.src = visitItem(res);
+                                // buttonItem.value = visitItem(res);
                         })
                         .catch(error => console.log(error))
 
@@ -81,8 +76,6 @@
 
             form.addEventListener("submit", function (event) {
                 event.preventDefault();
-                var userFormId = document.getElementById('hidden-user-id');
-                userFormId.value = document.getElementById('hidden-id').value;
 
                 let body = {};
 
@@ -94,7 +87,7 @@
                 console.log(body);
 
                 // Делаем запрос на сервер
-                fetch(`/api/event-visit?userId=`+body["userId"] + `&eventId=`+body["eventId"],{
+                fetch(`/api/event-visit?eventId=`+body["eventId"],{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8'

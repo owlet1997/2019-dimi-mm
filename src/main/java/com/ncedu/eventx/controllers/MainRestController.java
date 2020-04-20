@@ -5,8 +5,14 @@ import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.services.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.sql.Blob;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,13 +96,29 @@ public class MainRestController {
 
         /////////////////////////////////////////////////
 
-        @GetMapping(value = "/api/events/{eventId}/user/{userId}", //
+        @GetMapping(value = "/api/events/{eventId}", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId,
-                                                @PathVariable("userId") int userId){
-            return eventsService.getEventWithItemsById(eventId, userId);
+        public EventWithItemsDTO getEventById ( @PathVariable("eventId") int eventId){
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            return eventsService.getEventWithItemsById(eventId, username);
+        }
+
+        @GetMapping(value = "/api/user/{userId}/events", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventDTO> getEventsByUserId(@PathVariable("userId") int userId){
+            return eventsService.getEventsByUserId(userId);
+        }
+
+        @GetMapping(value = "/api/user/{userId}/items", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventItemDTO> getItemsByUserId(@PathVariable("userId") int userId){
+            return eventItemService.getItemsByUser(userId);
         }
 
         @GetMapping(value = "/api/user/{userId}/events", //
@@ -131,7 +153,8 @@ public class MainRestController {
         public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional <String> city,
                 @RequestParam(name = "type") Optional <String> type,
                 @RequestParam(name = "dateStart") Optional <String> dateStart){
-
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            System.out.println(username);
             return eventsService.getEventsBySearchParams(city.orElseGet(() -> ""),
                     type.orElseGet(() -> ""),
                     dateStart.orElseGet(() -> ""));
@@ -142,7 +165,6 @@ public class MainRestController {
                 })
         @ResponseBody
         public List<EventDTO> getEventsByCreator ( @PathVariable("id") int id){
-
             return eventsService.getLastEventsByCreator(id);
         }
 
@@ -160,10 +182,10 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId,
-                                              @RequestParam(name = "userId") int userId){
+        public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId){
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            return userEventItemService.addToFeatured(itemId, username);
 
-            return userEventItemService.addToFeatured(itemId, userId);
         }
 
 
