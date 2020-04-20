@@ -77,10 +77,6 @@ public class WebController {
         return ResponseEntity.created(new URI("http://localhost:8080/blobs/" + file.getOriginalFilename())).build();
     }
 
-    @GetMapping("/user-items")
-    public String userItemsPage(@RequestParam("id") int id) {
-        return "items";
-    }
 
 
     @PutMapping("/user/{id}/update")
