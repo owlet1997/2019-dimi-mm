@@ -121,6 +121,22 @@ public class MainRestController {
             return eventItemService.getItemsByUser(userId);
         }
 
+        @GetMapping(value = "/api/user/{userId}/events", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventDTO> getEventsByUserId(@PathVariable("userId") int userId){
+            return eventsService.getEventsByUserId(userId);
+        }
+
+        @GetMapping(value = "/api/user/{userId}/items", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public List<EventItemDTO> getItemsByUserId(@PathVariable("userId") int userId){
+            return eventItemService.getItemsByUser(userId);
+        }
+
 
         @GetMapping(value = "/api/event-types", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
@@ -156,9 +172,10 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId){
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            return userEventService.visitEvent(username, eventId);
+        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId,
+        @RequestParam(name = "userId") int userId){
+
+            return userEventService.visitEvent(userId, eventId);
         }
 
         @PostMapping(value = "/api/item-visit", //
@@ -168,6 +185,7 @@ public class MainRestController {
         public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId){
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             return userEventItemService.addToFeatured(itemId, username);
+
         }
 
 

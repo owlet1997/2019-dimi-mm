@@ -90,6 +90,7 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean visitEvent(String username, int eventId) {
         if (isVisited(username, eventId)){
             deleteVisit(username, eventId);
+
             return false;
         }
         else {

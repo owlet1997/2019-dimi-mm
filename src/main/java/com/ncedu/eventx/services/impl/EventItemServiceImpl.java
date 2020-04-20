@@ -31,6 +31,7 @@ public class EventItemServiceImpl implements EventItemService {
     final UserRepository userRepository;
     SimpleDateFormat formatCreate = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
+
     public EventItemServiceImpl(EventItemRepository eventItemRepository,
                                 EventRepository eventRepository,
                                 RolesRepository rolesRepository,
@@ -51,6 +52,7 @@ public class EventItemServiceImpl implements EventItemService {
         EventItemEntity eventItemEntity = new EventItemEntity();
 
         EventEntity parentEntity = eventRepository.findById(eventItemDTO.getParent());
+
         eventItemEntity.setParent(parentEntity);
         eventItemEntity.setName(eventItemDTO.getName());
         eventItemEntity.setAuditory(eventItemDTO.getAuditory());
@@ -86,7 +88,6 @@ public class EventItemServiceImpl implements EventItemService {
         return eventItemMapper.toListDTO(list);
     }
 
-    @Override
     public List<EventItemDTO> getItemsByUser(int userId) {
         UserEntity userEntity = userRepository.findById(userId);
 
