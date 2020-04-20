@@ -1,6 +1,7 @@
 package com.ncedu.eventx.controllers;
 
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.services.EventItemService;
@@ -170,13 +171,21 @@ public class WebController {
         return userDTO.orElse(null);
     }
 
-
     @PostMapping("/upload")
     @ResponseBody
     public void uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         usersService.savePicture(file, username);
+    }
+
+    @GetMapping(value = "/download", //
+            produces = {MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public String downloadImage() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return usersService.getUserByUsername(username).getAvatarImg();
     }
 
 }

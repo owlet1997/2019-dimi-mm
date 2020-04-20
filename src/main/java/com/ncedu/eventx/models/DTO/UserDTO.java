@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDTO {
 
-
     private int id;
 
     private String email;
@@ -32,6 +31,6 @@ public class UserDTO {
 
     private String positionName;
 
-    private Blob avatarImg;
+    private String avatarImg;
 
 }

@@ -7,7 +7,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.sql.Blob;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
