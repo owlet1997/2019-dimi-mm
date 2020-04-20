@@ -14,8 +14,6 @@ public interface EventItemService {
 
    List<EventItemDTO> getItemsByUser(int userId);
 
-   List<EventItemWithUsersDTO> getEventItemsListByParent(int id, UserEntity user);
-
    List<EventItemDTO> getEventItemListByParent(int id);
 
    List<EventItemWithUsersDTO> getEventItemWithUsersListByParent(int id, UserEntity user);
