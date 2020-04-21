@@ -18,13 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.net.URI;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.Blob;
-import java.util.Optional;
 
-import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.URI;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -75,6 +73,8 @@ public class WebController {
         usersService.savePicture(file,username);
         return ResponseEntity.created(new URI("http://localhost:8080/blobs/" + file.getOriginalFilename())).build();
     }
+
+
 
     @PutMapping("/user/{id}/update")
     @ResponseBody
@@ -170,7 +170,26 @@ public class WebController {
         return userDTO.orElse(null);
     }
 
+    @PostMapping("/upload")
+    @ResponseBody
+    public void uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        usersService.savePicture(file, username);
+    }
+
+    @GetMapping(value = "/download", //
+            produces = {MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public String downloadImage() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String avatar = usersService.getUserByUsername(username).getAvatarImg();
+        if(avatar == null) {
+            return null;
+        } else
+        return (char)34 + "data:image/png;base64," + avatar + (char)34;
+    }
 
 }
 

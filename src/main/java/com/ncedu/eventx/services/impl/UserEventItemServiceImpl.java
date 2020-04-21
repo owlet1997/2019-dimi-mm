@@ -75,11 +75,13 @@ public class UserEventItemServiceImpl implements UserEventItemService {
 
     @Override
     public boolean addToFeatured(int itemId, String username) {
+
         EventItemEntity itemEntity = eventItemRepository.findById(itemId);
         UserEntity userEntity = userRepository.findByUsername(username);
 
         if(isFeatured(itemId, username)){
             removeFromFeatured(itemId, username);
+
             return false;
         }
         else {

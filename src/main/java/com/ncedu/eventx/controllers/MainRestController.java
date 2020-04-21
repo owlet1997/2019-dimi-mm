@@ -8,7 +8,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.sql.Blob;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,6 +132,7 @@ public class MainRestController {
         }
 
 
+
         @GetMapping(value = "/api/event-types", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
@@ -161,8 +167,8 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId){
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        public boolean visitEvent ( @RequestParam(name = "eventId") int eventId) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
             return userEventService.visitEvent(username, eventId);
         }
 
@@ -173,6 +179,7 @@ public class MainRestController {
         public boolean checkFeaturedEvent(@RequestParam(name = "itemId") int itemId){
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             return userEventItemService.addToFeatured(itemId, username);
+
         }
 
 

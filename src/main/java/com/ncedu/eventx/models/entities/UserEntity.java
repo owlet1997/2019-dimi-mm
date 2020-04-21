@@ -20,14 +20,12 @@ import java.util.*;
 @Entity
 @ToString
 @Table(name="user", schema = "eventx")
-//@Table(name="user", schema = "eventx")
 
 public class UserEntity implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.REFRESH, CascadeType.MERGE})
@@ -56,8 +54,9 @@ public class UserEntity implements Serializable, UserDetails {
     private String positionName;
 
     @Column
-    @Lob
-    private Blob avatarImg;
+    private String avatarImg;
+//    @Lob
+//    private Blob avatarImg;
 
     @Email
     @Column(nullable = false)

@@ -28,9 +28,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.sql.Blob;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,12 +77,23 @@ public class UsersServiceImpl implements UsersService{
         return usersMapper.toUserForUpdateDTO(userEntity);
     }
 
+//    @Override
+//    public UserForUpdateDTO savePicture(MultipartFile file, String username) throws IOException {
+//        UserEntity userEntity = userRepository.findByUsername(username);
+//
+//        Blob blob = lobHelper.createBlob(file.getInputStream(),file.getSize());
+//        userEntity.setAvatarImg(blob);
+//        userRepository.save(userEntity);
+//
+//        return usersMapper.toUserForUpdateDTO(userEntity);
+//    }
+
     @Override
     public UserForUpdateDTO savePicture(MultipartFile file, String username) throws IOException {
         UserEntity userEntity = userRepository.findByUsername(username);
 
-        Blob blob = lobHelper.createBlob(file.getInputStream(),file.getSize());
-        userEntity.setAvatarImg(blob);
+//        Blob blob = lobHelper.createBlob(file.getInputStream(),file.getSize());
+        userEntity.setAvatarImg(DatatypeConverter.printBase64Binary(file.getBytes()));
         userRepository.save(userEntity);
 
         return usersMapper.toUserForUpdateDTO(userEntity);
@@ -139,7 +152,6 @@ public class UsersServiceImpl implements UsersService{
         if (user == null) {
             throw new UsernameNotFoundException(username + "!!!!!!!!!!!!");
         }
-
         return usersMapper.toDTO(user);
     }
 

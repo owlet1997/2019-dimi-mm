@@ -3,6 +3,7 @@
 const cancel = "icons/full-star.png";
 const add = "icons/empty-star.png";
 
+
 const visit = "Посетить";
 const refuse = "Отказаться от участия";
 
