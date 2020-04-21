@@ -1,7 +1,6 @@
 package com.ncedu.eventx.controllers;
 
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ncedu.eventx.converters.UsersMapper;
 import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.services.EventItemService;
@@ -19,13 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.net.URI;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.Blob;
-import java.util.Optional;
 
-import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.URI;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -187,7 +184,11 @@ public class WebController {
     @ResponseBody
     public String downloadImage() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return usersService.getUserByUsername(username).getAvatarImg();
+        String avatar = usersService.getUserByUsername(username).getAvatarImg();
+        if(avatar == null) {
+            return null;
+        } else
+        return (char)34 + "data:image/png;base64," + avatar + (char)34;
     }
 
 }
