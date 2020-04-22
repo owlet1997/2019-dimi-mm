@@ -88,6 +88,25 @@
                 if (res.length>0){
                     res.forEach(function (element) {
                         $('.items').append(templateEvent(element));
+                        var eventItem = document.getElementById('del-event-img'+element.id);
+                        eventItem.onclick = function (event) {
+                            event.preventDefault();
+                            if (confirm("Вы точно передумали идти?")){
+                                fetch(`/api/event-visit?eventId=`+ element.id,{
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=utf-8'
+                                    }
+                                })
+                                    // Получаем из ответа JSON
+                                    .then(res => res.json())
+                                    .then(res => {
+                                        console.log(res);
+                                        window.location.reload();
+                                    })
+                                    .catch(error => console.log(error))
+                            }
+                        }
                     })
                 }
                 else {
@@ -119,6 +138,7 @@
                 if (res.length>0){
                     res.forEach(function (element) {
                         $('.items').append(templateEvent(element));
+                        document.getElementById('del-event-img'+element.id).hidden = true;
                     })
                 }
                 else {
@@ -150,6 +170,27 @@
                 if (res.length>0){
                     res.forEach(function (element) {
                         $('.items').append(templateItem(element));
+                        var eventItem = document.getElementById('del-item-img'+element.id);
+                        eventItem.onclick = function (event) {
+                            event.preventDefault();
+                            if (confirm("Вы точно хотите убрать площадку из избранных?")){
+                                fetch(`/api/item-visit?itemId=`+ element.id,{
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=utf-8'
+                                    }
+                                })
+                                    // Получаем из ответа JSON
+                                    .then(res => res.json())
+                                    .then(res => {
+                                    console.log(res);
+                                    window.location.reload();
+                                    })
+                                    .catch(error => console.log(error))
+                            }
+
+
+                        }
                     })
                 }
                 else {

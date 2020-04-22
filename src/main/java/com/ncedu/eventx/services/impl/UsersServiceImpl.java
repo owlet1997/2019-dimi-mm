@@ -42,7 +42,6 @@ public class UsersServiceImpl implements UsersService{
 
     final UserRepository userRepository;
     final RolesRepository rolesRepository;
-    final LobHelper lobHelper;
 
     final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -50,11 +49,9 @@ public class UsersServiceImpl implements UsersService{
 
     public UsersServiceImpl(UserRepository userRepository,
                             RolesRepository rolesRepository,
-                            LobHelper lobHelper,
                             BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
-        this.lobHelper = lobHelper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -77,22 +74,9 @@ public class UsersServiceImpl implements UsersService{
         return usersMapper.toUserForUpdateDTO(userEntity);
     }
 
-//    @Override
-//    public UserForUpdateDTO savePicture(MultipartFile file, String username) throws IOException {
-//        UserEntity userEntity = userRepository.findByUsername(username);
-//
-//        Blob blob = lobHelper.createBlob(file.getInputStream(),file.getSize());
-//        userEntity.setAvatarImg(blob);
-//        userRepository.save(userEntity);
-//
-//        return usersMapper.toUserForUpdateDTO(userEntity);
-//    }
-
     @Override
     public UserForUpdateDTO savePicture(MultipartFile file, String username) throws IOException {
         UserEntity userEntity = userRepository.findByUsername(username);
-
-//        Blob blob = lobHelper.createBlob(file.getInputStream(),file.getSize());
         userEntity.setAvatarImg(DatatypeConverter.printBase64Binary(file.getBytes()));
         userRepository.save(userEntity);
 

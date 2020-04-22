@@ -98,7 +98,7 @@
 
         <script type="text/template" class="templateEvent">
             <div class="item list">
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <div class="wrapper">
                         <h3 class="item-name"><%- item.city.name %></h3>
                         <header class="page-title">
@@ -115,12 +115,19 @@
                         <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
                     </div>
                 </div>
+                <div class="col-md-2">
+                    <div class="wrapper">
+                        <div class="form-group">
+                            <img src="icons/close.png" id="del-event-img<%= item.id %>" alt="Удалить">
+                        </div>
+                    </div>
+                </div>
             </div>
         </script>
 
         <script type="text/template" class="templateItem">
             <div class="item list">
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <div class="wrapper">
                         <a href="/event?id=<%= item.parent.id %>"><h3 class="item-name">Мероприятие: <%- item.parent.name %></h3></a>
                         <header class="page-title">
@@ -130,6 +137,13 @@
                             </div>
                         </header>
                         <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="wrapper">
+                        <div class="form-group">
+                            <img src="icons/close.png" id="del-item-img<%= item.id %>" alt="Удалить">
+                        </div>
                     </div>
                 </div>
             </div>

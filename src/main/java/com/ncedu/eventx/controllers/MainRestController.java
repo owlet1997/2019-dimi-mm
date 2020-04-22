@@ -106,6 +106,14 @@ public class MainRestController {
             return eventsService.getEventWithItemsById(eventId, username);
         }
 
+        @DeleteMapping(value = "/api/events/{eventId}", //
+                produces = {MediaType.APPLICATION_JSON_VALUE
+                })
+        @ResponseBody
+        public boolean deleteEventById ( @PathVariable("eventId") int eventId){
+            return eventsService.deleteEventById(eventId);
+        }
+
         @GetMapping(value = "/api/user/{userId}/events/guest", //
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })

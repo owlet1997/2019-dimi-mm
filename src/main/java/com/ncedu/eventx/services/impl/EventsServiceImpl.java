@@ -140,6 +140,11 @@ public class EventsServiceImpl implements EventsService {
         return eventMapper.toDTO(eventEntity);
     }
 
+    @Override
+    public boolean deleteEventById(int id) {
+        eventRepository.deleteById(id);
+        return true;
+    }
 
     @Override
     public List<EventWithItemsDTO> getEventsBySearchParams(String city, String type, String dateStart) {

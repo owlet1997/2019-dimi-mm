@@ -6,16 +6,14 @@ import com.ncedu.eventx.models.DTO.*;
 
 
 import com.ncedu.eventx.models.entities.*;
-import com.ncedu.eventx.repositories.EventRepository;
-import com.ncedu.eventx.repositories.RolesRepository;
-import com.ncedu.eventx.repositories.UserEventRepository;
-import com.ncedu.eventx.repositories.UserRepository;
+import com.ncedu.eventx.repositories.*;
 import com.ncedu.eventx.services.EventsService;
 import com.ncedu.eventx.services.UserEventService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ncedu.eventx.enums.UserRoleItems.CREATOR;
 import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
@@ -24,18 +22,24 @@ import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
 public class UserEventServiceImpl implements UserEventService {
 
     final UserEventRepository userEventRepository;
+    final UserEventItemRepository userEventItemRepository;
+
     final EventRepository eventRepository;
+    final EventItemRepository eventItemRepository;
     final RolesRepository rolesRepository;
     final UserRepository userRepository;
     final EventsService eventsService;
 
     public UserEventServiceImpl(UserEventRepository userEventRepository,
+                                UserEventItemRepository userEventItemRepository,
                                 EventRepository eventRepository,
-                                RolesRepository rolesRepository,
+                                EventItemRepository eventItemRepository, RolesRepository rolesRepository,
                                 UserRepository userRepository,
                                 EventsService eventsService) {
         this.userEventRepository = userEventRepository;
+        this.userEventItemRepository = userEventItemRepository;
         this.eventRepository = eventRepository;
+        this.eventItemRepository = eventItemRepository;
         this.rolesRepository = rolesRepository;
         this.userRepository = userRepository;
         this.eventsService = eventsService;
@@ -125,9 +129,18 @@ public class UserEventServiceImpl implements UserEventService {
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
         UserEntity userEntity = userRepository.findByUsername(username);
 
-        UserEventKey key = new UserEventKey(eventId, userEntity.getId(),roleEntity.getId());
+        List<EventItemEntity> list = eventItemRepository.findAllByParent(eventRepository.findById(eventId));
 
+        UserEventKey key = new UserEventKey(eventId, userEntity.getId(),roleEntity.getId());
         userEventRepository.deleteById(key);
+        try {
+            List<UserEventItemEntity> itemEntityList = userEventItemRepository.getAllByUserAndRole(userEntity, roleEntity)
+                    .stream().filter(eventItemEntity -> list.contains(eventItemEntity.getItem())).collect(Collectors.toList());
+            itemEntityList.forEach(e -> userEventItemRepository.delete(e));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         return true;
     }
 

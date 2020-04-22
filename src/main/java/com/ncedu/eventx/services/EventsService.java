@@ -15,6 +15,8 @@ public interface EventsService {
 
     List<EventDTO> getEventsList();
 
+    boolean deleteEventById(int id);
+
     List<EventDTO> getEventsByUserId(int userId, String role);
 
     EventWithItemsDTO getEventWithItemsById(int id, String username);

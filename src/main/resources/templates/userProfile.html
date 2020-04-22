@@ -48,6 +48,7 @@
                 <ul class="user-area">
                     <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
                     <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><input type="hidden" value="<%= item.id %>" id="hiddenVisitorId"></li>
                     <li><a href="/logout">Выйти</a></li>
                 </ul>
             </div>
@@ -155,7 +156,7 @@
                                     <input type="password" class="form-control" id="confirm-new-password" name="confirm-password" required>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-default">Изменить пароль</button>
+                                    <button type="submit" class="btn btn-default" id="passwd-submit">Изменить пароль</button>
                                 </div>
                             </form>
                         </div>

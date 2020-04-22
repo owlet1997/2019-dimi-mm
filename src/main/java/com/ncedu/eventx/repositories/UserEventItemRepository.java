@@ -1,9 +1,6 @@
 package com.ncedu.eventx.repositories;
 
-import com.ncedu.eventx.models.entities.EventItemEntity;
-import com.ncedu.eventx.models.entities.UserEntity;
-import com.ncedu.eventx.models.entities.UserEventItemEntity;
-import com.ncedu.eventx.models.entities.UserEventItemKey;
+import com.ncedu.eventx.models.entities.*;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -13,5 +10,7 @@ public interface UserEventItemRepository extends CrudRepository<UserEventItemEnt
     List<UserEventItemEntity> getAllByItem(EventItemEntity eventItemEntity);
 
     List<UserEventItemEntity> getAllByUser(UserEntity userEntity);
+
+    List<UserEventItemEntity> getAllByUserAndRole(UserEntity userEntity, RoleEntity roleEntity);
 
 }
