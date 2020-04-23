@@ -178,13 +178,15 @@ public class WebController {
         usersService.savePicture(file, username);
     }
 
-    @GetMapping(value = "/download", //
+    @GetMapping(value = "/download/{id}", //
             produces = {MediaType.APPLICATION_JSON_VALUE
             })
     @ResponseBody
-    public String downloadImage() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        String avatar = usersService.getUserByUsername(username).getAvatarImg();
+    public String downloadImage(@PathVariable("id") int id) {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        String avatar = usersService.getUserById(id).getAvatarImg();
+//        String avatar = usersService.getUserByUsername(username).getAvatarImg();
         if(avatar == null) {
             return null;
         } else
