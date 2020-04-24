@@ -11,6 +11,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 
 @Controller
@@ -45,6 +51,7 @@ public class WebController {
         this.eventItemService = eventItemService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
 
     @GetMapping("/user")
@@ -61,7 +68,7 @@ public class WebController {
 
     @PutMapping("/user/{id}/change-passwd")
     @ResponseBody
-    public UserForUpdateDTO updatePassword(@RequestBody PasswordChangeDTO user){
+    public UserForUpdateDTO updatePassword(@RequestBody PasswordChangeDTO user) {
         return usersService.updatePassword(user);
     }
 
@@ -70,15 +77,14 @@ public class WebController {
     public ResponseEntity<Integer> updatePicture(@RequestParam MultipartFile file) throws IOException, URISyntaxException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        usersService.savePicture(file,username);
+        usersService.savePicture(file, username);
         return ResponseEntity.created(new URI("http://localhost:8080/blobs/" + file.getOriginalFilename())).build();
     }
 
 
-
     @PutMapping("/user/{id}/update")
     @ResponseBody
-    public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user){
+    public UserForUpdateDTO updateUser(@RequestBody UserForUpdateDTO user) {
         usersService.updateUser(user);
         return usersMapper.toUserForUpdateDTO(usersService.getUserById(user.getId()));
     }
@@ -110,10 +116,10 @@ public class WebController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public UserForUpdateDTO loginPost(@RequestParam String username,@RequestParam String password) {
+    public UserForUpdateDTO loginPost(@RequestParam String username, @RequestParam String password) {
         UserDTO userFromDb = usersService.getUserByUsername(username);
 
-        if(bCryptPasswordEncoder.matches(password,userFromDb.getPassword())){
+        if (bCryptPasswordEncoder.matches(password, userFromDb.getPassword())) {
 
             return usersMapper.toUserForUpdateDTO(userFromDb);
 
@@ -129,8 +135,7 @@ public class WebController {
 
     @PostMapping(value = "/register")
     @ResponseBody
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user)
-    {
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO user) {
         if (user.getPassword().equals(user.getPasswordConfirm())) {
             usersService.createRegisteredUser(user);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -140,7 +145,7 @@ public class WebController {
 
     @PostMapping("/add-event")
     @ResponseBody
-    public EventWithUsersDTO createEvent(@RequestBody EventForCreateDTO event){
+    public EventWithUsersDTO createEvent(@RequestBody EventForCreateDTO event) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println(username);
         EventWithUsersDTO eventWithUsersDTO = userEventService.createEvent(event, username);
@@ -150,10 +155,10 @@ public class WebController {
 
     @PostMapping("/add-event-item")
     @ResponseBody
-    public EventItemDTO createEventElements(@RequestBody EventItemForCreateDTO event){
+    public EventItemDTO createEventElements(@RequestBody EventItemForCreateDTO event) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println(username);
-        EventItemDTO eventItemDTO = userEventItemService.createEventItem(event,username);
+        EventItemDTO eventItemDTO = userEventItemService.createEventItem(event, username);
         System.out.println(eventItemDTO);
         return eventItemDTO;
     }
@@ -161,9 +166,9 @@ public class WebController {
 
     @GetMapping(value = "/check-auth",
             produces = {MediaType.APPLICATION_JSON_VALUE
-    })
+            })
     @ResponseBody
-    public UserDTO isAutentificated(){
+    public UserDTO isAutentificated() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<UserDTO> userDTO = Optional.ofNullable(usersService.getUserByUsername(username));
         System.out.println("В системе пользователь " + userDTO);
@@ -176,19 +181,20 @@ public class WebController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         usersService.savePicture(file, username);
+
     }
 
-    @GetMapping(value = "/download", //
+    @GetMapping(value = "/download/{id}", //
             produces = {MediaType.APPLICATION_JSON_VALUE
             })
     @ResponseBody
-    public String downloadImage() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        String avatar = usersService.getUserByUsername(username).getAvatarImg();
-        if(avatar == null) {
+    public String downloadImage(@PathVariable("id") int id) {
+
+        String avatar = usersService.getUserById(id).getAvatarImg();
+        if (avatar == null) {
             return null;
         } else
-        return (char)34 + "data:image/png;base64," + avatar + (char)34;
+            return (char) 34 + "data:image/png;base64," + avatar + (char) 34;
     }
 
 }
