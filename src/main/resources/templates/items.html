@@ -93,10 +93,19 @@
 
         <script type="text/template" class="templateTitle">
             <li><a href="/user?id=<%= item.id %>"><h1 class="page-title"><%- item.name %></h1></a></li>
-            <li class="active"><a href="/user-items?id=<%= item.id %>"><h1 class="page-title">Мероприятия</h1></a></li>
+            <li class="active"><a href="/user-items?id=<%= item.id %>">
+                <div id="templateTitleClass" class="templateTitleClass">
+                    <h1 class="page-title">Мероприятия</h1>
+                </div>
+            </a></li>
         </script>
 
-        <script type="text/template" class="templateEvent">
+        <script type="text/template" class="templateTitleLine">
+            <h1 class="page-title"><%- item.name %></h1>
+        </script>
+
+
+            <script type="text/template" class="templateEvent">
             <div class="item list">
                 <div class="col-md-10">
                     <div class="wrapper">

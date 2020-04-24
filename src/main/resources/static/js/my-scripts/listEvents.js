@@ -3,7 +3,9 @@ _.templateSettings.variable = 'item';
 var template = _.template(
     $('script.template').html()
 );
-var arr =  { type: "FeatureCollection", features:[]};
+var templateEmpty = _.template(
+    $('script.templateEmpty').html()
+);
 
 fetch(`/api/events/`, {
     method: 'GET',
@@ -13,9 +15,15 @@ fetch(`/api/events/`, {
 })
     .then(res => res.json())
     .then(res => {
-        res.forEach(function (element) {
+        if (res.length>0){
+            res.forEach(function (element) {
             $('.js-events').append(template(element));
-        })
+        })}
+        else{
+            var answer = { name: "Нет мероприятий!"};
+            $('.js-events').append(templateEmpty(answer));
+        }
+
     })
     .catch(error => alert(error));
 

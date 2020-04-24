@@ -7,6 +7,10 @@
         $('script.template').html()
     );
 
+    var templateEmpty = _.template(
+        $('script.templateEmpty').html()
+    );
+
     // Слушаем, когда на форму подпишутся
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -31,14 +35,21 @@
         })
             // Получаем из ответа JSON
             .then(res => res.json())
-            .then(res => {
-                while (container.firstChild) {
+            .then(res =>
+            {
+                if (res.length>0){while (container.firstChild) {
                     container.removeChild(container.firstChild);
                 }
                     res.forEach(function (element) {
                         console.log(element);
                         $('.js-events').append(template(element));
-                    })
+                    })}
+                else{
+                        var answer = { name: "Мероприятия не найдены! Попробуйте изменить параметры запроса"};
+                        $('.js-events').append(templateEmpty(answer));
+                    }
+
+
             })
             // Обрабатываем ошибки с сервера
             .catch(error => alert(error))

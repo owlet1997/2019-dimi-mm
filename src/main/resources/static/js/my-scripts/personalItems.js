@@ -12,6 +12,9 @@
     var templateTitle = _.template(
         $('script.templateTitle').html()
     );
+    var templateTitleLine = _.template(
+        $('script.templateTitleLine').html()
+    );
 
     var templateEmpty = _.template(
         $('script.templateEmpty').html()
@@ -60,7 +63,7 @@
                 })
             }
             else {
-                var answer = { name: "Нет посещенных мероприятий"};
+                var answer = { name: "Нет мероприятий для посещения"};
                 $('.items').append(templateEmpty(answer));
             }
 
@@ -70,6 +73,14 @@
 
     buttonEvents.onclick = function (event) {
         event.preventDefault();
+        var containerTitle = document.getElementById('templateTitleClass');
+
+        while (containerTitle.firstChild) {
+            containerTitle.removeChild(containerTitle.firstChild)
+        }
+        var titleElement = { name: "Мероприятия для посещения"};
+
+        $('.templateTitleClass').append(templateTitleLine(titleElement));
 
         fetch(`/api/user/`+userId+`/events/guest`,{
             method: 'GET',
@@ -120,6 +131,14 @@
 
     buttonEventsCreator.onclick = function (event) {
         event.preventDefault();
+        var containerTitle = document.getElementById('templateTitleClass');
+
+        while (containerTitle.firstChild) {
+            containerTitle.removeChild(containerTitle.firstChild)
+        }
+        var titleElement = { name: "Организованные мероприятия"};
+
+        $('.templateTitleClass').append(templateTitleLine(titleElement));
 
         fetch(`/api/user/`+userId+`/events/creator`,{
             method: 'GET',
@@ -152,6 +171,15 @@
 
     buttonItems.onclick = function (event) {
         event.preventDefault();
+        var containerTitle = document.getElementById('templateTitleClass');
+
+        while (containerTitle.firstChild) {
+            containerTitle.removeChild(containerTitle.firstChild)
+        }
+        var titleElement = { name: "Избранные площадки"};
+
+        $('.templateTitleClass').append(templateTitleLine(titleElement));
+
 
         fetch(`/api/user/`+userId+`/items`,{
             method: 'GET',
@@ -188,8 +216,6 @@
                                     })
                                     .catch(error => console.log(error))
                             }
-
-
                         }
                     })
                 }

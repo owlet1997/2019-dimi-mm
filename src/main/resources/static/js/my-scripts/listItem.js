@@ -34,6 +34,35 @@
             $('.event-header').append(templateEventHeader(res));
             $('.event-body').append(templateEventBody(res));
 
+            var deleteButton = document.getElementById('event-delete'+res.id);
+            var deleteContainer = document.querySelector('.button-container');
+            var owner = document.getElementById('hidden-owner-id').value;
+            console.log("Owner id = " + owner);
+            console.log("Creator id = " + res.creator.id);
+            if (owner==res.creator.id){
+                deleteContainer.hidden = false;
+                deleteButton.onclick = function (event) {
+                    if (confirm("Вы уверены, что хотите удалить событие? Действие нельзя отменить!")){
+                        fetch(`/api/events/`+res.id,{
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8'
+                            }
+                        })
+                            // Получаем из ответа JSON
+                            .then(res => res.json())
+                            .then(res => {
+                                alert("Событие удалено!");
+                                console.log(res);
+                                window.location.assign("/");
+
+                            })
+                            .catch(error => console.log(error))
+                    }
+
+                }
+            }
+
             var items = res["itemsList"];
             console.log(items);
 
