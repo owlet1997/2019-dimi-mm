@@ -4805,7 +4805,7 @@ body.map-fullscreen #map {
 }
 .bootstrap-select.framed .selectpicker {
   border: 2px solid rgba(0, 0, 0, 0.08);
-  background-color: transparent;
+  background-color: white;
 }
 .bootstrap-select.framed .selectpicker:hover {
   background-color: transparent;
@@ -5273,7 +5273,7 @@ form .form-group.large label {
 }
 form .form-group.large input {
   font-size: 16px;
-  padding: 14px 12px;
+  padding: 64px 12px;
 }
 
 .search-bar.horizontal .main-search.narrow {
