@@ -2,8 +2,6 @@ package com.ncedu.eventx.models.DTO;
 
 import lombok.*;
 
-import java.sql.Blob;
-
 @Data
 @Getter
 @Setter
@@ -16,7 +14,5 @@ public class PasswordChangeDTO {
     private String password;
 
     private String newPassword;
-
-    private Blob avatarImg;
 
 }

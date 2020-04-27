@@ -64,9 +64,9 @@
 
         this.regional = []; // Available regional settings, indexed by language code
         this.regional[''] = { // Default regional settings
-            hourText: 'Hour',           // Display text for hours section
-            minuteText: 'Minute',       // Display text for minutes link
-            amPmText: ['AM', 'PM'],     // Display text for AM PM
+            hourText: 'Часы',           // Display text for hours section
+            minuteText: 'Минуты',       // Display text for minutes link
+            amPmText: ['', ''],     // Display text for AM PM
             closeButtonText: 'Done',        // Text for the confirmation button (ok button)
             nowButtonText: 'Now',           // Text for the now button
             deselectButtonText: 'Deselect'  // Text for the deselect button

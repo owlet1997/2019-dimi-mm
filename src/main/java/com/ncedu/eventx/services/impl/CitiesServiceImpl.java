@@ -2,7 +2,6 @@ package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.CitiesMapper;
 import com.ncedu.eventx.models.DTO.CityDTO;
-import com.ncedu.eventx.models.DTO.CityWithEventsDTO;
 import com.ncedu.eventx.models.entities.CityEntity;
 import com.ncedu.eventx.repositories.CitiesRepository;
 import com.ncedu.eventx.services.CitiesService;
@@ -28,10 +27,13 @@ public class CitiesServiceImpl implements CitiesService {
     }
 
     @Override
-    public CityWithEventsDTO getCityWithEventsById(int cityId) {
-       CityEntity cityEntity = citiesRepository.findById(cityId);
-       return citiesMapper.toCityWithEventsDTOs(cityEntity);
+    public List<CityDTO> getCitiesList(String abbrev) {
+        List<CityEntity> cityEntityList = citiesRepository.findAll();
+        CityEntity entity = citiesRepository.findByAbbrev(abbrev);
+        cityEntityList.remove(entity);
+        return citiesMapper.toCitiesDTO(cityEntityList);
     }
+
 
     @Override
     public boolean createCity(CityDTO cityDTO) {

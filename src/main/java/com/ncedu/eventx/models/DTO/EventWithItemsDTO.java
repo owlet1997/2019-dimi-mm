@@ -24,5 +24,6 @@ public class EventWithItemsDTO {
     private UserDTO creator;
     private List<EventItemWithUsersDTO> itemsList;
     private List<UserDTO> visitors;
+    private boolean cancelled;
     private boolean isVisited;
 }

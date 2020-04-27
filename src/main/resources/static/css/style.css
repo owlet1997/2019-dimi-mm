@@ -2921,6 +2921,10 @@ ul.bullets li a:hover {
 .navigation-sidebar li.active a:hover {
   color: #ff513f;
 }
+
+.navigation-sidebar li a::after {
+  background: #ffb29f;
+}
 .navigation-sidebar li.active a:hover i {
   border: 2px solid #ff513f;
 }
@@ -4805,10 +4809,10 @@ body.map-fullscreen #map {
 }
 .bootstrap-select.framed .selectpicker {
   border: 2px solid rgba(0, 0, 0, 0.08);
-  background-color: transparent;
+  background-color: white;
 }
 .bootstrap-select.framed .selectpicker:hover {
-  background-color: transparent;
+  background-color: white;
 }
 .bootstrap-select.framed .bootstrap-select-searchbox input {
   border: none;
@@ -5564,8 +5568,8 @@ input[type="text"]:focus, input[type="text"]:active, input[type="date"]:focus, i
   width: 100%;
 }
 .header .wrapper .brand {
-  display: table-cell;
-  float: left;
+  display: flex;
+  align-items: center;
   vertical-align: middle;
 }
 .header .wrapper .brand a {

@@ -1,7 +1,6 @@
 package com.ncedu.eventx.services;
 
 import com.ncedu.eventx.models.DTO.CityDTO;
-import com.ncedu.eventx.models.DTO.CityWithEventsDTO;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface CitiesService {
 
     List<CityDTO> getCitiesList();
 
-    CityWithEventsDTO getCityWithEventsById(int cityId);
+    List<CityDTO> getCitiesList(String abbrev);
 
     CityDTO getCityByName(String name);
 

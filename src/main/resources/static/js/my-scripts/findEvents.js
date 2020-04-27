@@ -37,14 +37,20 @@
             .then(res => res.json())
             .then(res =>
             {
-                if (res.length>0){while (container.firstChild) {
+                if (res.length>0)
+                {
+                    while (container.firstChild) {
                     container.removeChild(container.firstChild);
-                }
+                    }
                     res.forEach(function (element) {
                         console.log(element);
                         $('.js-events').append(template(element));
-                    })}
+                    })
+                }
                 else{
+                        while (container.firstChild) {
+                            container.removeChild(container.firstChild);
+                        }
                         var answer = { name: "Мероприятия не найдены! Попробуйте изменить параметры запроса"};
                         $('.js-events').append(templateEmpty(answer));
                     }

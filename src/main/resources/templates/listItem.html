@@ -12,12 +12,10 @@
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/head-style.css" type="text/css">
-
     <link rel="stylesheet" href="css/user.style.css" type="text/css">
     <link rel="stylesheet" href="css/scroll-list.css" type="text/css">
 
-
-    <title>Детали события</title>
+    <title>Детали мероприятия</title>
 
 </head>
 
@@ -39,8 +37,15 @@
                     </a>
                 </div>
                 <div class="brand">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск событий</button>
+                    </a>
+                </div>
+                <div class="brand">
                     <nav class="navigation-items">
-                        <div class="navigation nav-header"></div>
+                        <div class="navigation nav-header">
+
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -68,27 +73,40 @@
 
         <script type="text/template" class="templateEventTitle">
             <header class="page-title">
-                <div class="col-md-10">
+                <div class="col-md-8">
                     <div class="title">
-                        <h1>Мероприятие: <%- item.name %></h1>
-                        <figure>Адрес: <%- item.address %></figure>
-                        <figure>Тип мероприятия: <%- item.type.type %></figure>
+                        <% if (isCancelled(item.cancelled)!="") { %>
+                        <h1 style="color: darkred;
+                                   padding-bottom: 10px;">
+                            <%- isCancelled(item.cancelled) %></h1>
+                        <h2>Мероприятие: <%- item.name %></h2>
+                        <% } else { %>
+                        <h1><%- item.name %></h1>
+                        <% } %>
+                        <figure><strong>Адрес:</strong> <%- item.address %></figure>
+                        <figure><strong>Тип мероприятия:</strong> <%- item.type.type %></figure>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="button-container-cancel" hidden>
+                        <button class="btn btn-default" id="event-cancel<%= item.id %>"><%- buttonCancelled(item.cancelled) %></button>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="button-container" hidden>
-                        <button class="btn btn-default" id="event-delete<%= item.id %>">Удалить событие</button>
+                        <button class="btn btn-default" id="event-delete<%= item.id %>">Удалить мероприятие</button>
                     </div>
                 </div>
-
             </header>
         </script>
 
         <script type="text/template" class="templateEventSidebar">
             <aside class="col-md-4 col-sm-4" id="detail-sidebar">
-
                 <section>
                     <header><h3>Контакты организатора</h3></header>
+                        <div id="profile-picture" class="profile-picture dropzone">
+                            <img name="profile_pic" src="<%=  getImage() %>" alt="здесь должна быть картинка" id="profile-pic">
+                        </div>
                     <address>
                         <div><%- item.creator.name %></div>
                         <div><strong><%- item.creator.organizationName %></strong></div>
@@ -100,12 +118,16 @@
                             </div>
                         </figure>
                     </address>
+                    <div class="button-update-container" hidden>
+                       <a href="/update-event?id=<%=item.id %>"><button class="btn btn-default">Редактировать мероприятие</button></a>
+                    </div>
                 </section>
 
             </aside>
         </script>
 
         <script type="text/template" class="templateEventHeader">
+            <div class="col-md-12" style="background: white">
             <div class="col-md-8">
                 <header>
                     <h3>Дата начала</h3>
@@ -120,7 +142,16 @@
                     <p><%- item.description  %></p>
                 </header>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" style="padding-left: 10px">
+                <div class="form-group">
+                    <header>
+                        <% if (_.size(item.visitors)>0) { %>
+                        <h3>Количество посетителей: <%- _.size(item.visitors) %></h3>
+                        <% } else { %>
+                        <h3>Стань первым посетителем!</h3>
+                        <% } %>
+                    </header>
+                </div>
                 <div class="form-group eventVisit">
                     <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
                         <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
@@ -128,6 +159,7 @@
                         <input type="submit" class="btn btn-default" id="item-visited" value="<%= visitEvent(item.visited) %>">
                     </form>
                 </div>
+            </div>
             </div>
         </script>
 
@@ -147,8 +179,12 @@
                 <div class="col-md-9">
                     <div class="wrapper">
                         <h3 id="name" class="item-name"><%- listItem.eventItem.name %></h3>
-                        <figure id="auditory"><%- listItem.eventItem.auditory  %></figure>
-                        <figure id="timeStart"><%- _.identity(dateWrite(listItem.eventItem.timeStart)) %></figure>
+                        <h5 id="auditory"><b>Ориентир:</b> <%- listItem.eventItem.auditory  %></h5>
+                        <h5 id="timeStart"><b>Время начала:</b> <%- _.identity(dateWrite(listItem.eventItem.timeStart)) %></h5>
+                        <% if (!_.isEmpty(listItem.eventItem.description)) { %>
+                        <h5 id="descr"><b>Описание:</b> <%- listItem.eventItem.description  %></h5>
+                        <% } %>
+                        <h3 id="speaker" class="item-name">Спикер: <%- listItem.speaker.name %></h3>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -249,19 +285,22 @@
 </div>
 
 
-<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="js/before.load.js"></script>
-<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/base/before.load.js"></script>
+<script type="text/javascript" src="js/base/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
-<script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/base/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/base/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/base/custom.js"></script>
+<script type="text/javascript" src="js/base/moment.js"></script>
+<script type="text/javascript" src="js/base/underscore.js"></script>
 <script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
 <script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 <script type="text/javascript" src="js/my-scripts/buttonClassVisitEvent.js"></script>
 <script type="text/javascript" src="js/my-scripts/listItem.js"></script>
+<script type="text/javascript" src="js/my-scripts/getImg.js"></script>
+<!--<script type="text/javascript" src="js/my-scripts/userPictureDownload.js"></script>-->
+
 
 </body>
 </html>

@@ -10,6 +10,6 @@ public interface EventTypeService {
 
     List<EventTypeDTO> getAllEventTypes();
 
-    EventTypeDTO getEventTypeByName(String name);
+    List<EventTypeDTO> getAllEventTypes(int id);
 
 }

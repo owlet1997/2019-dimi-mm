@@ -1,6 +1,7 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.*;
+import com.ncedu.eventx.enums.UserRoleItems;
 import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
@@ -15,8 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ncedu.eventx.enums.UserRoleItems.CREATOR;
-import static com.ncedu.eventx.enums.UserRoleItems.VISITOR;
+import static com.ncedu.eventx.enums.UserRoleItems.*;
 
 @Service
 public class EventsServiceImpl implements EventsService {
@@ -32,6 +32,8 @@ public class EventsServiceImpl implements EventsService {
     final CoordinatesService coordinatesService;
     final UserRepository userRepository;
     final EventItemService eventItemService;
+    final EventItemRepository eventItemRepository;
+    final UserEventItemRepository userEventItemRepository;
 
     EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
@@ -43,7 +45,9 @@ public class EventsServiceImpl implements EventsService {
                              RolesRepository rolesRepository,
                              UserEventRepository userEventRepository,
                              CoordinatesService coordinatesService,
-                             UserRepository userRepository, EventItemService eventItemService) {
+                             UserRepository userRepository,
+                             EventItemService eventItemService,
+                             EventItemRepository eventItemRepository, UserEventItemRepository userEventItemRepository) {
         this.eventRepository = eventRepository;
         this.citiesRepository = citiesRepository;
         this.eventTypeRepository = eventTypeRepository;
@@ -52,6 +56,8 @@ public class EventsServiceImpl implements EventsService {
         this.coordinatesService = coordinatesService;
         this.userRepository = userRepository;
         this.eventItemService = eventItemService;
+        this.eventItemRepository = eventItemRepository;
+        this.userEventItemRepository = userEventItemRepository;
     }
 
     @Override
@@ -85,13 +91,17 @@ public class EventsServiceImpl implements EventsService {
         eventRepository.save(eventEntity);
 
         return eventEntity;
-
     }
 
     @Override
-    public List<EventDTO> getEventsList() {
-        List<EventEntity> list = eventRepository.findAll();
-        return eventMapper.toListDTO(list);
+    public EventForUpdateDTO updateEventById(EventForUpdateDTO event) {
+        EventEntity eventEntity = eventRepository.findById(event.getId());
+        eventEntity.setCity(citiesRepository.findByAbbrev(event.getCity()));
+        eventEntity.setType(eventTypeRepository.findById(event.getType()));
+        eventEntity.setDescription(event.getDescription());
+        eventRepository.save(eventEntity);
+
+        return event;
     }
 
     @Override
@@ -128,16 +138,12 @@ public class EventsServiceImpl implements EventsService {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY,0);
         Date now = today.getTime();
-        List<EventEntity> list = userEventEntityList.stream().filter(e -> e.getRole().equals(roleEntity)).map(UserEventEntity::getEvent).filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart()
-                .after(now)).sorted(Comparator.comparing(EventEntity::getTimeStart)).collect(Collectors.toList());
+        List<EventEntity> list = userEventEntityList.stream()
+                .filter(e -> e.getRole().equals(roleEntity))
+                .map(UserEventEntity::getEvent).filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now))
+                .sorted(Comparator.comparing(EventEntity::getTimeStart)).collect(Collectors.toList());
 
         return eventMapper.toListDTO(list);
-    }
-
-    @Override
-    public EventDTO getEventById(int id) {
-        EventEntity eventEntity = eventRepository.findById(id);
-        return eventMapper.toDTO(eventEntity);
     }
 
     @Override
@@ -163,7 +169,6 @@ public class EventsServiceImpl implements EventsService {
                 e.printStackTrace();
             }
         }
-
         int typeId = 0;
         if (!isTypeEmpty) typeId = Integer.parseInt(type);
 
@@ -176,43 +181,28 @@ public class EventsServiceImpl implements EventsService {
         builder.append(isDateStartEmpty ? "1":"0");
 
         switch (builder.toString()){
-            // все 3 параметра не пустые
             case "000": typeEntity = eventTypeRepository.findById(typeId);
                         cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByTypeAndCityAndTimeStart(typeEntity,cityEntity,date);
                         break;
-
-                // пустая дата
             case "001": typeEntity = eventTypeRepository.findById(typeId);
                         cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByTypeAndCity(typeEntity,cityEntity);
                         break;
-
-            // пустой тип
             case "010": cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByCityAndTimeStart(cityEntity, date);
                 break;
-
-            // пустой город
             case "100": typeEntity = eventTypeRepository.findById(typeId);
                         eventEntityList = eventRepository.findAllByTypeAndTimeStart(typeEntity,date);
                 break;
-
-            // пустой тип и пустая дата
             case "011": cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByCity(cityEntity);
                 break;
-
-            // пустой город и дата
             case "101": typeEntity = eventTypeRepository.findById(typeId);
                         eventEntityList = eventRepository.findAllByType(typeEntity);
                 break;
-
-            // пустой город и пустой тип
             case "110": eventEntityList = eventRepository.findAllByTimeStart(date);
                 break;
-
-            // все пустые
             case "111": eventEntityList = eventRepository.findAll();
                 break;
         }
@@ -248,24 +238,11 @@ public class EventsServiceImpl implements EventsService {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY,0);
         Date now = today.getTime();
-        return withItemsDTOList.stream().filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now)).sorted(Comparator.comparing(EventWithItemsDTO::getTimeStart)).collect(Collectors.toList());
-    }
-
-    @Override
-    public EventWithUsersDTO getEventWithUsers(int id) {
-        EventEntity eventEntity = eventRepository.findById(id);
-
-        RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
-
-        List<UserEventEntity> list = userEventRepository.findAllByEvent(eventEntity);
-
-        UserEntity creator = list.stream()
-                .filter(e -> e.getRole().equals(userRoleCreator))
-                .map(UserEventEntity::getUser).findFirst().get();
-        EventWithUsersDTO event = eventMapper.toEventWithUsersDTO(eventEntity);
-        event.setCreator(usersMapper.toDTO(creator));
-
-        return event;
+        return withItemsDTOList.stream()
+                .filter(eventWithItemsDTO -> !eventWithItemsDTO.isCancelled())
+                .filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now))
+                .sorted(Comparator.comparing(EventWithItemsDTO::getTimeStart))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -283,5 +260,23 @@ public class EventsServiceImpl implements EventsService {
         List<EventEntity> result = eventEntityList.stream().limit(3).collect(Collectors.toList());
 
         return eventMapper.toListDTO(result);
+    }
+
+    @Override
+    public boolean cancelEventById(int eventId) {
+        EventEntity eventEntity = eventRepository.findById(eventId);
+        if (!eventEntity.isCancelled()) {
+            RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
+            eventEntity.setCancelled(true);
+            userEventRepository.deleteAllByEventAndRole(eventEntity,roleEntity);
+            List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
+            for (EventItemEntity e: list) {
+                userEventItemRepository.deleteAllByItemAndRole(e, roleEntity);
+            }
+        } else {
+            eventEntity.setCancelled(false);
+        }
+        eventRepository.save(eventEntity);
+        return true;
     }
 }

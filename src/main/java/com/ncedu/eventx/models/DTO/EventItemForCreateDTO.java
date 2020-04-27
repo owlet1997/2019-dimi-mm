@@ -15,6 +15,7 @@ public class EventItemForCreateDTO {
     private int speaker;
     private String name;
     private String auditory;
+    private String description;
     private String dateStart;
     private String timeStart;
 }

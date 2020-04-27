@@ -12,13 +12,11 @@ import org.locationtech.jts.geom.Point;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityDTO {
+public class EventForUpdateDTO {
 
     private int id;
-    private String abbrev;
+    private String city;
     private String name;
-    @JsonSerialize(using = PointToJsonSerializer.class)
-    @JsonDeserialize(using = JsonToPointDeserializer.class)
-    private Point point;
-
+    private int type;
+    private String description;
 }

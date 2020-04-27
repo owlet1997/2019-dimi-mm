@@ -47,30 +47,6 @@ public class UserEventServiceImpl implements UserEventService {
 
     EventMapper eventMapper = Mappers.getMapper(EventMapper.class);
     UsersMapper usersMapper = Mappers.getMapper(UsersMapper.class);
-    @Override
-    public List<UserEventEntity> getAllList() {
-        return userEventRepository.findAll();
-    }
-
-    @Override
-    public List<UserEventEntity> getAllByEvent(EventDTO eventDTO) {
-        EventEntity entity = eventRepository.findById(eventDTO.getId());
-        return userEventRepository.findAllByEvent(entity);
-    }
-
-    @Override
-
-    public List<UserEventEntity> getAllByRole(RoleDTO roleDTO) {
-        RoleEntity entity = rolesRepository.findByName(roleDTO.getName());
-
-        return userEventRepository.findAllByRole(entity);
-    }
-
-    @Override
-    public List<UserEventEntity> getAllByUser(UserDTO userDTO) {
-        UserEntity entity = userRepository.findById(userDTO.getId());
-        return userEventRepository.findAllByUser(entity);
-    }
 
     @Override
     public EventWithUsersDTO createEvent(EventForCreateDTO createDTO, String username) {

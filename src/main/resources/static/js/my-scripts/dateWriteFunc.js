@@ -18,3 +18,26 @@ function dateWrite(varDate) {
     }
     return date + " в " + itemDate.format('HH:mm');
 }
+
+function getDate(varDate) {
+    var itemDate = moment(varDate);
+    itemDate.lang('ru');
+    var date = new Date(itemDate.getFullYear(),itemDate.getMonth(),itemDate.getDate());
+    return date;
+}
+
+function getTime(varDate) {
+    var itemDate = moment(varDate);
+    itemDate.lang('ru');
+    var date = new('HH:mm');
+    return date;
+}
+
+function getCoord(varCoord) {
+    var coordinates = {};
+    coordinates[0] = (varCoord.split(",")[1]);
+    coordinates[1] = (varCoord.split(",")[0]);
+    console.log(coordinates)
+    return coordinates;
+
+}

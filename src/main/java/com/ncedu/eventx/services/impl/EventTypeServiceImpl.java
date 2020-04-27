@@ -36,10 +36,11 @@ public class EventTypeServiceImpl implements EventTypeService {
     }
 
     @Override
-    public EventTypeDTO getEventTypeByName(String name) {
-        EventTypeEntity eventTypeEntity = eventTypeRepository.findByType(name);
-        return eventTypesMapper.toEventTypeDTO(eventTypeEntity);
+    public List<EventTypeDTO> getAllEventTypes(int id) {
+        List<EventTypeEntity> entityList = eventTypeRepository.findAll();
+        EventTypeEntity entity = eventTypeRepository.findById(id);
+        entityList.remove(entity);
+        return eventTypesMapper.getEventTypeDTOs(entityList);
+
     }
-
-
 }

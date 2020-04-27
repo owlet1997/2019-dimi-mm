@@ -16,5 +16,6 @@ public class EventItemDTO {
     private String name;
     private String auditory;
     private Date timeStart;
+    private String description;
 
 }

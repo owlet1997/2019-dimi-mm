@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventItemWithUsersDTO {
+
     EventItemDTO eventItem;
     UserDTO speaker;
     boolean isFeatured;

@@ -35,6 +35,11 @@
                     </a>
                 </div>
                 <div class="brand">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск событий</button>
+                    </a>
+                </div>
+                <div class="brand">
                     <nav class="navigation-items">
                         <div class="navigation nav-header">
 
@@ -91,8 +96,8 @@
                                 </section>
                                 <section>
                                     <div class="form-group large">
-                                        <label for="title">Описание</label>
-                                        <input type="text" class="form-control" id="description" name="description" required>
+                                        <label for="description">Описание</label>
+                                        <textarea class="form-control" id="description" name="description" rows="10" required></textarea>
                                         <input id="hidden-address" name="address" class="form-address" type="hidden" value="">
                                         <input id="hidden-coords" name="coord" class="form-coord" type="hidden" value="">
                                     </div>
@@ -111,14 +116,14 @@
                                                     <td class="day-name">День начала</td>
                                                     <td class="from">
                                                         <input name="dateStart" type="date" class="form-control" id="dateStart" required>
-                                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>
+                                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="Время начала" required>
                                                     </td>
                                                 </tr>
                                                 <tr class="day">
                                                     <td class="day-name">День окончания</td>
                                                     <td class="to">
                                                         <input name="dateEnd" type="date" class="form-control" id="dateEnd" required>
-                                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" required>
+                                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="Время окончания" required>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -149,7 +154,7 @@
                                 </section>
                                 <section>
                                     <div class="form-group large">
-                                        <label for="auditoryItem">Аудитория</label>
+                                        <label for="auditoryItem">Место проведения (аудитория, кабинет, ориентир)</label>
                                         <input type="text" class="form-control" id="auditoryItem" name="auditory" required>
                                     </div>
                                 </section>
@@ -163,7 +168,7 @@
                                                         <td class="day-name">День начала</td>
                                                         <td class="from">
                                                             <input name="dateStart" type="date" class="form-control" id="dateStartItem" required>
-                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>
+                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="Время начала" required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -178,6 +183,10 @@
                                             <option value="" selected>Спикер не выбран</option>
                                         </select>
                                     </div>
+                                </section>
+                                <section>
+                                    <label for="description">Описание</label>
+                                    <textarea class="form-control" id="descr" name="description" rows="6"></textarea>
                                 </section>
                                 <section>
                                     <div class="form-group">
@@ -344,17 +353,17 @@
 <script>
 
 </script>
-<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="js/icheck.min.js"></script>
-<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
-<script type="text/javascript" src="js/jquery.ui.timepicker.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
-<script type="text/javascript" src="js/underscore.js"></script>
-<script type="text/javascript" src="js/moment.js"></script>
+<script type="text/javascript" src="js/base/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/base/icheck.min.js"></script>
+<script type="text/javascript" src="js/base/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/base/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="js/base/custom.js"></script>
+<script type="text/javascript" src="js/base/underscore.js"></script>
+<script type="text/javascript" src="js/base/moment.js"></script>
 
 <script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
 <script type="text/javascript" src="js/my-scripts/addEventMap.js"></script>

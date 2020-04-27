@@ -13,4 +13,6 @@ public interface UserEventItemRepository extends CrudRepository<UserEventItemEnt
 
     List<UserEventItemEntity> getAllByUserAndRole(UserEntity userEntity, RoleEntity roleEntity);
 
+    boolean deleteAllByItemAndRole(EventItemEntity eventItemEntity, RoleEntity roleEntity);
+
 }

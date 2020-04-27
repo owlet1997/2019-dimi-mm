@@ -81,13 +81,6 @@ public class EventItemServiceImpl implements EventItemService {
         return withUsersDTOList;
     }
 
-    @Override
-    public List<EventItemDTO> getEventItemListByParent(int id){
-        EventEntity eventEntity = eventRepository.findById(id);
-        List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
-        return eventItemMapper.toListDTO(list);
-    }
-
     public List<EventItemDTO> getItemsByUser(int userId) {
         UserEntity userEntity = userRepository.findById(userId);
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
@@ -132,5 +125,9 @@ public class EventItemServiceImpl implements EventItemService {
                 usersMapper.toUserDTOList(usersList));
     }
 
-
+    @Override
+    public boolean deleteItemById(int id) {
+        eventItemRepository.deleteById(id);
+        return true;
+    }
 }

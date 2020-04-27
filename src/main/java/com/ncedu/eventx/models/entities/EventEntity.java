@@ -62,4 +62,6 @@ public class EventEntity implements Serializable {
     @Column(name = "time_end", nullable = false)
     private Date timeEnd;
 
+    @Column(nullable = false)
+    private boolean cancelled;
 }

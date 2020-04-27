@@ -36,6 +36,9 @@ public class EventItemEntity {
     @Column(nullable = false)
     private String auditory;
 
+    @Column(nullable = false)
+    private String description;
+
     @OneToMany(mappedBy = "item")
     List<UserEventItemEntity> userEventItems = new ArrayList<>();
 

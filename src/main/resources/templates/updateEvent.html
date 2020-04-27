@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery.ui.timepicker.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/head-style.css" type="text/css">
+    <link rel="stylesheet" href="css/user.style.css" type="text/css">
+
+    <title>Редактировать мероприятие</title>
+
+</head>
+
+<body onunload="" class="page-subpage page-submit navigation-off-canvas" id="page-top">
+
+<div id="outer-wrapper">
+    <div id="inner-wrapper">
+        <div class="header">
+            <div class="wrapper top-event-header">
+                <div class="brand my-header">
+                    <a href="/">
+                        <img src="icons/logo.png" alt="logo" height="64px">
+                        <img src="icons/text.png" alt="logo" height="30px">
+                    </a>
+                </div>
+                <div class="brand my-header">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить событие</button>
+                    </a>
+                </div>
+                <div class="brand my-header">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск событий</button>
+                    </a>
+                </div>
+                <div class="brand my-header">
+                    <nav class="navigation-items">
+                        <div class="navigation nav-header"></div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/template" class="templateHeaderAuth">
+            <div class="wrapper">
+                <ul class="user-area">
+                    <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
+                    <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateHeaderUnauth">
+            <div class="wrapper">
+                <ul class="user-area header-wrapper">
+                    <li><a href="/login">Войти</a></li>
+                    <li><a href="/register"><strong>Регистрация</strong></a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateEventForm">
+                <section>
+                    <div class="form-group large">
+                        <label for="title">Название</label>
+                        <input type="text" class="form-control" id="title" name="name" value="<%= item.name %>" required>
+                    </div>
+                </section>
+                <section>
+                    <h3>Детали события</h3>
+                    <div class="form-group large" style="padding-left: 15px">
+                        <div class="row">
+                            <div class="col-md-6" >
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="city">Город</label>
+                                        <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true" required>
+                                            <option value="<%= item.city.abbrev %>" selected><%- item.city.name %></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="type">Тип</label>
+                                        <select class="framed js-event-types" id="type" name="type" title="Тип" data-live-search="true" required>
+                                            <option value="<%= item.type.id %>" selected><%- item.type.type %></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="form-group large">
+                        <label for="description">Описание</label>
+                        <textarea class="form-control" id="description" name="description" rows="10" required><%- item.description %></textarea>
+<!--                        <input id="hidden-address" name="address" class="form-address" type="hidden" value="<%= item.address %>">-->
+<!--                        <input id="hidden-coords" name="coord" class="form-coord" type="hidden" value="<%= item.coord %>">-->
+                    </div>
+                </section>
+<!--                <section>-->
+<!--                    <h3>Укажите событие на карте</h3>-->
+<!--                    <div id="map"></div>-->
+<!--                </section>-->
+<!--                <section>-->
+<!--                    <h3>Укажите время события</h3>-->
+<!--                    <div class="opening-hours">-->
+<!--                        <div class="table-responsive">-->
+<!--                            <table class="table">-->
+<!--                                <tbody>-->
+<!--                                <tr class="day">-->
+<!--                                    <td class="day-name">День начала</td>-->
+<!--                                    <td class="from">-->
+<!--                                        <input name="dateStart" type="date" class="form-control" id="dateStart" required>-->
+<!--                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                <tr class="day">-->
+<!--                                    <td class="day-name">День окончания</td>-->
+<!--                                    <td class="to">-->
+<!--                                        <input name="dateEnd" type="date" class="form-control" id="dateEnd" required>-->
+<!--                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" required>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </section>-->
+                <section>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default pull-right" id="submit">Сохранить изменения</button>
+                    </div>
+                </section>
+        </script>
+
+        <div id="page-canvas">
+            <div id="page-content">
+                <section class="container">
+                    <div class="row">
+
+                        <div class="col-md-9" id="add-event-container">
+                            <div class="add-event" id="add-event">
+                                <header>
+                                    <h1 class="page-title">Редактировать мероприятие</h1>
+                                </header>
+                                <form class="form-container" name="updateevent" role="form" method="post" action="?" enctype="multipart/form-data">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-9 event-items" id="event-items">
+                            <header>
+                                <h1 class="page-title">Площадки мероприятия</h1>
+                            </header>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="add-item-event" id="add-item-event">
+                                <header>
+                                    <h1 class="page-title">Добавить площадку</h1>
+                                </header>
+                                <form name="additem" id="additem" role="form" method="post" action="?" enctype="multipart/form-data">
+                                    <input type="hidden" class="form-control" id="hiddenId" name="parent" value="">
+                                    <section>
+                                        <div class="form-group large">
+                                            <label for="titleItem">Название</label>
+                                            <input type="text" class="form-control" id="titleItem" name="name" required>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <div class="form-group large">
+                                            <label for="auditoryItem">Место проведения (аудитория, кабинет, ориентир)</label>
+                                            <input type="text" class="form-control" id="auditoryItem" name="auditory" required>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <h3>Укажите время начала</h3>
+                                        <div class="opening-hours">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr class="day">
+                                                        <td class="day-name">День начала</td>
+                                                        <td class="from">
+                                                            <input name="dateStart" type="date" class="form-control" id="dateStartItem" required>
+                                                            <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <label for="speaker">Выберите спикера</label>
+                                        <div class="form-group">
+                                            <select id="speaker" class="framed js-speaker" name="speaker" title="Спикер" data-live-search="true" required>
+                                                <option value="" selected>Спикер не выбран</option>
+                                            </select>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <label for="description">Описание</label>
+                                        <textarea class="form-control" id="descr" name="description" rows="6"></textarea>
+                                    </section>
+                                    <section>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-default pull-right" id="add-item-button">Добавить элемент события</button>
+                                        </div>
+                                    </section>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <script type="text/template" class="items-list-template">
+            <div class="block-header">
+                <div class="col-md-12 event-body">
+                    <div class="item list">
+                        <div class="col-md-10">
+                            <div class="wrapper">
+                                <h3 id="name" class="item-name"><%- item.eventItem.name %></h3>
+                                <figure id="auditory"><%- item.eventItem.auditory  %></figure>
+                                <figure id="timeStart"><%- _.identity(dateWrite(item.eventItem.timeStart)) %></figure>
+                                <% if (!_.isEmpty(item.eventItem.description)) { %>
+                                <figure><%- item.eventItem.description %></figure>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="wrapper">
+                                <div class="form-group">
+                                    <img src="icons/close.png" id="del-item-img<%= item.eventItem.id %>" alt="Удалить" width="32px" height="32px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <footer id="page-footer">
+            <div class="inner">
+                <div class="footer-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>About Us</h2>
+                                    <address>
+                                        <div>Группа DEV-2</div>
+                                        <div>DIMI-MM</div>
+                                    </address>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Об авторах</h2>
+                                    <figure>
+                                        <div class="info">
+                                            <span>Шаталова Надежда</span>
+                                        </div>
+                                        <div class="info">
+                                            <span>Таиров Александр</span>
+                                        </div>
+                                    </figure>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Вот здесь нас нет</h2>
+                                    <div class="social">
+                                        <a href="#" class="social-button"><i class="fa fa-twitter"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="container">
+                        <span class="left">(C) EventX, NetCracker, 2020.</span>
+                        <span class="right">
+                           <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=d0d09cfa-6955-4a10-acbc-8a964c4fef39" type="text/javascript"></script>
+<script>
+
+</script>
+<script type="text/javascript" src="js/base/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/base/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/base/icheck.min.js"></script>
+<script type="text/javascript" src="js/base/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/base/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="js/base/custom.js"></script>
+<script type="text/javascript" src="js/base/underscore.js"></script>
+<script type="text/javascript" src="js/base/moment.js"></script>
+
+<script type="text/javascript" src="js/my-scripts/updateEvent.js"></script>
+<!--<script type="text/javascript" src="js/my-scripts/updateEventMap.js"></script>-->
+<script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
+<script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
+
+
+</body>
+</html>

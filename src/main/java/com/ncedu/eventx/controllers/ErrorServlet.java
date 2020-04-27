@@ -1,19 +1,24 @@
 package com.ncedu.eventx.controllers;
 
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class ErrorServlet {
+public class ErrorServlet implements ErrorController
+{
+    private static final String ERROR_MAPPING = "/error";
 
-    @GetMapping(value = "/error")
-    public String renderErrorPage() {
+    @RequestMapping(value = ERROR_MAPPING)
+    public String error() {
         return "404";
+    }
+
+    @Override
+    public String getErrorPath() {
+        return ERROR_MAPPING;
     }
 
 }
