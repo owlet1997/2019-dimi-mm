@@ -104,9 +104,11 @@
             <aside class="col-md-4 col-sm-4" id="detail-sidebar">
                 <section>
                     <header><h3>Контакты организатора</h3></header>
-                        <div id="profile-picture" class="profile-picture dropzone">
-                            <img name="profile_pic" src="<%=  getImage() %>" alt="здесь должна быть картинка" id="profile-pic">
-                        </div>
+
+                    <div>
+                        <img name="profile_pic" src="data:image/png;base64,<%- item.creator.avatarImg %>" alt="" id="profile_pic">
+                    </div>
+
                     <address>
                         <div><%- item.creator.name %></div>
                         <div><strong><%- item.creator.organizationName %></strong></div>
