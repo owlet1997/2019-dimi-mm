@@ -5,6 +5,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
@@ -104,9 +105,6 @@
             <aside class="col-md-4 col-sm-4" id="detail-sidebar">
                 <section>
                     <header><h3>Контакты организатора</h3></header>
-<!--                        <div id="profile-picture" class="profile-picture dropzone">-->
-<!--                            <img name="profile_pic" src="data:image/png;base64,<%= item.creator.avatarImg %>" alt="здесь должна быть картинка" id="profile-pic" width="300px">-->
-<!--                        </div>-->
                     <address>
                         <div><%- item.creator.name %></div>
                         <div><strong><%- item.creator.organizationName %></strong></div>
@@ -118,7 +116,9 @@
                             </div>
                         </figure>
                     </address>
-
+                    <div class="button-update-container" hidden>
+                       <a href="/update-event?id=<%=item.id %>"><button class="btn btn-default">Редактировать мероприятие</button></a>
+                    </div>
                 </section>
 
             </aside>
@@ -126,34 +126,38 @@
 
         <script type="text/template" class="templateEventHeader">
             <div class="col-md-12" style="background: white">
-                <div class="col-md-7">
+            <div class="col-md-8">
+                <header>
+                    <h3>Дата начала</h3>
+                    <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
+                </header>
+                <header>
+                    <h3>Дата окончания</h3>
+                    <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
+                </header>
+                <header>
+                    <h3>Описание</h3>
+                    <p><%- item.description  %></p>
+                </header>
+            </div>
+            <div class="col-md-4" style="padding-left: 10px">
+                <div class="form-group">
                     <header>
-                        <h3>Дата начала</h3>
-                        <p><%-  _.identity(dateWrite(item.timeStart)) %></p>
-                    </header>
-                    <header>
-                        <h3>Дата окончания</h3>
-                        <p><%-  _.identity(dateWrite(item.timeEnd))  %></p>
+                        <% if (_.size(item.visitors)>0) { %>
+                        <h3>Количество посетителей: <%- _.size(item.visitors) %></h3>
+                        <% } else { %>
+                        <h3>Стань первым посетителем!</h3>
+                        <% } %>
                     </header>
                 </div>
-                <div class="col-md-5" style="padding-left: 10px">
-                    <div class="form-group">
-                        <header>
-                            <% if (_.size(item.visitors)>0) { %>
-                            <h3>Количество посетителей: <%- _.size(item.visitors) %></h3>
-                            <% } else if (!item.cancelled) { %>
-                            <h3>Стань первым посетителем!</h3>
-                            <% } %>
-                        </header>
-                    </div>
-                    <div class="form-group eventVisit">
-                        <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
-                            <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
-                            <input id="hidden-event-id" name="eventId" class="userId" type="hidden" value="<%= item.id %>">
-                            <input type="submit" class="btn btn-default" id="item-visited" value="<%= visitEvent(item.visited) %>">
-                        </form>
-                    </div>
+                <div class="form-group eventVisit">
+                    <form name="visitevent" id="visitevent" role="form" method="post" action="?" >
+                        <input id="hidden-user-id" name="userId" class="userId" type="hidden" value="">
+                        <input id="hidden-event-id" name="eventId" class="userId" type="hidden" value="<%= item.id %>">
+                        <input type="submit" class="btn btn-default" id="item-visited" value="<%= visitEvent(item.visited) %>">
+                    </form>
                 </div>
+            </div>
             </div>
             <div class="col-md-12" style="background: white">
                 <header>
@@ -194,6 +198,7 @@
                                 <input id="hidden-user-featur-id<%= listItem.eventItem.id %>" name="userId" class="userId" type="hidden" value="">
                                 <input id="hidden-item-id<%= listItem.eventItem.id %>" name="itemId" class="itemId" type="hidden" value="<%= listItem.eventItem.id %>">
                                 <input type="image" src="<%= visitItem(listItem.featured) %>" id="item-featured<%= listItem.eventItem.id %>" alt="Щелкни меня!">                            </form>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -297,6 +302,9 @@
 <script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 <script type="text/javascript" src="js/my-scripts/buttonClassVisitEvent.js"></script>
 <script type="text/javascript" src="js/my-scripts/listItem.js"></script>
+
+<!--<script type="text/javascript" src="js/my-scripts/userPictureDownload.js"></script>-->
+
 
 </body>
 </html>
