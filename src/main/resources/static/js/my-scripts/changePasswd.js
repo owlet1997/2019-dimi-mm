@@ -1,5 +1,4 @@
 const form = document.forms.changepassword;
-const pictureForm = document.forms.picture;
 
 var newPasswd = document.getElementById("confirm-new-password");
 
@@ -55,26 +54,4 @@ id.value = window.location.search.split("=")[1];
         }
 })
 
-    pictureForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    var input = $("#uploadimage");
-    const fd = new FormData();
 
-    fd.append('img', input.prop('files')[0]);
-    console.log(fd);
-    fetch(`/user/`+ id.value + `/add-picture`,{
-        method: 'PUT',
-        body: fd
-    })
-        // Получаем из ответа JSON
-        .then(res => res.json())
-        .then(res => {
-            console.log(JSON.stringify(res));
-            alert("Картинка изменена успешно!");
-        })
-        // Обрабатываем ошибки с сервера
-        .catch(error => {
-            alert("Ошибка!");
-            console.log(error)})
-
-})

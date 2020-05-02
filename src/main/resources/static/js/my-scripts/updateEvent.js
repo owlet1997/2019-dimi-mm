@@ -47,25 +47,7 @@ fetch(`/api/events/`+eventId, {
         });
         console.log("Плошадки добавлены");
 
-        const selectCity = document.querySelector('.js-city');
         const selectEventType = document.querySelector('.js-event-types');
-
-        fetch(`/api/cities/` + res.city.abbrev, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                res.forEach(function (element) {
-                    console.log(element);
-                    const node = '<option value="' + element.abbrev + '">' + element.name + '</option>';
-                    selectCity.insertAdjacentHTML("beforeend", node);
-                    $(".js-city").selectpicker("refresh");
-                })
-            })
-            .catch(error => console.log(error));
 
             fetch(`/api/event-types/` + res.type.id, {
                     method: 'GET',
@@ -126,7 +108,7 @@ fetch(`/api/events/`+eventId, {
                 // Получаем из ответа JSON
                 .then(res => res.json())
                 .then(res => {
-                    $('.event-items').append(itemstemplate(res));
+                    $('.event-items').append(templateEventItem(res));
                     console.log(JSON.stringify(res));
                     alert("Элемент события добавлено успешно!");
                     for (let element of itemForm.elements) {

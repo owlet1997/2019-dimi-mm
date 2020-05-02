@@ -1,6 +1,7 @@
 package com.ncedu.eventx.converters;
 
 import com.ncedu.eventx.models.DTO.EventDTO;
+import com.ncedu.eventx.models.DTO.EventForListDTO;
 import com.ncedu.eventx.models.DTO.EventWithItemsDTO;
 import com.ncedu.eventx.models.DTO.EventWithUsersDTO;
 import com.ncedu.eventx.models.entities.EventEntity;
@@ -22,4 +23,5 @@ public interface EventMapper {
 
     EventWithUsersDTO toEventWithUsersDTO(EventEntity eventEntity);
 
+    EventForListDTO toEventForListDTO(EventEntity e);
 }

@@ -4,6 +4,7 @@ import com.ncedu.eventx.models.entities.*;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -13,7 +14,10 @@ public interface UserEventRepository extends CrudRepository<UserEventEntity, Use
 
     List<UserEventEntity> findAllByEvent(EventEntity eventEntity);
 
+    List<UserEventEntity> findAllByEventAndRole(EventEntity eventEntity,RoleEntity roleEntity);
+
     List<UserEventEntity> findAllByRole(RoleEntity roleEntity);
+
 
 
     List<UserEventEntity> findAllByUser(UserEntity userEntity);
@@ -28,4 +32,5 @@ public interface UserEventRepository extends CrudRepository<UserEventEntity, Use
     boolean deleteByEventAndUserAndRole(EventEntity entity, UserEntity userEntity, RoleEntity roleEntity);
 
 
+    List<UserEventEntity> findAllByUserAndRoleAndEventTimeEndAfter(UserEntity userEntity, RoleEntity roleEntity, Date date);
 }

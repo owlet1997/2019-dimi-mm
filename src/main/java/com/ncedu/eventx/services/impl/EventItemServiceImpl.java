@@ -7,6 +7,7 @@ import com.ncedu.eventx.enums.UserRoleItems;
 import com.ncedu.eventx.models.DTO.EventItemDTO;
 import com.ncedu.eventx.models.DTO.EventItemForCreateDTO;
 import com.ncedu.eventx.models.DTO.EventItemWithUsersDTO;
+import com.ncedu.eventx.models.DTO.EventItemWithoutParentDTO;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
 import com.ncedu.eventx.services.EventItemService;
@@ -56,6 +57,8 @@ public class EventItemServiceImpl implements EventItemService {
         eventItemEntity.setParent(parentEntity);
         eventItemEntity.setName(eventItemDTO.getName());
         eventItemEntity.setAuditory(eventItemDTO.getAuditory());
+        if (!eventItemDTO.getDescription().equals(""))
+        eventItemEntity.setDescription(eventItemDTO.getDescription());
         String dateStart = eventItemDTO.getDateStart() + " " + eventItemDTO.getTimeStart();
         try {
             eventItemEntity.setTimeStart(formatCreate.parse(dateStart));
@@ -81,20 +84,33 @@ public class EventItemServiceImpl implements EventItemService {
         return withUsersDTOList;
     }
 
+    @Override
+    public List<EventItemDTO> getEventItemsByParent(int id) {
+        EventEntity eventEntity = eventRepository.findById(id);
+        List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
+
+        return eventItemMapper.toListDTO(list);
+    }
+
+    @Override
+    public List<EventItemWithoutParentDTO> getEventItemsWithoutParent(int id) {
+        EventEntity eventEntity = eventRepository.findById(id);
+        List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
+
+        return eventItemMapper.toListWithoutParentDTO(list);
+    }
+
     public List<EventItemDTO> getItemsByUser(int userId) {
         UserEntity userEntity = userRepository.findById(userId);
         RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
-
-        List<UserEventItemEntity> userEventItemEntityList = userEventItemRepository.getAllByUser(userEntity);
-
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY,0);
         Date now = today.getTime();
 
+        List<UserEventItemEntity> userEventItemEntityList = userEventItemRepository.getAllByUserAndRoleAndItemTimeStartAfter(userEntity,roleEntity, now);
+
         List<EventItemEntity> list = userEventItemEntityList.stream()
-                .filter(eventItemEntity -> eventItemEntity.getRole().equals(roleEntity))
                 .map(UserEventItemEntity::getItem)
-                .filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now))
                 .sorted(Comparator.comparing(EventItemEntity::getTimeStart)).collect(Collectors.toList());
 
         return eventItemMapper.toListDTO(list);

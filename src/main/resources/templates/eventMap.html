@@ -34,13 +34,13 @@
                     </a>
                 </div>
                 <div class="brand">
-                    <a href="/add-event" class="submit-item">
-                        <button class="btn btn-default">Добавить событие</button>
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск мероприятий</button>
                     </a>
                 </div>
                 <div class="brand">
-                    <a href="/" class="submit-item">
-                        <button class="btn btn-default">Поиск событий</button>
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить мероприятие</button>
                     </a>
                 </div>
                 <div class="brand">
@@ -109,7 +109,7 @@
                             <div class="person">
                                 <div class="person image">
                                     <img src="icons/person.png" height="25px"></div>
-                                <div class="person text"><%- _.size(item.visitors) %></div>
+                                <div class="person text"><%- _.identity(item.visitors) %></div>
                             </div>
                         </div>
                     </div>
@@ -119,26 +119,24 @@
                     <div class="card-body">
                         <p class="type">Тип события: <%- item.type.type %></p>
                         <div class="time">
-                            <div class="time image"><img src="icons/time.png" height="25px"></div>
-                            <div class="time text"><%- _.identity(dateWrite(item.timeEnd)) %></div>
+                            <div class="time text">День окончания: <%- _.identity(dateWrite(item.timeEnd)) %></div>
                         </div>
-                        <p class="descr"><%- item.description %></p>
+
                         <% _.each( item.itemsList, function( listItem ){ %>
                         <div class="listItem">
-                            <h5 class="mb-0"><%- listItem.eventItem.name %></h5>
-                            <p class="address"><%- listItem.eventItem.auditory %></p>
+                            <h5 class="mb-0"><%- listItem.name %></h5>
+                            <p class="address"><%- listItem.auditory %></p>
                             <div class="time-and-counters">
                                 <div class="time">
                                     <div class="time image"><img src="icons/time.png" height="25px"></div>
-                                    <div class="time text"><%- _.identity(dateWrite(listItem.eventItem.timeStart)) %></div>
+                                    <div class="time text"><%- _.identity(dateWrite(listItem.timeStart)) %></div>
                                 </div>
-
-                                <div class="right-group">
-                                    <div class="person">
-                                        <div class="person image"><img src="icons/person.png" height="25px"></div>
-                                        <div class="person text"><%- _.size(listItem.users) %></div>
-                                    </div>
-                                </div>
+<!--                                <div class="right-group">-->
+<!--                                    <div class="person">-->
+<!--                                        <div class="person image"><img src="icons/person.png" height="25px"></div>-->
+<!--                                        <div class="person text"><%- _.size(listItem.users) %></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                             </div>
                         </div>
                         <% }); %>
@@ -275,7 +273,7 @@
 <script type="text/javascript" src="js/base/underscore.js"></script>
 <script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
 <script type="text/javascript" src="js/my-scripts/searchFormData.js"></script>
-<script type="text/javascript" src="js/my-scripts/listEvents.js"></script>
+<!--<script type="text/javascript" src="js/my-scripts/listEvents.js"></script>-->
 <script type="text/javascript" src="js/my-scripts/findEvents.js"></script>
 <script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
 

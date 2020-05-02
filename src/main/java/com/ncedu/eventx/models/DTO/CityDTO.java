@@ -17,8 +17,5 @@ public class CityDTO {
     private int id;
     private String abbrev;
     private String name;
-    @JsonSerialize(using = PointToJsonSerializer.class)
-    @JsonDeserialize(using = JsonToPointDeserializer.class)
-    private Point point;
 
 }

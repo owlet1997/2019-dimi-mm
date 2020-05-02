@@ -34,9 +34,5 @@ public class CityEntity implements Serializable {
     @OneToMany(mappedBy = "city", cascade = {CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
     private List<EventEntity> events = new ArrayList<>();
 
-    @Column(columnDefinition="geometry(Point,4326)",nullable = false)
-    @JsonSerialize(using = PointToJsonSerializer.class)
-    @JsonDeserialize(using = JsonToPointDeserializer.class)
-    private Point point;
 
 }

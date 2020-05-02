@@ -1,14 +1,10 @@
 package com.ncedu.eventx;
 
-import com.ncedu.eventx.converters.UserRoleMapper;
-import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.repositories.RolesRepository;
 import com.ncedu.eventx.services.*;
-import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class EventxApplicationTests {
@@ -37,17 +33,12 @@ class EventxApplicationTests {
     @Autowired
     UsersService usersService;
 
-    UserRoleMapper userRoleMapper = Mappers.getMapper(UserRoleMapper.class);
-
-//    @Autowired
-//    UsersService usersService;
-//
 
 //    @Test
 //    void addEvent() {
 //        EventTypeDTO eventTypeDTO = eventTypeService.getEventTypeByName("Вебинар");
 //        CityDTO cityDTO = citiesService.getCityByName("Тольятти");
-//        UserDTO userDTO = usersService.getUserById(20);
+//        UserDTO userDTO = usersService.getUserById();
 //
 //        Calendar calendar = Calendar.getInstance();
 //        calendar.add(Calendar.DAY_OF_WEEK,3);

@@ -7,7 +7,7 @@ const refuse = "Отказаться от участия";
 const cancelled = "Отменено";
 const existed = "";
 
-const buttonCancel = "Отменить мероприятие";
+const buttonCancel = "Отменить";
 const buttonExist = "Активировать";
 
 function visitItem(varBool) {

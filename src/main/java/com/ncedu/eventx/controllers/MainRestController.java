@@ -8,12 +8,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.sql.Blob;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -187,12 +182,10 @@ public class MainRestController {
                 produces = {MediaType.APPLICATION_JSON_VALUE
                 })
         @ResponseBody
-        public List<EventWithItemsDTO> getEventBySearchParam(@RequestParam(name = "city") Optional <String> city,
+        public List<EventForListDTO> getEventBySearchParam(@RequestParam(name = "city") Optional <String> city,
                 @RequestParam(name = "type") Optional <String> type,
                 @RequestParam(name = "dateStart") Optional <String> dateStart){
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            System.out.println(username);
-            return eventsService.getEventsBySearchParams(city.orElseGet(() -> ""),
+            return eventsService.getEventsForListBySearchParams(city.orElseGet(() -> ""),
                     type.orElseGet(() -> ""),
                     dateStart.orElseGet(() -> ""));
         }

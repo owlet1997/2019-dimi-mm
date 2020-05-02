@@ -1,5 +1,12 @@
-
 async function getJson() {
+    _.templateSettings.variable = 'item';
+
+    var template = _.template(
+        $('script.template').html()
+    );
+    var templateEmpty = _.template(
+        $('script.templateEmpty').html()
+    );
     let arr = {type: "FeatureCollection", features: []};
 
     return await fetch(`/api/events/`, {
@@ -10,6 +17,14 @@ async function getJson() {
     })
         .then(res => res.json())
         .then(res => {
+            if (res.length>0){
+                res.forEach(function (element) {
+                    $('.js-events').append(template(element));
+                })}
+            else{
+                var answer = { name: "Нет мероприятий!"};
+                $('.js-events').append(templateEmpty(answer));
+            }
             console.log(res);
             res.forEach(function (element) {
                 var split = [];
@@ -21,7 +36,7 @@ async function getJson() {
                     properties: {
                         balloonContentHeader: "<b><a href=#collapse" + element.id + ">" + element.name + "</a></b>",
                         balloonContentBody: "<p>" + element.city.name + "</p>",
-                        balloonContentFooter: "<font size=1>Организатор: </font> <strong>" + element.creator.name + "</strong>",
+                        balloonContentFooter: "<font size=1>Тип: </font> <strong>" + element.type.type + "</strong>",
                         clusterCaption: "<strong>"+ element.name +"</strong>",
                         hintContent: _.identity(dateWrite(element.timeStart))
                     }
@@ -35,6 +50,4 @@ async function getJson() {
         })
         .catch(error => alert(error));
 
-
 }
-

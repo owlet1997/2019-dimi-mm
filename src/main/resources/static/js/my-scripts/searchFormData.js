@@ -10,7 +10,6 @@ fetch(`/api/cities/`, {
     .then(res => res.json())
     .then(res => {
         res.forEach(function (element) {
-            console.log(element);
             const node = '<option value="'+ element.abbrev + '">'+ element.name + '</option>';
             selectCity.insertAdjacentHTML("beforeend",node);
             $(".js-city").selectpicker("refresh");
@@ -28,7 +27,6 @@ fetch(`/api/event-types/`, {
     .then(res => res.json())
     .then(res => {
         res.forEach(function (element) {
-            console.log(element);
             const node = '<option value="'+ element.id + '">'+ element.type + '</option>';
             selectEventType.insertAdjacentHTML("beforeend",node);
             $(".js-event-types").selectpicker("refresh");

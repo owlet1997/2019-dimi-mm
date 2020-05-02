@@ -29,14 +29,14 @@
                         <img src="icons/text.png" alt="logo" height="30px">
                     </a>
                 </div>
-                <div class="brand my-header">
-                    <a href="/add-event" class="submit-item">
-                        <button class="btn btn-default">Добавить событие</button>
+                <div class="brand">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск мероприятий</button>
                     </a>
                 </div>
-                <div class="brand my-header">
-                    <a href="/" class="submit-item">
-                        <button class="btn btn-default">Поиск событий</button>
+                <div class="brand">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить мероприятие</button>
                     </a>
                 </div>
                 <div class="brand my-header">
@@ -77,16 +77,6 @@
                     <h3>Детали события</h3>
                     <div class="form-group large" style="padding-left: 15px">
                         <div class="row">
-                            <div class="col-md-6" >
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label for="city">Город</label>
-                                        <select id="city" class="framed js-city" name="city" title="Город" data-live-search="true" required>
-                                            <option value="<%= item.city.abbrev %>" selected><%- item.city.name %></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="form-group">
@@ -104,39 +94,9 @@
                     <div class="form-group large">
                         <label for="description">Описание</label>
                         <textarea class="form-control" id="description" name="description" rows="10" required><%- item.description %></textarea>
-<!--                        <input id="hidden-address" name="address" class="form-address" type="hidden" value="<%= item.address %>">-->
-<!--                        <input id="hidden-coords" name="coord" class="form-coord" type="hidden" value="<%= item.coord %>">-->
                     </div>
                 </section>
-<!--                <section>-->
-<!--                    <h3>Укажите событие на карте</h3>-->
-<!--                    <div id="map"></div>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <h3>Укажите время события</h3>-->
-<!--                    <div class="opening-hours">-->
-<!--                        <div class="table-responsive">-->
-<!--                            <table class="table">-->
-<!--                                <tbody>-->
-<!--                                <tr class="day">-->
-<!--                                    <td class="day-name">День начала</td>-->
-<!--                                    <td class="from">-->
-<!--                                        <input name="dateStart" type="date" class="form-control" id="dateStart" required>-->
-<!--                                        <input name="timeStart" class="oh-timepicker" type="text" placeholder="From" required>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                                <tr class="day">-->
-<!--                                    <td class="day-name">День окончания</td>-->
-<!--                                    <td class="to">-->
-<!--                                        <input name="dateEnd" type="date" class="form-control" id="dateEnd" required>-->
-<!--                                        <input name="timeEnd" class="oh-timepicker" type="text" placeholder="To" required>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </section>-->
+
                 <section>
                     <div class="form-group">
                         <button type="submit" class="btn btn-default pull-right" id="submit">Сохранить изменения</button>

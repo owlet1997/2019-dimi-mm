@@ -1,7 +1,6 @@
 package com.ncedu.eventx.services.impl;
 
 import com.ncedu.eventx.converters.*;
-import com.ncedu.eventx.enums.UserRoleItems;
 import com.ncedu.eventx.models.DTO.*;
 import com.ncedu.eventx.models.entities.*;
 import com.ncedu.eventx.repositories.*;
@@ -10,6 +9,7 @@ import com.ncedu.eventx.services.EventItemService;
 import com.ncedu.eventx.services.EventsService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,7 +96,6 @@ public class EventsServiceImpl implements EventsService {
     @Override
     public EventForUpdateDTO updateEventById(EventForUpdateDTO event) {
         EventEntity eventEntity = eventRepository.findById(event.getId());
-        eventEntity.setCity(citiesRepository.findByAbbrev(event.getCity()));
         eventEntity.setType(eventTypeRepository.findById(event.getType()));
         eventEntity.setDescription(event.getDescription());
         eventRepository.save(eventEntity);
@@ -133,15 +132,16 @@ public class EventsServiceImpl implements EventsService {
     public List<EventDTO> getEventsByUserId(int userId, String role){
         UserEntity userEntity = userRepository.findById(userId);
         RoleEntity roleEntity = rolesRepository.findByName(role);
-
-        List<UserEventEntity> userEventEntityList = userEventRepository.findAllByUser(userEntity);
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY,0);
         Date now = today.getTime();
+
+        List<UserEventEntity> userEventEntityList = userEventRepository.findAllByUserAndRoleAndEventTimeEndAfter(userEntity, roleEntity,now);
+
         List<EventEntity> list = userEventEntityList.stream()
-                .filter(e -> e.getRole().equals(roleEntity))
-                .map(UserEventEntity::getEvent).filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now))
-                .sorted(Comparator.comparing(EventEntity::getTimeStart)).collect(Collectors.toList());
+                .map(UserEventEntity::getEvent)
+                .sorted(Comparator.comparing(EventEntity::getTimeStart))
+                .collect(Collectors.toList());
 
         return eventMapper.toListDTO(list);
     }
@@ -153,7 +153,7 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public List<EventWithItemsDTO> getEventsBySearchParams(String city, String type, String dateStart) {
+    public List<EventWithItemsDTO> getEventsBySearchParams(String city, String type, String dateStart, String username) {
 
         List<EventEntity> eventEntityList = new ArrayList<>();
 
@@ -179,6 +179,9 @@ public class EventsServiceImpl implements EventsService {
         builder.append(isCityEmpty ? "1":"0");
         builder.append(isTypeEmpty ? "1":"0");
         builder.append(isDateStartEmpty ? "1":"0");
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        Date now = today.getTime();
 
         switch (builder.toString()){
             case "000": typeEntity = eventTypeRepository.findById(typeId);
@@ -187,7 +190,7 @@ public class EventsServiceImpl implements EventsService {
                         break;
             case "001": typeEntity = eventTypeRepository.findById(typeId);
                         cityEntity = citiesRepository.findByAbbrev(city);
-                        eventEntityList = eventRepository.findAllByTypeAndCity(typeEntity,cityEntity);
+                        eventEntityList = eventRepository.findAllByTypeAndCityAndTimeEndAfter(typeEntity,cityEntity, now);
                         break;
             case "010": cityEntity = citiesRepository.findByAbbrev(city);
                         eventEntityList = eventRepository.findAllByCityAndTimeStart(cityEntity, date);
@@ -196,10 +199,10 @@ public class EventsServiceImpl implements EventsService {
                         eventEntityList = eventRepository.findAllByTypeAndTimeStart(typeEntity,date);
                 break;
             case "011": cityEntity = citiesRepository.findByAbbrev(city);
-                        eventEntityList = eventRepository.findAllByCity(cityEntity);
+                        eventEntityList = eventRepository.findAllByCityAndTimeEndAfter(cityEntity, now);
                 break;
             case "101": typeEntity = eventTypeRepository.findById(typeId);
-                        eventEntityList = eventRepository.findAllByType(typeEntity);
+                        eventEntityList = eventRepository.findAllByTypeAndTimeEndAfter(typeEntity,now);
                 break;
             case "110": eventEntityList = eventRepository.findAllByTimeStart(date);
                 break;
@@ -207,20 +210,111 @@ public class EventsServiceImpl implements EventsService {
                 break;
         }
 
-    return getEventsWithItemsList(eventEntityList);
+    return getEventsWithItemsList(eventEntityList,username);
     }
 
     @Override
-    public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList) {
-        UserEntity userEntity = userRepository.findById(20);
+    public List<EventForListDTO> getEventsForListBySearchParams(String city, String type, String dateStart) {
+        List<EventEntity> eventEntityList = new ArrayList<>();
+
+        boolean isCityEmpty = city.isEmpty();
+        boolean isTypeEmpty = type.isEmpty();
+        boolean isDateStartEmpty = dateStart.isEmpty();
+
+        Date date = null;
+        if (!isDateStartEmpty) {
+            try {
+                date = formatter.parse(dateStart);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        int typeId = 0;
+        if (!isTypeEmpty) typeId = Integer.parseInt(type);
+
+        EventTypeEntity typeEntity;
+        CityEntity cityEntity;
+
+        StringBuilder builder = new StringBuilder("");
+        builder.append(isCityEmpty ? "1":"0");
+        builder.append(isTypeEmpty ? "1":"0");
+        builder.append(isDateStartEmpty ? "1":"0");
+
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        Date now = today.getTime();
+
+        switch (builder.toString()){
+            case "000": typeEntity = eventTypeRepository.findById(typeId);
+                cityEntity = citiesRepository.findByAbbrev(city);
+                eventEntityList = eventRepository.findAllByTypeAndCityAndTimeStart(typeEntity,cityEntity,date);
+                break;
+            case "001": typeEntity = eventTypeRepository.findById(typeId);
+                cityEntity = citiesRepository.findByAbbrev(city);
+                eventEntityList = eventRepository.findAllByTypeAndCityAndTimeEndAfter(typeEntity,cityEntity, now);
+                break;
+            case "010": cityEntity = citiesRepository.findByAbbrev(city);
+                eventEntityList = eventRepository.findAllByCityAndTimeStart(cityEntity, date);
+                break;
+            case "100": typeEntity = eventTypeRepository.findById(typeId);
+                eventEntityList = eventRepository.findAllByTypeAndTimeStart(typeEntity,date);
+                break;
+            case "011": cityEntity = citiesRepository.findByAbbrev(city);
+                eventEntityList = eventRepository.findAllByCityAndTimeEndAfter(cityEntity,now);
+                break;
+            case "101": typeEntity = eventTypeRepository.findById(typeId);
+                eventEntityList = eventRepository.findAllByTypeAndTimeEndAfter(typeEntity, now);
+                break;
+            case "110": eventEntityList = eventRepository.findAllByTimeStart(date);
+                break;
+            case "111": eventEntityList = eventRepository.findEventEntitiesByTimeEndAfter(now);
+                break;
+        }
+
+        return getEventsForList(eventEntityList);
+    }
+
+    @Override
+    public List<EventForListDTO> getEventsForList(List<EventEntity> eventEntityList) {
+        RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
+
+        List<EventForListDTO> withItemsDTOList = new ArrayList<>();
+        for (EventEntity e: eventEntityList) {
+            if (e.isCancelled()) continue;
+            List<UserEventEntity> userEventEntityList = userEventRepository.findAllByEventAndRole(e,userRoleVisit);
+            long usersList = userEventEntityList.stream()
+                    .filter(event -> event.getEvent().equals(e))
+                    .count();
+
+            EventForListDTO event = eventMapper.toEventForListDTO(e);
+            event.setVisitors((int) usersList);
+            event.setItemsList(eventItemService.getEventItemsWithoutParent(e.getId()));
+            withItemsDTOList.add(event);
+        }
+
+        List<EventForListDTO> list2 =  withItemsDTOList.stream()
+                .sorted(Comparator.comparing(EventForListDTO::getTimeStart))
+                .collect(Collectors.toList());
+        System.out.println(list2);
+
+        return list2;
+    }
+
+    @Override
+    public List<EventWithItemsDTO> getEventsWithItemsList(List<EventEntity> eventEntityList, String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
         RoleEntity userRoleVisit = rolesRepository.findByName(VISITOR.getDescription());
         RoleEntity userRoleCreator = rolesRepository.findByName(CREATOR.getDescription());
 
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        Date now = today.getTime();
 
         List<UserEventEntity> userEventEntityList = userEventRepository.findAll();
 
         List<EventWithItemsDTO> withItemsDTOList = new ArrayList<>();
         for (EventEntity e: eventEntityList) {
+            if (e.getTimeStart().before(now)||e.isCancelled()) continue;
             List<UserEntity> usersList = userEventEntityList.stream()
                     .filter(event -> event.getEvent().equals(e))
                     .filter(role -> role.getRole().equals(userRoleVisit))
@@ -235,14 +329,12 @@ public class EventsServiceImpl implements EventsService {
             event.setItemsList(eventItemService.getEventItemWithUsersListByParent(e.getId(), userEntity));
             withItemsDTOList.add(event);
         }
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY,0);
-        Date now = today.getTime();
-        return withItemsDTOList.stream()
-                .filter(eventWithItemsDTO -> !eventWithItemsDTO.isCancelled())
-                .filter(eventWithItemsDTO -> eventWithItemsDTO.getTimeStart().after(now))
+
+        List<EventWithItemsDTO> list2 =  withItemsDTOList.stream()
                 .sorted(Comparator.comparing(EventWithItemsDTO::getTimeStart))
                 .collect(Collectors.toList());
+        System.out.println(list2);
+        return list2;
     }
 
     @Override
@@ -263,20 +355,29 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
+    @Transactional
     public boolean cancelEventById(int eventId) {
         EventEntity eventEntity = eventRepository.findById(eventId);
         if (!eventEntity.isCancelled()) {
             RoleEntity roleEntity = rolesRepository.findByName(VISITOR.getDescription());
             eventEntity.setCancelled(true);
-            userEventRepository.deleteAllByEventAndRole(eventEntity,roleEntity);
-            List<EventItemEntity> list = eventItemRepository.findAllByParent(eventEntity);
-            for (EventItemEntity e: list) {
-                userEventItemRepository.deleteAllByItemAndRole(e, roleEntity);
+            eventRepository.save(eventEntity);
+            List<UserEventEntity> list = userEventRepository.findAllByEventAndRole(eventEntity,roleEntity);
+            for (UserEventEntity e: list) {
+                userEventRepository.delete(e);
+            }
+            List<EventItemEntity> listItem = eventItemRepository.findAllByParent(eventEntity);
+            for (EventItemEntity e: listItem) {
+                List<UserEventItemEntity> list1 = userEventItemRepository.getAllByItemAndRole(e,roleEntity);
+                for (UserEventItemEntity u: list1) {
+                    userEventItemRepository.delete(u);
+                }
             }
         } else {
             eventEntity.setCancelled(false);
+            eventRepository.save(eventEntity);
+
         }
-        eventRepository.save(eventEntity);
         return true;
     }
 }

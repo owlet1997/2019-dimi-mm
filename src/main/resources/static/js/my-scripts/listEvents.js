@@ -15,6 +15,7 @@ fetch(`/api/events/`, {
 })
     .then(res => res.json())
     .then(res => {
+        console.log(res);
         if (res.length>0){
             res.forEach(function (element) {
             $('.js-events').append(template(element));
@@ -25,5 +26,5 @@ fetch(`/api/events/`, {
         }
 
     })
-    .catch(error => alert(error));
+    .catch(error => console.log(error));
 

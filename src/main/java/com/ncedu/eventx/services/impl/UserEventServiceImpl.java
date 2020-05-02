@@ -33,7 +33,8 @@ public class UserEventServiceImpl implements UserEventService {
     public UserEventServiceImpl(UserEventRepository userEventRepository,
                                 UserEventItemRepository userEventItemRepository,
                                 EventRepository eventRepository,
-                                EventItemRepository eventItemRepository, RolesRepository rolesRepository,
+                                EventItemRepository eventItemRepository,
+                                RolesRepository rolesRepository,
                                 UserRepository userRepository,
                                 EventsService eventsService) {
         this.userEventRepository = userEventRepository;
@@ -70,7 +71,6 @@ public class UserEventServiceImpl implements UserEventService {
     public boolean visitEvent(String username, int eventId) {
         if (isVisited(username, eventId)){
             deleteVisit(username, eventId);
-
             return false;
         }
         else {

@@ -19,6 +19,7 @@ async function init() {
     myMap.geoObjects.add(objectManager);
 
     getJson().then((value) => {
+        console.log(value);
     objectManager.add(value);
     })
 

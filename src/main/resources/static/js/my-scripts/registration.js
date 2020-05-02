@@ -3,7 +3,7 @@ var template = _.template(
     $('script.template').html()
 );
 
-var container = document.querySelector('.registr');
+var container = document.querySelector('.register');
 
 const form = document.forms.register;
 
@@ -28,17 +28,19 @@ fetch(`/register`,{
         body: JSON.stringify(body)
     })
         // Получаем из ответа JSON
-        .then(res => res.json())
         .then(res => {
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
+            if (confirm("Регистрация прошла успешно! Перейти на страницу входа?")){
+                window.location.assign("/login");
+            } else {
+                for (let element of form.elements) {
+                    if (!(element.name === "")){
+                        element.value = "";
+                    }
+                }
             }
-            $('.registr').append(template);
-            console.log(JSON.stringify(res));
         })
         // Обрабатываем ошибки с сервера
         .catch(error =>
-            console.log(error))
-    // window.location.assign("/login");
+            alert("Ошибка!"))
 
 })
