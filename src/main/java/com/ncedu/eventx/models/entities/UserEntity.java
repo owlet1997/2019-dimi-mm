@@ -1,34 +1,42 @@
 package com.ncedu.eventx.models.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.util.Set;
+
+import java.sql.Blob;
+import java.util.*;
+
 
 @Data
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name="user", schema = "eventx")
-public class UserEntity implements Serializable {
+
+public class UserEntity implements Serializable, UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(nullable = false)
-    private UserRoleEntity roleId;
+    private RoleEntity role;
 
-    @OneToMany(mappedBy = "userId")
-    Set<UserEventEntity> userEvents;
+    @OneToMany(mappedBy = "user")
+    List<UserEventEntity> userEvents = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String login;
+    @OneToMany(mappedBy = "user")
+    List<UserEventItemEntity> userEventItems = new ArrayList<>();
 
     @Column(nullable = false)
     private String password;
@@ -36,18 +44,57 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(name="organization_name", nullable = false)
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String organizationName;
 
-    @Column(name="position_name", nullable = false)
+    @Column(nullable = false)
     private String positionName;
 
-    @Column(name="avatar_img", nullable = false)
+    @Column
     private String avatarImg;
+//    @Lob
+//    private Blob avatarImg;
 
-    @Email(message = "Email address has invalid format: ${validatedValue}",
-            regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
+    @Email
     @Column(nullable = false)
     private String email;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
 }

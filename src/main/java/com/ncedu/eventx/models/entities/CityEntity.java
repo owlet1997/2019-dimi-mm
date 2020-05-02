@@ -1,31 +1,38 @@
 package com.ncedu.eventx.models.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ncedu.eventx.serializers.JsonToPointDeserializer;
+import com.ncedu.eventx.serializers.PointToJsonSerializer;
+import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
-@Table(name="CITY", schema = "eventx")
+@Table(name="city", schema = "eventx")
 public class CityEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false)
-    private String cityId;
+    private String abbrev;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventEntity> events;
+    @OneToMany(mappedBy = "city", cascade = {CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
+    private List<EventEntity> events = new ArrayList<>();
+
 
 }

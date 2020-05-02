@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/head-style.css" type="text/css">
+
+    <link rel="stylesheet" href="css/user.style.css" type="text/css">
+
+    <title>Регистрация</title>
+
+</head>
+
+<body onunload="" class="page-subpage page-register navigation-top-header" id="page-top">
+
+<!-- Outer Wrapper-->
+<div id="outer-wrapper">
+    <!-- Inner Wrapper -->
+    <div id="inner-wrapper">
+        <!-- Navigation-->
+        <div class="header">
+            <div class="wrapper top-event-header">
+                <div class="brand">
+                    <a href="/">
+                        <img src="icons/logo.png" alt="logo" height="64px">
+                        <img src="icons/text.png" alt="logo" height="30px">
+                    </a>
+                </div>
+                <div class="brand">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск мероприятий</button>
+                    </a>
+                </div>
+                <div class="brand">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить мероприятие</button>
+                    </a>
+                </div>
+                <div class="brand">
+                    <nav class="navigation-items">
+                        <div class="navigation nav-header">
+
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/template" class="templateHeaderUnauth">
+            <div class="wrapper">
+                <ul class="user-area header-wrapper">
+                    <li><a href="/login">Войти</a></li>
+                    <li><a href="/register"><strong>Регистрация</strong></a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateHeaderAuth">
+            <div class="wrapper">
+                <ul class="user-area">
+                    <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
+                    <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="template">
+            <div class="row">
+                <section>
+                    <h3><i class="fa fa-user">Регистрация прошла успешно!</i></h3>
+                </section>
+                <section>
+                    <h3><a href="/login">Перейти к странице входа</a></h3>
+                </section>
+            </div>
+        </script>
+
+        <div id="page-canvas">
+            <div id="page-content">
+                <section class="container">
+                    <div class="block page register">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                                <header>
+                                    <h1 class="page-title">Регистрация</h1>
+                                </header>
+                                <hr>
+                                <form name="register" role="form" id="form-register" method="post" action="?">
+                                    <input type="hidden" class="form-control" id="form-register-id" name="id" value="">
+                                    <div class="form-group">
+                                        <label for="form-register-full-name">Полное имя:</label>
+                                        <input type="text" class="form-control" id="form-register-full-name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-register-login">Логин:</label>
+                                        <input type="text" class="form-control" id="form-register-login" name="username" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-register-email">Email:</label>
+                                        <input type="email" class="form-control" id="form-register-email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-register-password">Пароль:</label>
+                                        <input type="password" class="form-control" id="form-register-password" name="password" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="form-register-passwordConfirm">Подтвердите пароль:</label>
+                                        <input type="password" class="form-control" id="form-register-passwordConfirm" name="passwordConfirm" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="form-register-organization">Организация:</label>
+                                        <input type="text" class="form-control" id="form-register-organization" name="organizationName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="form-register-position">Должность:</label>
+                                        <input type="text" class="form-control" id="form-register-position" name="positionName" required>
+                                    </div>
+
+                                    <div class="form-group clearfix">
+                                        <button type="submit" class="btn pull-right btn-default" id="account-submit">Создать учетную запись</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer id="page-footer">
+            <div class="inner">
+                <div class="footer-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>About Us</h2>
+                                    <address>
+                                        <div>Группа DEV-2</div>
+                                        <div>DIMI-MM</div>
+                                    </address>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Об авторах</h2>
+                                    <figure>
+                                        <div class="info">
+                                            <span>Шаталова Надежда</span>
+                                        </div>
+                                        <div class="info">
+                                            <span>Таиров Александр</span>
+                                        </div>
+                                    </figure>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Вот здесь нас нет</h2>
+                                    <div class="social">
+                                        <a href="#" class="social-button"><i class="fa fa-twitter"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="container">
+                        <span class="left">(C) EventX, NetCracker, 2020.</span>
+                        <span class="right">
+                                <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
+                            </span>
+                    </div>
+                </div>
+                <!--/.footer-bottom-->
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/base/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/base/before.load.js"></script>
+<script type="text/javascript" src="js/base/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/base/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/base/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/base/icheck.min.js"></script>
+<script type="text/javascript" src="js/base/custom.js"></script>
+<script type="text/javascript" src="js/base/underscore.js"></script>
+<script type="text/javascript" src="js/my-scripts/registration.js"></script>
+<script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
+
+
+</body>
+</html>

@@ -11,23 +11,31 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(name="user_event", schema = "eventx")
 public class UserEventEntity implements Serializable {
 
     @EmbeddedId
-    UserEventKeyEntity id;
+    UserEventKey id;
 
     @ManyToOne
-    @MapsId("userid")
+    @MapsId("user")
     @JoinColumn(nullable = false)
-    private UserEntity userId;
+    private UserEntity user;
 
     @ManyToOne
-    @MapsId("eventid")
+    @MapsId("event")
     @JoinColumn(nullable = false)
-    private EventEntity eventId;
+    private EventEntity event;
 
-    @Column(name = "SHOW_ORDER", nullable = false)
+    @ManyToOne
+    @MapsId("role")
+    @JoinColumn(nullable = false)
+
+    private RoleEntity role;
+
+
+    @Column(nullable = false)
     private int showOrder;
 
 }

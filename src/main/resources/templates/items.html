@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="fonts/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/head-style.css" type="text/css">
+    <link rel="stylesheet" href="css/user.style.css" type="text/css">
+
+    <title>Мои события</title>
+
+</head>
+
+<body onunload="" class="page-subpage page-my-items navigation-off-canvas" id="page-top">
+
+<div id="outer-wrapper">
+    <div id="inner-wrapper">
+        <div class="header">
+            <div class="wrapper top-event-header">
+                <div class="brand">
+                    <a href="/">
+                        <img src="icons/logo.png" alt="logo" height="64px">
+                        <img src="icons/text.png" alt="logo" height="30px">
+                    </a>
+                </div>
+                <div class="brand">
+                    <a href="/" class="submit-item">
+                        <button class="btn btn-default">Поиск мероприятий</button>
+                    </a>
+                </div>
+                <div class="brand">
+                    <a href="/add-event" class="submit-item">
+                        <button class="btn btn-default">Добавить мероприятие</button>
+                    </a>
+                </div>
+                <div class="brand my-header">
+                    <nav class="navigation-items">
+                        <div class="navigation nav-header">
+
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-canvas">
+            <div id="page-content">
+                <section class="container">
+                    <header>
+                        <ul class="nav nav-pills"></ul>
+                    </header>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <aside id="sidebar">
+                                <ul class="navigation-sidebar list-unstyled">
+                                    <li id="all-events">
+                                        <a><i class="fa fa-folder"></i><span>Мероприятия: гость</span></a>
+                                    </li>
+                                    <li id="all-events-creator">
+                                        <a><i class="fa fa-folder"></i><span>Мероприятия: организатор</span></a>
+                                    </li>
+                                    <li id="all-items">
+                                        <a><i class="fa fa-check"></i><span>Избранное</span></a>
+                                    </li>
+                                </ul>
+                            </aside>
+                        </div>
+                        <div class="col-md-9 col-sm-9">
+                            <section id="items" class="items"></section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <script type="text/template" class="templateHeaderAuth">
+            <div class="wrapper">
+                <ul class="user-area">
+                    <li><a href="/user?id=<%= item.id %>"><strong id="page-title-name">Мой профиль</strong></a></li>
+                    <li><a href="/user-items?id=<%= item.id %>"><strong id="page-title-items">Мои мероприятия</strong></a></li>
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateHeaderUnauth">
+            <div class="wrapper">
+                <ul class="user-area header-wrapper">
+                    <li><a href="/login">Войти</a></li>
+                    <li><a href="/register"><strong>Регистрация</strong></a></li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateTitle">
+            <li><a href="/user?id=<%= item.id %>"><h1 class="page-title"><%- item.name %></h1></a></li>
+            <li class="active"><a href="/user-items?id=<%= item.id %>">
+                <div id="templateTitleClass" class="templateTitleClass">
+                    <h1 class="page-title">Мероприятия</h1>
+                </div>
+            </a></li>
+        </script>
+
+        <script type="text/template" class="templateTitleLine">
+            <h1 class="page-title"><%- item.name %></h1>
+        </script>
+
+
+            <script type="text/template" class="templateEvent">
+            <div class="item list">
+                <div class="col-md-10">
+                    <div class="wrapper">
+                        <h3 class="item-name"><%- item.city.name %></h3>
+                        <header class="page-title">
+                            <div class="title">
+                                <a href="/event?id=<%= item.id %>"><h1><%- item.name %></h1></a>
+                                <figure><%- item.address %></figure>
+                            </div>
+                            <div class="info">
+                                <div class="type">
+                                    <span><%- item.type.type %></span>
+                                </div>
+                            </div>
+                        </header>
+                        <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="wrapper">
+                        <div class="form-group">
+                            <img src="icons/close.png" id="del-event-img<%= item.id %>" alt="Удалить">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateItem">
+            <div class="item list">
+                <div class="col-md-10">
+                    <div class="wrapper">
+                        <a href="/event?id=<%= item.parent.id %>"><h3 class="item-name">Мероприятие: <%- item.parent.name %></h3></a>
+                        <header class="page-title">
+                            <div class="title">
+                                <h1><%- item.name %></h1>
+                                <figure><%- item.auditory %></figure>
+                            </div>
+                        </header>
+                        <figure><%- _.identity(dateWrite(item.timeStart)) %></figure>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="wrapper">
+                        <div class="form-group">
+                            <img src="icons/close.png" id="del-item-img<%= item.id %>" alt="Удалить" width="32px" height="32px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/template" class="templateEmpty">
+            <div class="item list">
+                <div class="col-md-12">
+                    <div class="wrapper">
+                        <header class="page-title">
+                            <div class="title">
+                                <h1><%- item.name %></h1>
+                            </div>
+                        </header>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <footer id="page-footer">
+            <div class="inner">
+                <div class="footer-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>О нас</h2>
+                                    <address>
+                                        <div>Группа DEV-2</div>
+                                        <div>DIMI-MM</div>
+                                    </address>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Об авторах</h2>
+                                    <figure>
+                                        <div class="info">
+                                            <span>Шаталова Надежда</span>
+                                        </div>
+                                        <div class="info">
+                                            <span>Таиров Александр</span>
+                                        </div>
+                                    </figure>
+                                </section>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <section>
+                                    <h2>Вот здесь нас нет</h2>
+                                    <div class="social">
+                                        <a href="#" class="social-button"><i class="fa fa-twitter"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-facebook"></i></a>
+                                        <a href="#" class="social-button"><i class="fa fa-pinterest"></i></a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="container">
+                        <span class="left">(C) EventX, NetCracker, 2020.</span>
+                        <span class="right">
+                            <a href="#page-top" class="to-top roll"><i class="fa fa-angle-up"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/base/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="js/base/before.load.js"></script>
+<script type="text/javascript" src="js/base/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/base/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/base/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="js/base/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/base/custom.js"></script>
+<script type="text/javascript" src="js/base/underscore.js"></script>
+<script type="text/javascript" src="js/base/moment.js"></script>
+<script type="text/javascript" src="js/my-scripts/checkAuth.js"></script>
+<script type="text/javascript" src="js/my-scripts/personalItems.js"></script>
+<script type="text/javascript" src="js/my-scripts/dateWriteFunc.js"></script>
+
+</body>
+</html>

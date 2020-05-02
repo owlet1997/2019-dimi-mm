@@ -1,0 +1,10 @@
+.brand.my-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wrapper.top-event-header {
+    display: flex;
+    justify-content: space-between;
+}

@@ -11,5 +11,7 @@ public interface EventTypeRepository extends CrudRepository<EventTypeEntity, Int
 
     List<EventTypeEntity> findAll();
 
-    List<EventTypeEntity> findById(int id);
+    EventTypeEntity findById(int id);
+
+    EventTypeEntity findByType(String name);
 }
