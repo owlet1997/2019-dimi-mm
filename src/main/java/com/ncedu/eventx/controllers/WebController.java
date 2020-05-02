@@ -11,7 +11,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,14 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Optional;
 
 @Controller
@@ -92,15 +86,11 @@ public class WebController {
 
     @GetMapping(value = "/add-event")
     public String addEvent() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(username);
         return "submit";
     }
 
     @GetMapping(value = "/")
     public String map() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(username);
         return "eventMap";
     }
 
